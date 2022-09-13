@@ -1,22 +1,29 @@
 {
-	"name": "backend",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"name": "graffinity-backend",
+	"version": "0.1.0",
+	"private": true,
+	"main": "server.ts",
+	"dependencies": {
+		"@prisma/client": "^4.3.1",
+		"dotenv": "^16.0.2",
+		"express": "^4.18.1"
+	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node server.ts"
+		"start": "node server.ts",
+		"lint": "npx prettier --write"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
 	"devDependencies": {
 		"@types/node": "^18.7.17",
+		"prettier": "^2.7.1",
 		"prisma": "^4.3.1",
 		"ts-node": "^10.9.1",
 		"typescript": "^4.8.3"
 	},
-	"dependencies": {
-		"@prisma/client": "^4.3.1"
-	}
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/graffinity/graffinity-backend.git"
+	},
+	"author": "Drop Shot Divas",
+	"homepage": "."
 }
