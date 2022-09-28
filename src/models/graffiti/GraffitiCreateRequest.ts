@@ -4,6 +4,7 @@ interface GraffitiCreateRequest {
 	picture_id: number;
 	location: string;
 	createdAt: Date;
+	updatedAt: Date;
 }
 
 export default GraffitiCreateRequest;
