@@ -2,12 +2,12 @@ name: backend continuous integration
 
 on:
     push:
-        branches: ["master"]
+        branches: [master]
     pull_request:
-        branches: ["master"]
+        branches: [master]
 
 jobs:
-    build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Run prettier
