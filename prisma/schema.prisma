@@ -12,9 +12,8 @@ datasource db {
 
 model graffiti {
   id          Int      @id @default(autoincrement())
-  name        String
+  name        String   @unique
   description String
   location    String
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
