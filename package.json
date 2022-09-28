@@ -12,7 +12,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node server.ts",
-		"lint": "npx prettier --write"
+		"lint": "npx prettier --write ."
 	},
 	"devDependencies": {
 		"@types/node": "^18.7.17",
