@@ -15,7 +15,7 @@
 		"lint": "npx prettier --write ."
 	},
 	"devDependencies": {
-		"@types/node": "^18.8.2",
+		"@types/node": "^18.8.3",
 		"prettier": "^2.7.1",
 		"prisma": "^4.4.0",
 		"ts-node": "^10.9.1",
