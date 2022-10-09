@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Graffiti {
+  id          Int                  @id @default(autoincrement())
+  name        String               @unique
+  description String
+  location    String
+  createdAt   DateTime             @default(now())
+  categories  CategoryToGraffiti[]
+}
+
+model Category {
+  id        Int                  @id @default(autoincrement())
+  name      String               @unique
+  graffitis CategoryToGraffiti[]
+}
+
+model CategoryToGraffiti {
+  id         Int      @id @default(autoincrement())
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  graffitiId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
