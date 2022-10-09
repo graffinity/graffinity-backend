@@ -1,0 +1,88 @@
+name: backend continuous integration
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+
+jobs:
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out source code
+  #       uses: actions/checkout@v3
+
+  #     - name: Set up node
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+  #         cache: "npm"
+
+  #     - name: Run prettier
+  #       run: npx prettier --check .
+
+  #     - name: Install dependencies
+  #       run: npm ci
+
+  #     - name: Run build
+  #       run: npm run build --if-present 
+
+  # connect-to-vpn:
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: catthehacker/ubuntu:act-latest
+  #     credentials:
+  #       username: root
+  #       password: example
+  #     options: privileged
+
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+
+  #     - name: Update
+  #       run: sudo apt update
+
+  #     - name: Install openconnect
+  #       run: sudo apt install -y openconnect
+
+  #     - name: Connect to VU VPN
+  #       run: sudo openconnect vpn2.vu.lt --user=1543349 -F main:password=JGU!hpm*zan*zuz5tze -b
+
+  update:
+    runs-on: ubuntu-latest
+    container:
+      # image: act-svanboxel-gitlab-mirror-and-ci-action-master-dockeraction:latest
+      image: catthehacker/ubuntu:act-latest
+      credentials:
+        username: root
+        password: example
+      options: privileged
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install vpn
+      # run: |
+      #   sudo apt update
+      #   sudo apt install -y openconnect
+      #   sudo openconnect vpn2.vu.lt --user=1543349 -F main:password=JGU!hpm*zan*zuz5tze -b
+
+    # - uses: actions/checkout@v2
+    # - name: Mirror + trigger CI
+      # uses: SvanBoxel/gitlab-mirror-and-ci-action@master
+      run: "bash /Users/kernius/graffinity/backend-graffinity/.github/workflows/entrypoint.sh"
+      with:
+        args: "https://git.mif.vu.lt/graffinity/graffinity-backend"
+      env:
+        FORCE_PUSH: "false"
+        GITLAB_HOSTNAME: "git.mif.vu.lt"
+        GITLAB_USERNAME: "kesu8139"
+        GITLAB_PASSWORD: "Com159159$$"
+        GITLAB_PROJECT_ID: "https://git.mif.vu.lt/graffinity/graffinity-backend/edit"
+        GITHUB_TOKEN: "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"
+
+
+
+
