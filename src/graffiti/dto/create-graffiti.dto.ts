@@ -1,6 +1,6 @@
 export class CreateGraffitiDto {
-	name!: string;
-	description!: string;
-	location!: string;
-	createdAt!: Date;
+	name: string;
+	description: string;
+	location: string;
+	createdAt: Date;
 }

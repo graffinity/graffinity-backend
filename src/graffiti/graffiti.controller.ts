@@ -11,7 +11,7 @@ import { GraffitiService } from "./graffiti.service";
 import { CreateGraffitiDto } from "./dto/create-graffiti.dto";
 import { UpdateGraffitiDto } from "./dto/update-graffiti.dto";
 
-@Controller("graffiti")
+@Controller("api/v1/graffiti")
 export class GraffitiController {
 	constructor(private readonly graffitiService: GraffitiService) {}
 

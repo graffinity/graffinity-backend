@@ -16,7 +16,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
 		"allowJs": true,
-		"strict": true,
+		// "strict": false,
 		"esModuleInterop": true,
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
@@ -24,9 +24,6 @@
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"outDir": "./dist",
 		"baseUrl": "./"
-		// "paths": {
-		// 	"*": ["node_modules/*", "src/types/*"]
-		// }
 	},
 	"include": ["src/**/*"]
 }
