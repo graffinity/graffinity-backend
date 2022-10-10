@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { GraffitiService } from "./graffiti.service";
 import { GraffitiController } from "./graffiti.controller";
-import { PrismaModule } from "src/prisma/prisma.module";
+import { PrismaModule } from "../prisma/prisma.module";
 
 @Module({
 	imports: [PrismaModule],
