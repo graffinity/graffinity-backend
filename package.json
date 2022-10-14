@@ -35,7 +35,7 @@
 	},
 	"devDependencies": {
 		"jest-mock-extended": "^3.0.1",
-		"@types/node": "^18.8.2",
+		"@types/node": "^18.11.0",
 		"prettier": "^2.7.1",
 		"prisma": "^4.4.0",
 		"ts-node": "^10.9.1",
