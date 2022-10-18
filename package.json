@@ -22,7 +22,7 @@
 		"test:e2e": "jest --config ./test/jest-e2e.json"
 	},
 	"dependencies": {
-		"@prisma/client": "^4.4.0",
+		"@prisma/client": "^4.5.0",
 		"@types/express": "^4.17.14",
 		"@nestjs/mapped-types": "*",
 		"dotenv": "^16.0.3",
