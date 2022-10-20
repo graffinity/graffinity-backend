@@ -12,10 +12,6 @@ jobs:
     steps:
       - name: Check out source code
         uses: actions/checkout@v3
-        with: 
-          fetch-depth: 0
-        env: 
-          token: Hh-idA_jgdaEbuMDFLt8
 
       - name: Set up node
         uses: actions/setup-node@v3
@@ -26,90 +22,11 @@ jobs:
       - name: Run prettier
         run: npx prettier --check .
 
-      # - name: Install dependencies
-      #   run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-      # - name: Run build
-      #   run: npm run build --if-present 
-
-      # - name: Run tests
-      #   run: npm run test
-
-      - name: Push To Gitlab
-        run: |
-          echo Starting to push repo to gitlab
-          git config user.name "KerniusSur"
-          git config user.email "kernius.survila@mif.stud.vu.lt"
-          git remote set-url origin "https://oauth2:${token}@git.mif.vu.lt/graffinity/graffinity-backend.git"
-          git push -u origin master
-
-  # push-to-gitlab:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with: 
-  #         fetch-depth: 0
-  #       env: 
-  #         token: Hh-idA_jgdaEbuMDFLt8
-
-  #     - name: Push To Gitlab
-  #       run: |
-  #         echo Starting to push repo to gitlab
-  #         git config user.name "KerniusSur"
-  #         git config user.email "kernius.survila@mif.stud.vu.lt"
-  #         git remote set-url origin "https://oauth2:${token}@git.mif.vu.lt/graffinity/graffinity-backend.git"
-  #         git push origin master
+      - name: Run build
+        run: npm run build --if-present 
 
       - name: Run tests
         run: npm run test
-
-  # connect-to-vpn:
-  #   runs-on: ubuntu-latest
-  #   container:
-  #     image: catthehacker/ubuntu:act-latest
-  #     credentials:
-  #       username: root
-  #       password: example
-  #     options: privileged
-
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #       with:
-  #         fetch-depth: 1
-
-  #     - name: Update
-  #       run: sudo apt update
-
-  #     - name: Install openconnect
-  #       run: sudo apt install -y openconnect
-
-  #     - name: Connect to VU VPN
-
-  # update:
-  #   runs-on: ubuntu-latest
-  #   container:
-  #     # image: act-svanboxel-gitlab-mirror-and-ci-action-master-dockeraction:latest
-  #     image: catthehacker/ubuntu:act-latest
-  #     credentials:
-  #       username: root
-  #       password: example
-  #     options: privileged
-
-  #   steps:
-  #   - uses: actions/checkout@v1
-  #   - name: Install vpn
-      # run: |
-      #   sudo apt update
-      #   sudo apt install -y openconnect
-
-    # - uses: actions/checkout@v2
-    # - name: Mirror + trigger CI
-      # uses: SvanBoxel/gitlab-mirror-and-ci-action@master
-      # run: "bash /Users/kernius/graffinity/backend-graffinity/.github/workflows/entrypoint.sh"
-      # with:
-      #   args: "https://git.mif.vu.lt/graffinity/graffinity-backend"
-    
-
-
-
-
