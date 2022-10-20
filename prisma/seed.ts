@@ -6,7 +6,7 @@ import { faker } from "@faker-js/faker";
 const prisma = new PrismaClient();
 
 const graffitiTestData = (): any => ({
-	name: faker.internet.domainName(),
+	name: faker.internet.domainWord(),
 	description: faker.lorem.sentence(),
 	location: faker.address.city(),
 	createdAt: faker.date.past(),
