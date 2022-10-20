@@ -11,11 +11,7 @@ import { CategoryService } from "./category.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
 
-<<<<<<< HEAD
 @Controller("api/v1/category")
-=======
-@Controller("category")
->>>>>>> 50536a2fae52c1cc6f8472f44a50951e45a1eb3c
 export class CategoryController {
 	constructor(private readonly categoryService: CategoryService) {}
 
