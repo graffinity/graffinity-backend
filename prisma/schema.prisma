@@ -14,6 +14,7 @@ model Graffiti {
   location    String
   createdAt   DateTime             @default(now())
   categories  CategoryToGraffiti[]
+
 }
 
 model Category {
