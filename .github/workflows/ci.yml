@@ -60,6 +60,9 @@ jobs:
   #         git remote set-url origin "https://oauth2:${token}@git.mif.vu.lt/graffinity/graffinity-backend.git"
   #         git push origin master
 
+      - name: Run tests
+        run: npm run test
+
   # connect-to-vpn:
   #   runs-on: ubuntu-latest
   #   container:

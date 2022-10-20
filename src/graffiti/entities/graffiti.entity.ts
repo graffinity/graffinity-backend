@@ -1,4 +1,6 @@
 import { Graffiti } from "@prisma/client";
+import { CategoryEntity } from "../../category/entities/category.entity";
+import { TagEntity } from "../../tag/entities/tag.entity";
 
 export class GraffitiEntity implements Graffiti {
 	id: number;
@@ -6,4 +8,7 @@ export class GraffitiEntity implements Graffiti {
 	description: string;
 	location: string;
 	createdAt: Date;
+	categories?: CategoryEntity[];
+
+	tags?: TagEntity[];
 }
