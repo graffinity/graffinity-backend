@@ -19,6 +19,7 @@ async function main() {
 	for (let i = 0; i < fakerRounds; i++) {
 		await prisma.graffiti.create({ data: graffitiTestData() });
 	}
+	console.log("Finished...");
 }
 
 main()
