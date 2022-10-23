@@ -39,4 +39,8 @@ export class GraffitiService {
 			},
 		});
 	}
+
+	findAllFilteredBy() {
+		return this.prisma.graffiti.findMany({});
+	}
 }
