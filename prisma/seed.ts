@@ -1,15 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import * as dotenv from "dotenv";
 
-import { faker } from "@faker-js/faker";
+import * as faker from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
 const graffitiTestData = (): any => ({
-	name: faker.internet.domainWord(),
-	description: faker.lorem.sentence(),
-	location: faker.address.city(),
-	createdAt: faker.date.past(),
+	name: faker.faker.internet.domainWord(),
+	description: faker.faker.lorem.sentence(),
+	location: faker.faker.address.city(),
+	createdAt: faker.faker.date.past(),
 });
 
 async function main() {
@@ -19,6 +19,17 @@ async function main() {
 	for (let i = 0; i < fakerRounds; i++) {
 		await prisma.graffiti.create({ data: graffitiTestData() });
 	}
+	prisma.user.create({
+		data: {
+			email: "johndoe@gmail.com",
+			name: "john",
+			lastname: "doe",
+			username: "john",
+			password: "changeme",
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		},
+	});
 	console.log("Finished...");
 }
 
@@ -27,3 +38,5 @@ main()
 	.finally(async () => {
 		await prisma.$disconnect();
 	});
+	// curl -X POST http://localhost:8080/auth/login -d '{"username": "john", "password": "changeme"}' -H "Content-Type: application/json"
+	// curl http://localhost:8080/profile -H 
