@@ -14,6 +14,8 @@ model Graffiti {
   location    String
   createdAt   DateTime             @default(now())
   categories  CategoryToGraffiti[]
+  authorId    Int
+  author      User                 @relation(fields: [authorId], references: [id])
 }
 
 model Category {
@@ -31,12 +33,11 @@ model CategoryToGraffiti {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String
-  lastname  String
-  username  String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id       Int        @id @default(autoincrement())
+  email    String     @unique
+  password String
+  name     String
+  lastname String
+  username String     @unique
+  posts    Graffiti[]
 }

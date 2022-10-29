@@ -28,6 +28,11 @@ export class CreateGraffitiDto {
 		default: new Date(),
 	})
 	createdAt: Date;
-	// categories?: CategoryToGraffiti[];
-	// tags?: TagToGraffiti[];
+
+	@ApiProperty({
+		type: Number,
+		description: "The authorId of a graffiti is a required value",
+	})
+	authorId: number
+
 }

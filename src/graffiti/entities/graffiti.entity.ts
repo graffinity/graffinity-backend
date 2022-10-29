@@ -19,5 +19,8 @@ export class GraffitiEntity implements Graffiti {
 	createdAt: Date;
 
 	@ApiProperty()
+	authorId: number;
+	
+	@ApiProperty()
 	categories?: CategoryEntity[];
 }

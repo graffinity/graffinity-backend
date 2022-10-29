@@ -36,4 +36,10 @@ export class UpdateGraffitiDto extends PartialType(CreateGraffitiDto) {
 		default: new Date(),
 	})
 	createdAt: Date;
+
+	@ApiProperty({
+		type: Number,
+		description: "The authorId of a graffiti is a required value",
+	})
+	authorId: number;
 }
