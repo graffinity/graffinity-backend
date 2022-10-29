@@ -14,7 +14,6 @@ model Graffiti {
   location    String
   createdAt   DateTime             @default(now())
   categories  CategoryToGraffiti[]
-
 }
 
 model Category {
@@ -29,4 +28,9 @@ model CategoryToGraffiti {
   graffitiId Int
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
+}
+
+model Comment {
+  id   Int    @id @default(autoincrement())
+  body String
 }

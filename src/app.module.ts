@@ -4,9 +4,10 @@ import { AppService } from "./app.service";
 import { CategoryModule } from "./category/category.module";
 import { GraffitiModule } from "./graffiti/graffiti.module";
 import { PrismaModule } from "./prisma/prisma.module";
+import { CommentModule } from './comment/comment.module';
 
 @Module({
-	imports: [GraffitiModule, PrismaModule, CategoryModule],
+	imports: [GraffitiModule, PrismaModule, CategoryModule, CommentModule],
 	controllers: [AppController],
 	providers: [AppService],
 })
