@@ -47,11 +47,3 @@ model ArtistToGraffiti {
   artistId   Int
 }
 
-model Comment {
-  id         Int      @id @default(autoincrement())
-  body       String
-  // user       User     @relation(fields: [userId], references: [id])
-  userId     Int
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  graffitiId Int
-}
