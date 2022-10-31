@@ -22,8 +22,8 @@ async function main() {
 			email: "johndoe@gmail.com",
 			name: "john",
 			lastname: "doe",
-			username: "john",
-			password: "changeme",
+			username: "johndoe",
+			password: "password",
 		},
 	});
 	for (let i = 0; i < fakerRounds; i++) {

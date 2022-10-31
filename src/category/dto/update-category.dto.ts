@@ -14,4 +14,5 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
 		description: "Name is required and must be unique",
 	})
 	name: string;
+
 }
