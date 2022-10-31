@@ -9,7 +9,7 @@ describe('ArtistController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ArtistController],
-      providers: [ArtistService],
+      providers: [PrismaService, ArtistService],
     }).compile();
 
     controller = module.get<ArtistController>(ArtistController);

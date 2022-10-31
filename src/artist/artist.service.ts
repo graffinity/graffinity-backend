@@ -6,6 +6,7 @@ import { UpdateArtistDto } from "./dto/update-artist.dto";
 @Injectable()
 export class ArtistService {
 	constructor(private prisma: PrismaService) {}
+
 	create(createArtistDto: CreateArtistDto) {
 		return this.prisma.artist.create({ data: createArtistDto });
 	}
@@ -37,5 +38,9 @@ export class ArtistService {
         id: id,
       },
     })
+	}
+
+	findAllFilteredBy() {
+		return this.prisma.artist.findMany({});
 	}
 }
