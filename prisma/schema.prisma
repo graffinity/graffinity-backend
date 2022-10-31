@@ -14,11 +14,7 @@ model Graffiti {
   location    String
   createdAt   DateTime             @default(now())
   categories  CategoryToGraffiti[]
-<<<<<<< HEAD
   tags        TagToGraffiti[]
-=======
-
->>>>>>> 0311c7588131961cb4dd5f90f69011f4376861f6
 }
 
 model Category {
