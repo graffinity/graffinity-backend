@@ -5,9 +5,10 @@ import { CategoryModule } from "./category/category.module";
 import { GraffitiModule } from "./graffiti/graffiti.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { TagModule } from "./tag/tag.module";
+import { GraffitiPhotoModule } from './graffitiphoto/graffitiphoto.module';
 
 @Module({
-	imports: [GraffitiModule, PrismaModule, CategoryModule, TagModule],
+	imports: [GraffitiModule, PrismaModule, CategoryModule, TagModule, GraffitiPhotoModule],
 	controllers: [AppController],
 	providers: [AppService],
 })
