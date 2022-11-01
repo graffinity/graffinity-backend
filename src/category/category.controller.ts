@@ -6,6 +6,7 @@ import {
 	Patch,
 	Param,
 	Delete,
+	Put,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CategoryService } from "./category.service";
@@ -35,7 +36,7 @@ export class CategoryController {
 		return this.categoryService.findOne(+id);
 	}
 
-	@Patch(":id")
+	@Put(":id")
 	@ApiOperation({ summary: "Update a category entity by id" })
 	update(
 		@Param("id") id: string,
@@ -46,7 +47,7 @@ export class CategoryController {
 
 	@Delete(":id")
 	@ApiOperation({ summary: "Delete a category by id" })
-	remove(@Param("id") id: string) {
-		return this.categoryService.remove(+id);
+	delete(@Param("id") id: string) {
+		return this.categoryService.delete(+id);
 	}
 }

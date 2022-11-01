@@ -1,6 +1,14 @@
+import { PartialType } from "@nestjs/mapped-types";
 import { ApiProperty } from "@nestjs/swagger";
+import { CreateGraffitiDto } from "./create-graffiti.dto";
 
-export class CreateGraffitiDto {
+export class UpdateGraffitiDto extends PartialType(CreateGraffitiDto) {
+	@ApiProperty({
+		type: Number,
+		description: "Id is a required value",
+	})
+	id: number;
+
 	@ApiProperty({
 		type: String,
 		description:
@@ -28,6 +36,16 @@ export class CreateGraffitiDto {
 		default: new Date(),
 	})
 	createdAt: Date;
-	// categories?: CategoryToGraffiti[];
-	// tags?: TagToGraffiti[];
+
+	@ApiProperty({
+		type: Number,
+		description: "The authorId of a graffiti is a required value",
+	})
+	authorId: number;
+
+	@ApiProperty({
+		type: Array<Number>,
+		description: "Categories is an array of category ids",
+	})
+	categoryIds: number[];
 }
