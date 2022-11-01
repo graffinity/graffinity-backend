@@ -1,23 +1,33 @@
 import { PrismaClient } from "@prisma/client";
 import * as dotenv from "dotenv";
 
-import { faker } from "@faker-js/faker";
+import * as faker from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
-const graffitiTestData = (): any => ({
-	name: faker.internet.domainWord(),
-	description: faker.lorem.sentence(),
-	location: faker.address.city(),
-	createdAt: faker.date.past(),
+const graffitiTestData = (userId: number): any => ({
+	name: faker.faker.internet.domainWord(),
+	description: faker.faker.lorem.sentence(),
+	location: faker.faker.address.city(),
+	createdAt: faker.faker.date.past(),
+	authorId: 1,
 });
 
 async function main() {
 	const fakerRounds = 5;
 	dotenv.config();
 	console.log("Seeding...");
+	let user = prisma.user.create({
+		data: {
+			email: "johndoe@gmail.com",
+			name: "john",
+			lastname: "doe",
+			username: "johndoe",
+			password: "password",
+		},
+	});
 	for (let i = 0; i < fakerRounds; i++) {
-		await prisma.graffiti.create({ data: graffitiTestData() });
+		await prisma.graffiti.create({ data: graffitiTestData((await user).id) });
 	}
 	console.log("Finished...");
 }
