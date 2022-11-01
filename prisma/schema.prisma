@@ -15,10 +15,11 @@ model Graffiti {
   createdAt   DateTime             @default(now())
   categories  CategoryToGraffiti[]
   tags        TagToGraffiti[]
+  photos      GraffitiPhoto[]
 }
 
 model Category {
-  id        Int                  @id @default(autoincrement())
+  id        Int                  @id @default(autoincrement()) 
   name      String               @unique
   graffitis CategoryToGraffiti[]
 }
@@ -45,3 +46,21 @@ model TagToGraffiti {
   tag        Tag      @relation(fields: [tagId], references: [id])
   tagId      Int
 }
+
+model GraffitiPhoto {
+  id         Int      @id @default(autoincrement())
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  graffitiId Int
+  url        String
+  addedAt    DateTime @default(now())
+}
+
+//model Report {
+  //id         Int      @id @default(autoincrement())
+  //graffitiId Int
+  //userId    Int
+  //CreatedAt    DateTime @default(now())
+  //subject     String
+  //body        String
+  
+//}
