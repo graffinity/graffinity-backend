@@ -4,11 +4,21 @@ import { AppService } from "./app.service";
 import { CategoryModule } from "./category/category.module";
 import { GraffitiModule } from "./graffiti/graffiti.module";
 import { PrismaModule } from "./prisma/prisma.module";
-import { TagModule } from "./tag/tag.module";
-import { GraffitiPhotoModule } from './graffitiphoto/graffitiphoto.module';
+import { UserModule } from "./user/user.module";
+import { AuthModule } from "./auth/auth.module";
+import { JwtModule } from "@nestjs/jwt";
+import { GraffitiPhotoModule } from "./graffitiphoto/graffitiphoto.module";
 
 @Module({
-	imports: [GraffitiModule, PrismaModule, CategoryModule, TagModule, GraffitiPhotoModule],
+	imports: [
+		GraffitiModule,
+		PrismaModule,
+		CategoryModule,
+		UserModule,
+		AuthModule,
+		JwtModule,
+		GraffitiPhotoModule
+	],
 	controllers: [AppController],
 	providers: [AppService],
 })
