@@ -11,5 +11,5 @@ export class CreateCategoryDto {
 		type: Array<Number>,
 		description: "Posts is an array of graffiti ids",
 	})
-	graffitiIds: number[]
+	graffitiIds: number[];
 }

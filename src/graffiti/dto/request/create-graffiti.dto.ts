@@ -33,12 +33,11 @@ export class CreateGraffitiDto {
 		type: Number,
 		description: "The authorId of a graffiti is a required value",
 	})
-	authorId: number
+	authorId: number;
 
 	@ApiProperty({
 		type: Array<Number>,
 		description: "Categories is an array of category ids",
 	})
-	categoryIds: number[]
-
+	categoryIds: number[];
 }

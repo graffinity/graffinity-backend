@@ -20,7 +20,7 @@ export class GraffitiEntity implements Graffiti {
 
 	@ApiProperty()
 	authorId: number;
-	
+
 	@ApiProperty()
 	categories?: CategoryToGraffiti[];
 }

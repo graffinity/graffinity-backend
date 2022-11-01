@@ -10,7 +10,7 @@ const graffitiTestData = (userId: number): any => ({
 	description: faker.faker.lorem.sentence(),
 	location: faker.faker.address.city(),
 	createdAt: faker.faker.date.past(),
-	authorId: 1
+	authorId: 1,
 });
 
 async function main() {

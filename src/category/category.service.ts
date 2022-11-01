@@ -7,11 +7,11 @@ import { UpdateCategoryDto } from "./dto/update-category.dto";
 @Injectable()
 export class CategoryService {
 	constructor(private prisma: PrismaService) {}
-	
+
 	findAll() {
 		return this.prisma.category.findMany();
 	}
-	
+
 	findOne(id: number) {
 		return this.prisma.category.findUnique({
 			where: {
@@ -21,12 +21,16 @@ export class CategoryService {
 	}
 
 	create(createCategoryDto: CreateCategoryDto) {
-		return this.prisma.category.create({ data: {
-			name: createCategoryDto.name,
-			graffitis: {
-				create: createCategoryDto.graffitiIds.map((graffitiId) => ({graffitiId: graffitiId })),
-			}
-		} });
+		return this.prisma.category.create({
+			data: {
+				name: createCategoryDto.name,
+				graffitis: {
+					create: createCategoryDto.graffitiIds.map((graffitiId) => ({
+						graffitiId: graffitiId,
+					})),
+				},
+			},
+		});
 	}
 
 	update(id: number, updateCategoryDto: UpdateCategoryDto) {

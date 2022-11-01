@@ -9,5 +9,5 @@ export class CategoryEntity implements Category {
 	name: string;
 
 	@ApiProperty()
-	graffitis: CategoryToGraffiti[]
+	graffitis: CategoryToGraffiti[];
 }
