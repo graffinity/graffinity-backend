@@ -5,29 +5,34 @@ import * as faker from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
+// generate random data for graffiti posts using faker
 const graffitiTestData = (userId: number): any => ({
 	name: faker.faker.internet.domainWord(),
 	description: faker.faker.lorem.sentence(),
 	location: faker.faker.address.city(),
 	createdAt: faker.faker.date.past(),
-	authorId: 1,
+	authorId: userId,
 });
 
 async function main() {
 	const fakerRounds = 5;
 	dotenv.config();
 	console.log("Seeding...");
-	let user = prisma.user.create({
+
+	// User test data
+	let user = await prisma.user.create({
 		data: {
-			email: "johndoe@gmail.com",
 			name: "john",
 			lastname: "doe",
 			username: "johndoe",
+			email: "johndoe@gmail.com",
 			password: "password",
 		},
 	});
+
+	// GraffitiPost test data
 	for (let i = 0; i < fakerRounds; i++) {
-		await prisma.graffiti.create({ data: graffitiTestData((await user).id) });
+		await prisma.graffiti.create({ data: graffitiTestData(user.id) });
 	}
 	console.log("Finished...");
 }
