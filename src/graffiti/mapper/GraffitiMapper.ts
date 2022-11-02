@@ -11,6 +11,7 @@ const GraffitiMapper = {
 			description: entity.description,
 			location: entity.location,
 			authorId: entity.authorId,
+			creationDate: entity.createdAt,
 		};
 
 		return response;
