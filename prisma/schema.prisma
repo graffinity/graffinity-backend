@@ -14,7 +14,7 @@ model Graffiti {
   location    String
   createdAt   DateTime             @default(now())
   categories  CategoryToGraffiti[]
-  Comment     Comment[]
+  comment     Comment[]
   authorId    Int
   author      User                 @relation(fields: [authorId], references: [id])
 }
@@ -36,6 +36,7 @@ model CategoryToGraffiti {
 model Comment {
   id         Int      @id @default(autoincrement())
   body       String
+  createdAt  DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id])
   userId     Int
   graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
@@ -50,5 +51,5 @@ model User {
   lastname String
   username String     @unique
   posts    Graffiti[]
-  Comment  Comment[]
+  comment  Comment[]
 }
