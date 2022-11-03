@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import * as dotenv from "dotenv";
-
 import * as faker from "@faker-js/faker";
 
 const prisma = new PrismaClient();
@@ -14,8 +13,13 @@ const graffitiTestData = (userId: number): any => ({
 	authorId: userId,
 });
 
+const categoryTestDataCreation = (): any => ({
+	name: faker.faker.color.human(),
+});
+
 async function main() {
 	const fakerRounds = 5;
+	const fakerCategoryRounds = 3;
 	dotenv.config();
 	console.log("Seeding...");
 
@@ -29,12 +33,23 @@ async function main() {
 			password: "password",
 		},
 	});
+	console.log("User data seed success!");
 
 	// GraffitiPost test data
 	for (let i = 0; i < fakerRounds; i++) {
 		await prisma.graffiti.create({ data: graffitiTestData(user.id) });
 	}
-	console.log("Finished...");
+	console.log("Graffiti data seed success!");
+
+	// GraffitiPost test data
+	for (let i = 0; i < fakerCategoryRounds; i++) {
+		await prisma.category.create({ data: categoryTestDataCreation() });
+	}
+	console.log("Category data seed success!");
+
+	setTimeout(() => {
+		console.log("Finished...");
+	}, 300);
 }
 
 main()
