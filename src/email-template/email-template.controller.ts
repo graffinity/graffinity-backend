@@ -12,8 +12,9 @@ export class EmailTemplateController {
 
 	@Post()
 	@ApiOperation({ summary: 'email tamplate  creation' })
-	create(@Body() createEmailTemplateDto: CreateEmailTemplateDto) {
-		return this.emailTemplateService.create(createEmailTemplateDto);
+	async create(@Body() createEmailTemplateDto: CreateEmailTemplateDto) {
+		let entity = await this.emailTemplateService.create(createEmailTemplateDto);
+		return EmailTemplateMapper.toResponse(entity);
 	}
 
 	@Get()

@@ -42,7 +42,4 @@ export class EmailTemplateService {
 			},
 		});
 	}
-	findAllFilteredBy() {
-		return this.prisma.emailTemplate.findMany({});
-	}
 }
