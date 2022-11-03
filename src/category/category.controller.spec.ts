@@ -1,9 +1,9 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { PrismaService } from "../prisma/prisma.service";
-import { CategoryController } from "./category.controller";
-import { CategoryService } from "./category.service";
+import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaService } from '../prisma/prisma.service';
+import { CategoryController } from './category.controller';
+import { CategoryService } from './category.service';
 
-describe("CategoryController", () => {
+describe('CategoryController', () => {
 	let controller: CategoryController;
 
 	beforeEach(async () => {
@@ -15,7 +15,7 @@ describe("CategoryController", () => {
 		controller = module.get<CategoryController>(CategoryController);
 	});
 
-	it("should be defined", () => {
+	it('should be defined', () => {
 		expect(controller).toBeDefined();
 	});
 });
