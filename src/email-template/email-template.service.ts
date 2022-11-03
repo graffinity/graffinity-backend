@@ -1,46 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { rmdirSync } from 'fs';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateEmailTemplateDto } from './dto/create-email-template.dto';
-import { UpdateEmailTemplateDto } from './dto/update-email-template.dto';
+import { CreateEmailTemplateDto } from './dto/request/create-email-template.dto';
+import { UpdateEmailTemplateDto } from './dto/request/update-email-template.dto';
 
 @Injectable()
 export class EmailTemplateService {
-  constructor(private prisma: PrismaService) {}
+	constructor(private prisma: PrismaService) {}
 
-  create(createEmailTemplateDto: CreateEmailTemplateDto) {
-    return this.prisma.emailTemplate.create({data: createEmailTemplateDto});
-  }
+	async create(createEmailTemplateDto: CreateEmailTemplateDto) {
+		return await this.prisma.emailTemplate.create({
+			data: createEmailTemplateDto,
+		});
+	}
 
-  findAll() {
-    return this.prisma.emailTemplate.findMany();
-  }
+	async findAll() {
+		return await this.prisma.emailTemplate.findMany();
+	}
 
-  findOne(id: number) {
-    return this.prisma.emailTemplate.findUnique({
-      where: {
-        id: id,
-      },
-    });
-  }
+	async findOne(id: number) {
+		let entity = await this.prisma.emailTemplate.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+		});
+		return entity;
+	}
 
-  update(id: number, updateEmailTemplateDto: UpdateEmailTemplateDto) {
-    return this.prisma.emailTemplate.update({
-      where: {
-        id: id,
-      },
-      data: updateEmailTemplateDto,
-    });
-  }
+	async update(id: number, updateEmailTemplateDto: UpdateEmailTemplateDto) {
+		return await this.prisma.emailTemplate.update({
+			where: {
+				id: id,
+			},
+			data: updateEmailTemplateDto,
+		});
+	}
 
-  remove(id: number) {
-    return this.prisma.emailTemplate.delete({
-      where: {
-        id: id,
-      },
-    });
-  }
-  findAllFilteredBy() {
+	async delete(id: number) {
+		return await this.prisma.emailTemplate.delete({
+			where: {
+				id: id,
+			},
+		});
+	}
+	findAllFilteredBy() {
 		return this.prisma.emailTemplate.findMany({});
 	}
 }
