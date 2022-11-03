@@ -9,7 +9,14 @@ export class GraffitiService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createGraffitiDto: CreateGraffitiDto) {
-		return await this.prisma.graffiti.create({ data: createGraffitiDto });
+		return await this.prisma.graffiti.create({
+			data: {
+				name: createGraffitiDto.name,
+				location: createGraffitiDto.location,
+				description: createGraffitiDto.description,
+				authorId: createGraffitiDto.authorId,
+			},
+		});
 	}
 
 	async findAll() {
