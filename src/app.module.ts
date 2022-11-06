@@ -8,6 +8,7 @@ import { UserModule } from "./user/user.module";
 import { AuthModule } from "./auth/auth.module";
 import { JwtModule } from "@nestjs/jwt";
 import { GraffitiPhotoModule } from "./graffitiphoto/graffitiphoto.module";
+import { ReportModule } from './report/report.module';
 
 @Module({
 	imports: [
@@ -17,7 +18,8 @@ import { GraffitiPhotoModule } from "./graffitiphoto/graffitiphoto.module";
 		UserModule,
 		AuthModule,
 		JwtModule,
-		GraffitiPhotoModule
+		GraffitiPhotoModule,
+		ReportModule
 	],
 	controllers: [AppController],
 	providers: [AppService],
