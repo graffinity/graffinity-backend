@@ -1,11 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateGraffitiPhotoDto {
-	@ApiProperty({
-		type: Number,
-		description: "Id is a required value",
-	})
-	id: number;
+	// @ApiProperty({
+	// 	type: Number,
+	// 	description: "Id is a required value",
+	// })
+	// id: number;
 
 	@ApiProperty({
 		type: Number,

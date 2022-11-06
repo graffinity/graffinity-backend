@@ -1,22 +1,22 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-import { CreateGraffitiPhotoDto } from "./dto/create-graffitiphoto.dto";
-import { UpdateGraffitiPhotoDto } from "./dto/update-graffitiphoto.dto";
+import { CreateGraffitiPhotoDto } from "./dto/request/create-graffitiphoto.dto";
+import { UpdateGraffitiPhotoDto } from "./dto/request/update-graffitiphoto.dto";
 
 @Injectable()
 export class GraffitiPhotoService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
-		return this.prisma.graffitiPhoto.create({ data: createGraffitiPhotoDto });
+		return await this.prisma.graffitiPhoto.create({ data: createGraffitiPhotoDto });
 	}
 
 	async findAll() {
-		return this.prisma.graffitiPhoto.findMany();
+		return await this.prisma.graffitiPhoto.findMany();
 	}
 
 	async findOne(id: number) {
-		return this.prisma.graffitiPhoto.findUnique({
+		return await this.prisma.graffitiPhoto.findUnique({
 			where: {
 				id: id,
 			},
@@ -24,7 +24,7 @@ export class GraffitiPhotoService {
 	}
 
 	async update(id: number, updateGraffitiPhotoDto: UpdateGraffitiPhotoDto) {
-		return this.prisma.graffitiPhoto.update({
+		return await this.prisma.graffitiPhoto.update({
 			where: {
 				id: id,
 			},
@@ -33,7 +33,7 @@ export class GraffitiPhotoService {
 	}
 
 	async remove(id: number) {
-		return this.prisma.graffitiPhoto.delete({
+		return await this.prisma.graffitiPhoto.delete({
 			where: {
 				id: id,
 			},
@@ -41,6 +41,6 @@ export class GraffitiPhotoService {
 	}
 
 	async findAllFilteredBy() {
-		return this.prisma.graffitiPhoto.findMany({});
+		return await this.prisma.graffitiPhoto.findMany({});
 	}
 }

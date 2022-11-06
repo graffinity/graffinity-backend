@@ -9,8 +9,8 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { GraffitiPhotoService } from "./graffitiphoto.service";
-import { CreateGraffitiPhotoDto } from "./dto/create-graffitiphoto.dto";
-import { UpdateGraffitiPhotoDto } from "./dto/update-graffitiphoto.dto";
+import { CreateGraffitiPhotoDto } from "./dto/request/create-graffitiphoto.dto";
+import { UpdateGraffitiPhotoDto } from "./dto/request/update-graffitiphoto.dto";
 
 @ApiTags("graffitiphoto")
 @Controller("api/v1/graffitiphoto")
