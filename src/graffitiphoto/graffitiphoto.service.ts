@@ -7,15 +7,15 @@ import { UpdateGraffitiPhotoDto } from "./dto/update-graffitiphoto.dto";
 export class GraffitiPhotoService {
 	constructor(private prisma: PrismaService) {}
 
-	create(createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
+	async create(createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
 		return this.prisma.graffitiPhoto.create({ data: createGraffitiPhotoDto });
 	}
 
-	findAll() {
+	async findAll() {
 		return this.prisma.graffitiPhoto.findMany();
 	}
 
-	findOne(id: number) {
+	async findOne(id: number) {
 		return this.prisma.graffitiPhoto.findUnique({
 			where: {
 				id: id,
@@ -23,7 +23,7 @@ export class GraffitiPhotoService {
 		});
 	}
 
-	update(id: number, updateGraffitiPhotoDto: UpdateGraffitiPhotoDto) {
+	async update(id: number, updateGraffitiPhotoDto: UpdateGraffitiPhotoDto) {
 		return this.prisma.graffitiPhoto.update({
 			where: {
 				id: id,
@@ -32,7 +32,7 @@ export class GraffitiPhotoService {
 		});
 	}
 
-	remove(id: number) {
+	async remove(id: number) {
 		return this.prisma.graffitiPhoto.delete({
 			where: {
 				id: id,
@@ -40,7 +40,7 @@ export class GraffitiPhotoService {
 		});
 	}
 
-	findAllFilteredBy() {
+	async findAllFilteredBy() {
 		return this.prisma.graffitiPhoto.findMany({});
 	}
 }

@@ -16,6 +16,7 @@ model Graffiti {
   categories  CategoryToGraffiti[]
   tags        TagToGraffiti[]
   photos      GraffitiPhoto[]
+  reports     Report[]
   authorId    Int
   author      User                 @relation(fields: [authorId], references: [id])
 }
@@ -57,15 +58,7 @@ model GraffitiPhoto {
   addedAt    DateTime @default(now())
 }
 
-//model Report {
-  //id         Int      @id @default(autoincrement())
-  //graffitiId Int
-  //userId    Int
-  //CreatedAt    DateTime @default(now())
-  //subject     String
-  //body        String
-  
-//}
+
 model User {
   id       Int        @id @default(autoincrement())
   email    String     @unique
@@ -74,4 +67,20 @@ model User {
   lastname String
   username String     @unique
   posts    Graffiti[]
+  reports  Report[]
+}
+
+model Report {
+  id         Int      @id @default(autoincrement())
+  graffitiId Int
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  userId    Int
+  user   User @relation(fields: [userId], references: [id])
+  //TODO add relation to user (reported by)
+  //TODO add relation to reported post (reported post)
+  createdAt    DateTime @default(now())
+  reportReason     String 
+
+  status      String
+  comment     String?//optional field?
 }
