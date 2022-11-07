@@ -7,40 +7,37 @@ import { UpdateArtistDto } from "./dto/request/update-artist.dto";
 export class ArtistService {
 	constructor(private prisma: PrismaService) {}
 
-	create(createArtistDto: CreateArtistDto) {
-		return this.prisma.artist.create({ data: createArtistDto });
+	async create(createArtistDto: CreateArtistDto) {
+		return await this.prisma.artist.create({ data: createArtistDto });
 	}
 
-	findAll() {
-		return this.prisma.artist.findMany();
+	async findAll() {
+		return await this.prisma.artist.findMany();
 	}
 
-	findOne(id: number) {
-		return this.prisma.artist.findUnique({
+	async findOne(id: number) {
+		let entity = await this.prisma.artist.findUniqueOrThrow({
 			where: {
 				id: id,
 			},
 		});
+		return entity;
 	}
 
-	update(id: number, updateArtistDto: UpdateArtistDto) {
-		return this.prisma.artist.update({
+	async update(id: number, request: UpdateArtistDto) {
+		return await this.prisma.artist.update({
 			where: {
 				id: id,
 			},
-			data: updateArtistDto,
+			data: request,
 		});
 	}
 
-	remove(id: number) {
-		return this.prisma.artist.delete({
-      where: {
-        id: id,
+	async delete(id: number) {
+		return await this.prisma.artist.delete({
+			where: {
+				id: id,
       },
-    })
-	}
-
-	findAllFilteredBy() {
-		return this.prisma.artist.findMany({});
+    });
 	}
 }

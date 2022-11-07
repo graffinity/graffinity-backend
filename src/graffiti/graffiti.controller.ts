@@ -42,10 +42,12 @@ export class GraffitiController {
 	async findAllFilteredBy(
 		@Param() userId?: number,
 		@Param() categoryId?: number,
+		@Param() artistId?: number,
 	) {
 		let entities = await this.graffitiService.findAllFilteredBy(
 			userId,
 			categoryId,
+			artistId,
 		);
 		return GraffitiMapper.toResponses(entities);
 	}

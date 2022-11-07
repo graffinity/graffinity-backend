@@ -3,13 +3,12 @@ import {
 	Get,
 	Post,
 	Body,
-	Patch,
+	Put,
 	Param,
 	Delete,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ArtistService } from "./artist.service";
-import { ArtistEntry } from "../graffiti/dto/request/artist-entry.dto";
 import { GraffitiEntry } from "./dto/request/graffiti-entry.dto";
 import { CreateArtistDto } from "./dto/request/create-artist.dto";
 import { UpdateArtistDto } from "./dto/request/update-artist.dto";
@@ -40,15 +39,17 @@ export class ArtistController {
 		return ArtistMapper.toResponse(entity);
 	}
 
-	@Patch(":id")
+	@Put(":id")
 	@ApiOperation({ summary: "Update an artist entity by id" })
-	update(@Param("id") id: string, @Body() updateArtistDto: UpdateArtistDto) {
-		return this.artistService.update(+id, updateArtistDto);
+	async update(@Param("id") id: string, @Body() updateArtistDto: UpdateArtistDto) {
+		let entity = await this.artistService.update(+id, updateArtistDto);
+		return ArtistMapper.toResponse(entity);
 	}
 
 	@Delete(":id")
 	@ApiOperation({ summary: "Delete an artist by id" })
-	remove(@Param("id") id: string) {
-		return this.artistService.remove(+id);
+	async delete(@Param("id") id: string) {
+		let entity = await this.artistService.delete(+id);
+		return ArtistMapper.toResponse(entity);
 	}
 }
