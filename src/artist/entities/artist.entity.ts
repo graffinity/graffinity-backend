@@ -3,13 +3,13 @@ import { Artist, ArtistToGraffiti } from "@prisma/client";
 
 export class ArtistEntity implements Artist {
     @ApiProperty()
-    id: number
+    id: number;
 
     @ApiProperty()
-    name: string
+    name: string;
 
     @ApiProperty()
-    surname: string
+    surname: string;
 
     @ApiProperty()
     graffitis?: ArtistToGraffiti[];
