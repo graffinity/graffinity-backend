@@ -9,8 +9,11 @@ import {
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ArtistService } from "./artist.service";
-import { CreateArtistDto } from "./dto/create-artist.dto";
-import { UpdateArtistDto } from "./dto/update-artist.dto";
+import { ArtistEntry } from "../graffiti/dto/request/artist-entry.dto";
+import { GraffitiEntry } from "./dto/request/graffiti-entry.dto";
+import { CreateArtistDto } from "./dto/request/create-artist.dto";
+import { UpdateArtistDto } from "./dto/request/update-artist.dto";
+import ArtistMapper from "./mapper/ArtistMapper";
 
 @ApiTags("artist")
 @Controller("api/v1/artist")
@@ -25,14 +28,16 @@ export class ArtistController {
 
 	@Get()
 	@ApiOperation({ summary: "Find all artists" })
-	findAll() {
-		return this.artistService.findAll();
+	async findAll() {
+		let entities = await this.artistService.findAll();
+		return ArtistMapper.toResponses(entities);
 	}
 
 	@Get(":id")
 	@ApiOperation({ summary: "Find an artist by id" })
-	findOne(@Param("id") id: string) {
-		return this.artistService.findOne(+id);
+	async findOne(@Param("id") id: string) {
+		let entity = await this.artistService.findOne(+id);
+		return ArtistMapper.toResponse(entity);
 	}
 
 	@Patch(":id")

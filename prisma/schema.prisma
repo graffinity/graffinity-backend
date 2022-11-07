@@ -8,16 +8,16 @@ datasource db {
 }
 
 model Graffiti {
-  id               Int                  @id @default(autoincrement())
-  name             String               @unique
-  description      String
-  location         String
-  createdAt        DateTime             @default(now())
-  categories       CategoryToGraffiti[]
-  authorId         Int
-  author           User                 @relation(fields: [authorId], references: [id])
-  ArtistToGraffiti ArtistToGraffiti[]
-  comments         Comment[]
+  id          Int                  @id @default(autoincrement())
+  name        String               @unique
+  description String
+  location    String
+  createdAt   DateTime             @default(now())
+  categories  CategoryToGraffiti[]
+  authorId    Int
+  author      User                 @relation(fields: [authorId], references: [id])
+  artists     ArtistToGraffiti[]
+  //comments         Comment[]
 }
 
 model Category {
@@ -48,7 +48,7 @@ model Artist {
   id            Int                @id @default(autoincrement())
   name          String             @unique
   surname       String
-  relToGraffiti ArtistToGraffiti[]
+  graffitis ArtistToGraffiti[]
 }
 
 model ArtistToGraffiti {

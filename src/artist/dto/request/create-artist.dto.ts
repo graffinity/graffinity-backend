@@ -12,4 +12,10 @@ export class CreateArtistDto {
 		description: "Surname is required and must be unique",
 	})
 	surname: string;
+
+	@ApiProperty({
+		type: Array<Number>,
+		description: "Graffitis is an array of graffiti ids",
+	})
+	graffitiIds: number[];
 }

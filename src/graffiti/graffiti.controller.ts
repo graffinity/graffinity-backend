@@ -9,6 +9,7 @@ import {
 } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CategoryEntry } from "./dto/request/category-entry.dto";
+import { ArtistEntry } from "./dto/request/artist-entry.dto";
 import { CreateGraffitiDto } from "./dto/request/create-graffiti.dto";
 import { UpdateGraffitiDto } from "./dto/request/update-graffiti.dto";
 import { GraffitiService } from "./graffiti.service";
@@ -83,6 +84,26 @@ export class GraffitiController {
 		@Body() request: CategoryEntry,
 	) {
 		let entity = await this.graffitiService.addCategoryToGraffiti(+id, request);
+		return GraffitiMapper.toResponse(entity);
+	}
+
+	@Put("/:id/artist/add")
+	@ApiOperation({ summary: "Update a graffiti post by id" })
+	async addArtistToGraffiti(
+		@Param("id") id: string,
+		@Body() request: ArtistEntry,
+	) {
+		let entity = await this.graffitiService.addArtistToGraffiti(+id, request);
+		return GraffitiMapper.toResponse(entity);
+	}
+
+	@Put("/:id/artist/remove")
+	@ApiOperation({ summary: "Update a graffiti post by id" })
+	async removeArtistFromGraffiti(
+		@Param("id") id: string,
+		@Body() request: ArtistEntry,
+	) {
+		let entity = await this.graffitiService.removeArtistFromGraffiti(+id, request);
 		return GraffitiMapper.toResponse(entity);
 	}
 
