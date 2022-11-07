@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Artist } from "@prisma/client";
+import { Artist, ArtistToGraffiti } from "@prisma/client";
 
 export class ArtistEntity implements Artist {
     @ApiProperty()
@@ -10,4 +10,7 @@ export class ArtistEntity implements Artist {
 
     @ApiProperty()
     surname: string
+
+    @ApiProperty()
+    graffitis?: ArtistToGraffiti[];
 }

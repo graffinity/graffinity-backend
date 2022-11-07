@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { CategoryToGraffiti, Graffiti } from "@prisma/client";
+import { CategoryToGraffiti, Graffiti, ArtistToGraffiti } from "@prisma/client";
+import { ArtistEntity } from "../../artist/entities/artist.entity";
 import { CategoryEntity } from "../../category/entities/category.entity";
 
 export class GraffitiEntity implements Graffiti {
@@ -23,4 +24,7 @@ export class GraffitiEntity implements Graffiti {
 
 	@ApiProperty()
 	categories?: CategoryToGraffiti[];
+
+	@ApiProperty()
+	artists?: ArtistToGraffiti[];
 }
