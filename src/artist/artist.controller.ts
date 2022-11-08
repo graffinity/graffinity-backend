@@ -7,9 +7,8 @@ import {
 	Param,
 	Delete,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ArtistService } from "./artist.service";
-import { GraffitiEntry } from "./dto/request/graffiti-entry.dto";
 import { CreateArtistDto } from "./dto/request/create-artist.dto";
 import { UpdateArtistDto } from "./dto/request/update-artist.dto";
 import ArtistMapper from "./mapper/ArtistMapper";
