@@ -14,6 +14,8 @@ model Graffiti {
   location    String
   createdAt   DateTime             @default(now())
   categories  CategoryToGraffiti[]
+  tags        TagToGraffiti[]
+
   authorId    Int
   author      User                 @relation(fields: [authorId], references: [id])
 }
@@ -32,6 +34,35 @@ model CategoryToGraffiti {
   categoryId Int
 }
 
+model Email {
+  id       Int      @id @default(autoincrement())
+  dateSent DateTime @default(now())
+  subject  String   
+  body     String
+  status   String 
+}
+
+model EmailTemplate {
+  name     String 
+  id       Int      @id @default(autoincrement())
+  subject  String   
+  body     String 
+}
+
+model Tag {
+  id          Int             @id @default(autoincrement())
+  name        String          @unique
+  description String
+  graffitis   TagToGraffiti[]
+}
+
+model TagToGraffiti {
+  id         Int      @id @default(autoincrement())
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  graffitiId Int
+  tag        Tag      @relation(fields: [tagId], references: [id])
+  tagId      Int
+}
 model User {
   id       Int        @id @default(autoincrement())
   email    String     @unique
