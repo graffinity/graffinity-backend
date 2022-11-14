@@ -80,7 +80,6 @@ model Report {
   //TODO add relation to reported post (reported post)
   createdAt    DateTime @default(now())
   reportReason     String 
-
   status      String
   comment     String?//optional field?
 }
