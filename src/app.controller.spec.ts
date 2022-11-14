@@ -1,12 +1,12 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
+import { Test, TestingModule } from '@nestjs/testing';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 const appServiceMock = {
-	getHello: jest.fn().mockImplementation(() => "Hello World!"),
+	getHello: jest.fn().mockImplementation(() => 'Hello World!'),
 };
 
-describe("AppController", () => {
+describe('AppController', () => {
 	let appController: AppController;
 	let appService: AppService;
 
@@ -25,16 +25,16 @@ describe("AppController", () => {
 		appController = moduleRef.get<AppController>(AppController);
 	});
 
-	describe("root", () => {
+	describe('root', () => {
 		it('should return "Hello World!"', () => {
-			expect(appController.getHello()).toBe("Hello World!");
+			expect(appController.getHello()).toBe('Hello World!');
 			expect(appService.getHello).toHaveBeenCalled();
 		});
 	});
 
-	// describe("root", () => {
+	// describe('root', () => {
 	// 	it('should return "Hello World!"', () => {
-	// 		expect(appController.getHello()).toBe("Hello World!");
+	// 		expect(appController.getHello()).toBe('Hello World!');
 	// 	});
 	// });
 });
