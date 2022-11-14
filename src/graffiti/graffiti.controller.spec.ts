@@ -1,9 +1,9 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { PrismaService } from "../prisma/prisma.service";
-import { GraffitiController } from "./graffiti.controller";
-import { GraffitiService } from "./graffiti.service";
+import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaService } from '../prisma/prisma.service';
+import { GraffitiController } from './graffiti.controller';
+import { GraffitiService } from './graffiti.service';
 
-describe("GraffitiController", () => {
+describe('GraffitiController', () => {
 	let controller: GraffitiController;
 
 	beforeEach(async () => {
@@ -15,7 +15,7 @@ describe("GraffitiController", () => {
 		controller = module.get<GraffitiController>(GraffitiController);
 	});
 
-	it("should be defined", () => {
+	it('should be defined', () => {
 		expect(controller).toBeDefined();
 	});
 });
