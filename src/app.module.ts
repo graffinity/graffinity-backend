@@ -9,9 +9,15 @@ import { AuthModule } from "./auth/auth.module";
 import { JwtModule } from "@nestjs/jwt";
 import { GraffitiPhotoModule } from "./graffitiphoto/graffitiphoto.module";
 import { ReportModule } from './report/report.module';
+import { EmailTemplateModule } from './email-template/email-template.module';
+import { TagModule } from './tag/tag.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
 	imports: [
+		EmailModule,
+		EmailTemplateModule,
+		TagModule,
 		GraffitiModule,
 		PrismaModule,
 		CategoryModule,
