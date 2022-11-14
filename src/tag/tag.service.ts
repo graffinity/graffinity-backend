@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { CreateTagDto } from "./dto/create-tag.dto";
-import { UpdateTagDto } from "./dto/update-tag.dto";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateTagDto } from './dto/create-tag.dto';
+import { UpdateTagDto } from './dto/update-tag.dto';
 
 @Injectable()
 export class TagService {
@@ -37,5 +37,8 @@ export class TagService {
 				id: id,
 			},
 		});
+	}
+	findAllFilteredBy() {
+		return this.prisma.tag.findMany({});
 	}
 }

@@ -17,6 +17,7 @@ model Graffiti {
   tags        TagToGraffiti[]
   photos      GraffitiPhoto[]
   reports     Report[]
+
   authorId    Int
   author      User                 @relation(fields: [authorId], references: [id])
 }
@@ -33,6 +34,21 @@ model CategoryToGraffiti {
   graffitiId Int
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
+}
+
+model Email {
+  id       Int      @id @default(autoincrement())
+  dateSent DateTime @default(now())
+  subject  String   
+  body     String
+  status   String 
+}
+
+model EmailTemplate {
+  name     String 
+  id       Int      @id @default(autoincrement())
+  subject  String   
+  body     String 
 }
 
 model Tag {
