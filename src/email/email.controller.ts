@@ -8,8 +8,8 @@ import {
 	Delete,
 } from '@nestjs/common';
 import { EmailService } from './email.service';
-import { CreateEmailDto } from './dto/create-email.dto';
-import { UpdateEmailDto } from './dto/update-email.dto';
+//import { CreateEmailDto } from './dto/create-email.dto';
+//import { UpdateEmailDto } from './dto/update-email.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('email')
@@ -17,11 +17,11 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class EmailController {
 	constructor(private readonly emailService: EmailService) {}
 
-	@Post()
+	/*@Post()
 	@ApiOperation({ summary: 'email creation' })
 	create(@Body() createEmailDto: CreateEmailDto) {
 		return this.emailService.create(createEmailDto);
-	}
+	}*/
 
 	@Get()
 	@ApiOperation({ summary: 'Find all emails' })
@@ -35,11 +35,11 @@ export class EmailController {
 		return this.emailService.findOne(+id);
 	}
 
-	@Patch(':id')
-	@ApiOperation({ summary: 'Update an email by its id' })
-	update(@Param('id') id: string, @Body() updateEmailDto: UpdateEmailDto) {
-		return this.emailService.update(+id, updateEmailDto);
-	}
+	// @Patch(':id')
+	// @ApiOperation({ summary: 'Update an email by its id' })
+	// update(@Param('id') id: string, @Body() updateEmailDto: UpdateEmailDto) {
+	// 	return this.emailService.update(+id, updateEmailDto);
+	// }
 
 	@Delete(':id')
 	@ApiOperation({ summary: 'Delete an email by id' })
