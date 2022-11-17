@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { createDeflate } from 'zlib';
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateCommentDto } from "./dto/request/create-comment.dto";
 
@@ -7,7 +8,7 @@ export class CommentService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createCommentDto: CreateCommentDto) {
-		return await this.prisma.comment.create({data: createCommentDto});
+		return await this.prisma.comment.create({ data: createCommentDto });
 	}
 
 	async findAll() {
