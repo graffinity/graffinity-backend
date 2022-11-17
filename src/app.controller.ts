@@ -5,16 +5,16 @@ import {
 	Post,
 	Request,
 	UseGuards,
-} from "@nestjs/common";
-import { AppService } from "./app.service";
-import { AuthService } from "./auth/auth.service";
-import { LoginRequest } from "./auth/dto/request/login-request.dto";
-import { StatusResponse } from "./auth/dto/response/status-response-dto";
-import { AuthenticatedGuard } from "./auth/guards/authenticated.guard";
-import { JwtAuthGuard } from "./auth/jwt-auth.guards";
-import { LocalAuthGuard } from "./auth/local-auth.guard";
-import UserMapper from "./user/mapper/UserMapper";
-import { UserService } from "./user/user.service";
+} from '@nestjs/common';
+import { AppService } from './app.service';
+import { AuthService } from './auth/auth.service';
+import { LoginRequest } from './auth/dto/request/login-request.dto';
+import { StatusResponse } from './auth/dto/response/status-response-dto';
+import { AuthenticatedGuard } from './auth/guards/authenticated.guard';
+import { JwtAuthGuard } from './auth/jwt-auth.guards';
+import { LocalAuthGuard } from './auth/local-auth.guard';
+import UserMapper from './user/mapper/UserMapper';
+import { UserService } from './user/user.service';
 
 @Controller()
 export class AppController {
@@ -30,7 +30,7 @@ export class AppController {
 	}
 
 	@UseGuards(LocalAuthGuard)
-	@Post("api/v1/auth/login")
+	@Post('api/v1/auth/login')
 	async login(@Request() req: any, @Body() request: LoginRequest) {
 		let user = await this.authService.validateUser(request);
 		if (user !== null) {
@@ -48,7 +48,7 @@ export class AppController {
 	}
 
 	// @UseGuards(AuthenticatedGuard)
-	@Get("api/v1/auth/status")
+	@Get('api/v1/auth/status')
 	async getStatus(@Request() req: any) {
 		if (req.user) {
 			let status: StatusResponse = {
@@ -63,7 +63,7 @@ export class AppController {
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@Get("/api/v1/profile")
+	@Get('/api/v1/profile')
 	async getProfile(@Body() request: LoginRequest) {
 		let user = await this.userService.findByUsername(request.username);
 		if (user != null) {

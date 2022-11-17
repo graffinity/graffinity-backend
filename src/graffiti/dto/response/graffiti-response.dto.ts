@@ -32,8 +32,8 @@ export class GraffitiResponseDto {
 	authorId: number;
 
 	@ApiProperty({
-		description: "Entity creation date timestamp",
-		example: "2021-05-01T00:00:00.000Z",
+		description: 'Entity creation date timestamp',
+		example: '2021-05-01T00:00:00.000Z',
 	})
 	creationDate: Date;
 }

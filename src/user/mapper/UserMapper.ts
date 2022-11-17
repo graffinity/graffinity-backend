@@ -1,5 +1,5 @@
-import { UserInfoResponse } from "../dto/response/user-info-response.dto";
-import { UserEntity } from "../entities/user.entity";
+import { UserInfoResponse } from '../dto/response/user-info-response.dto';
+import { UserEntity } from '../entities/user.entity';
 
 const UserMapper = {
 	toResponse: (entity: UserEntity) => {
