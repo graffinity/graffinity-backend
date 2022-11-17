@@ -13,7 +13,7 @@ import { UpdateEmailDto } from './dto/update-email.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('email')
-@Controller('api/v1/graffiti')
+@Controller('api/v1/email')
 export class EmailController {
 	constructor(private readonly emailService: EmailService) {}
 
