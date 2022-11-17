@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -9,13 +9,13 @@ export class UserService {
 	private readonly users = [
 		{
 			userId: 1,
-			username: "john",
-			password: "changeme",
+			username: 'john',
+			password: 'changeme',
 		},
 		{
 			userId: 2,
-			username: "maria",
-			password: "guess",
+			username: 'maria',
+			password: 'guess',
 		},
 	];
 	create(createUserDto: CreateUserDto) {
