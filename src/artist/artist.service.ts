@@ -1,14 +1,25 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateArtistDto } from "./dto/request/create-artist.dto";
-import { UpdateArtistDto } from "./dto/request/update-artist.dto";
+import { GraffitiEntry } from './dto/request/graffiti-entry.dto';
+import { UpdateArtistDto } from './dto/request/update-artist.dto';
 
 @Injectable()
 export class ArtistService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createArtistDto: CreateArtistDto) {
-		return await this.prisma.artist.create({ data: createArtistDto });
+		return await this.prisma.artist.create({
+			data: {
+				name: createArtistDto.name,
+				surname: createArtistDto.surname,
+				graffitis: {
+					create: createArtistDto.graffitiIds.map((graffitiId) => ({
+						graffitiId: graffitiId,
+					})),
+				},
+			},
+		});
 	}
 
 	async findAll() {
@@ -21,6 +32,38 @@ export class ArtistService {
 				id: id,
 			},
 		});
+		return entity;
+	}
+
+	async addGraffitiToArtist(id: number, request: GraffitiEntry) {
+		let entity = await this.prisma.artist.update({
+			where: {
+				id: id,
+			},
+			data: {
+				graffitis: {
+					create: request.graffitiIds.map((graffitiId) => ({
+						graffitiId: graffitiId,
+					})),
+				},
+			},
+		});
+		console.log(entity);
+		return entity;
+	}
+
+	async removeGraffitiFromArtist(id: number, request: GraffitiEntry) {
+		let entity = await this.prisma.artist.update({
+			where: {
+				id: id,
+			},
+			data: {
+				graffitis: {
+					delete: request.graffitiIds.map((graffitiId) => ({ id: graffitiId })),
+				},
+			},
+		});
+		console.log(entity);
 		return entity;
 	}
 
@@ -37,7 +80,7 @@ export class ArtistService {
 		return await this.prisma.artist.delete({
 			where: {
 				id: id,
-      },
-    });
+			},
+		});
 	}
 }
