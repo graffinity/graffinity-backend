@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { CategoryEntry } from "./dto/request/category-entry.dto";
-import { CreateGraffitiDto } from "./dto/request/create-graffiti.dto";
-import { UpdateGraffitiDto } from "./dto/request/update-graffiti.dto";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CategoryEntry } from './dto/request/category-entry.dto';
+import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
+import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
 
 @Injectable()
 export class GraffitiService {

@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { User } from "@prisma/client";
-import { GraffitiEntity } from "../../graffiti/entities/graffiti.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { User } from '@prisma/client';
+import { GraffitiEntity } from '../../graffiti/entities/graffiti.entity';
 
 export class UserEntity implements User {
 	@ApiProperty()

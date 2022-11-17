@@ -9,10 +9,10 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
 	const config = new DocumentBuilder()
-		.setTitle("Graffinity")
-		.setDescription("Graffinity API documentation")
-		.setVersion("0.0.1")
-		.addTag("graffiti")
+		.setTitle('Graffinity')
+		.setDescription('Graffinity API documentation')
+		.setVersion('0.0.1')
+		.addTag('graffiti')
 		.build();
 
 	const document = SwaggerModule.createDocument(app, config, {

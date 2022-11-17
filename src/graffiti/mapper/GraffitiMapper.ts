@@ -1,5 +1,5 @@
-import { GraffitiResponseDto } from "../dto/response/graffiti-response.dto";
-import { GraffitiEntity } from "../entities/graffiti.entity";
+import { GraffitiResponseDto } from '../dto/response/graffiti-response.dto';
+import { GraffitiEntity } from '../entities/graffiti.entity';
 
 const GraffitiMapper = {
 	toEntity: () => {},
