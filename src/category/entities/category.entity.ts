@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Category, CategoryToGraffiti } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
+import { Category, CategoryToGraffiti } from '@prisma/client';
 
 export class CategoryEntity implements Category {
 	@ApiProperty()
