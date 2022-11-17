@@ -1,14 +1,8 @@
-<<<<<<< HEAD
-import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { UserEntity } from "../user/entities/user.entity";
-import { UserService } from "../user/user.service";
-import { LoginRequest } from "./dto/request/login-request.dto";
-=======
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { UserEntity } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
->>>>>>> db457ba11b5815a0a4cf0dc53dddae57d41a6f71
+import { LoginRequest } from './dto/request/login-request.dto';
 
 @Injectable()
 export class AuthService {
