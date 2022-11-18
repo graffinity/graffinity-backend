@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 import { createDeflate } from 'zlib';
-import { PrismaService } from "../prisma/prisma.service";
+import { PrismaService } from '../prisma/prisma.service';
 import { sortBy } from 'sort-by-typescript';
 import { CreateCommentDto } from './dto/request/create-comment.dto';
 import { CommentEntity } from './entities/comment.entity';
