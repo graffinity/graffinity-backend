@@ -1,5 +1,5 @@
-import { CommentResponseDto } from "../dto/response/comment-response.dto";
-import { CommentEntity } from "../entities/comment.entity";
+import { CommentResponseDto } from '../dto/response/comment-response.dto';
+import { CommentEntity } from '../entities/comment.entity';
 
 const CommentMapper = {
 	toEntity: () => {},
