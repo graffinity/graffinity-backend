@@ -1,7 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { createDeflate } from 'zlib';
 import { PrismaService } from "../prisma/prisma.service";
-import { CreateCommentDto } from "./dto/request/create-comment.dto";
+import { sortBy } from 'sort-by-typescript';
+import { CreateCommentDto } from './dto/request/create-comment.dto';
+import { CommentEntity } from './entities/comment.entity';
 
 @Injectable()
 export class CommentService {
@@ -12,7 +14,10 @@ export class CommentService {
 	}
 
 	async findAll() {
-		return await this.prisma.comment.findMany();
+		let entities = await this.prisma.comment.findMany({});
+
+		entities.sort(sortBy('-createdAt'));
+		return entities;
 	}
 
 	async delete(id: number) {

@@ -8,6 +8,7 @@ const CommentMapper = {
 		let response: CommentResponseDto = {
 			id: entity.id,
 			body: entity.body,
+			createdAt: entity.createdAt,
 			userId: entity.userId,
 			graffitiId: entity.graffitiId,
 		};
