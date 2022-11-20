@@ -70,7 +70,7 @@ model GraffitiPhoto {
   id         Int      @id @default(autoincrement())
   graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId Int
-  url        String
+  url        String   @unique
   addedAt    DateTime @default(now())
 }
 
