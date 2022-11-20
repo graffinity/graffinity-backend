@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Report } from "@prisma/client";
 
-export class Report {
+export class ReportEntity implements Report {
     @ApiProperty()
 	id: number;
 
@@ -19,6 +20,6 @@ export class Report {
     @ApiProperty()
     status: string;
 
-    // @ApiProperty()
-    // comment: string?;
+    @ApiProperty()
+    comment: string | null;
 }
