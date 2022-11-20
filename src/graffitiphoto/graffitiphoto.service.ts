@@ -16,11 +16,12 @@ export class GraffitiPhotoService {
 	}
 
 	async findOne(id: number) {
-		return await this.prisma.graffitiPhoto.findUnique({
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
 			where: {
 				id: id,
 			},
 		});
+		return entity;
 	}
 
 	async update(id: number, updateGraffitiPhotoDto: UpdateGraffitiPhotoDto) {
@@ -32,7 +33,7 @@ export class GraffitiPhotoService {
 		});
 	}
 
-	async remove(id: number) {
+	async delete(id: number) {
 		return await this.prisma.graffitiPhoto.delete({
 			where: {
 				id: id,
