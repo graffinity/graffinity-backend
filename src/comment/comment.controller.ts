@@ -19,8 +19,9 @@ export class CommentController {
 
 	@Post()
 	@ApiOperation({ summary: 'Create a comment' })
-	create(@Body() createCommentDto: CreateCommentDto) {
-		return this.commentService.create(createCommentDto);
+	async create(@Body() createCommentDto: CreateCommentDto) {
+		let entity = await this.commentService.create(createCommentDto);
+		return CommentMapper.toResponse(entity);
 	}
 
 	@Get()

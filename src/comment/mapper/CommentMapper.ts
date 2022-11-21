@@ -2,8 +2,6 @@ import { CommentResponseDto } from '../dto/response/comment-response.dto';
 import { CommentEntity } from '../entities/comment.entity';
 
 const CommentMapper = {
-	toEntity: () => {},
-
 	toResponse: (entity: CommentEntity) => {
 		let response: CommentResponseDto = {
 			id: entity.id,
