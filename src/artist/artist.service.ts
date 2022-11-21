@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { CreateArtistDto } from "./dto/request/create-artist.dto";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateArtistDto } from './dto/request/create-artist.dto';
 import { GraffitiEntry } from './dto/request/graffiti-entry.dto';
 import { UpdateArtistDto } from './dto/request/update-artist.dto';
 
