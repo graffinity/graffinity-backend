@@ -1,17 +1,16 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { EmailTemplate } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
+import { EmailTemplate } from '@prisma/client';
 
 export class EmailTemplateEntity implements EmailTemplate {
-    @ApiProperty()
-    name: string;
+	@ApiProperty()
+	name: string;
 
-    @ApiProperty()
-    id: number;
+	@ApiProperty()
+	id: number;
 
-    @ApiProperty()
-    subject: string;
+	@ApiProperty()
+	subject: string;
 
-    @ApiProperty()
-    body: string;
-
+	@ApiProperty()
+	body: string;
 }
