@@ -6,13 +6,13 @@ import {
 	Put,
 	Param,
 	Delete,
-} from "@nestjs/common";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
-import { ArtistService } from "./artist.service";
-import { CreateArtistDto } from "./dto/request/create-artist.dto";
+} from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ArtistService } from './artist.service';
+import { CreateArtistDto } from './dto/request/create-artist.dto';
 import { GraffitiEntry } from './dto/request/graffiti-entry.dto';
-import { UpdateArtistDto } from "./dto/request/update-artist.dto";
-import ArtistMapper from "./mapper/ArtistMapper";
+import { UpdateArtistDto } from './dto/request/update-artist.dto';
+import ArtistMapper from './mapper/ArtistMapper';
 
 @ApiTags('artist')
 @Controller('api/v1/artist')

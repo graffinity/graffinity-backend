@@ -51,7 +51,7 @@ export class UpdateGraffitiDto extends PartialType(CreateGraffitiDto) {
 
 	@ApiProperty({
 		type: Array<Number>,
-		description: "Artists is an array of artist ids",
+		description: 'Artists is an array of artist ids',
 	})
 	artistIds: number[];
 }
