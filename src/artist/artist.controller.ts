@@ -21,8 +21,9 @@ export class ArtistController {
 
 	@Post()
 	@ApiOperation({ summary: 'Create an artist entity' })
-	create(@Body() createArtistDto: CreateArtistDto) {
-		return this.artistService.create(createArtistDto);
+	async create(@Body() createArtistDto: CreateArtistDto) {
+		let entity = await this.artistService.create(createArtistDto);
+		return ArtistMapper.toResponse(entity);
 	}
 
 	@Get()
