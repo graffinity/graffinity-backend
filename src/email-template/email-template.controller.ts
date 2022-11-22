@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+	Controller,
+	Get,
+	Post,
+	Body,
+	Patch,
+	Param,
+	Delete,
+} from '@nestjs/common';
 import { EmailTemplateService } from './email-template.service';
 import { CreateEmailTemplateDto } from './dto/request/create-email-template.dto';
 import { UpdateEmailTemplateDto } from './dto/request/update-email-template.dto';

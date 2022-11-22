@@ -1,16 +1,10 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { User } from "@prisma/client";
-import { GraffitiEntity } from "../../graffiti/entities/graffiti.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { User } from '@prisma/client';
+import { GraffitiEntity } from '../../graffiti/entities/graffiti.entity';
 
 export class UserEntity implements User {
 	@ApiProperty()
 	id: number;
-
-	@ApiProperty()
-	email: string;
-
-	@ApiProperty()
-	password: string;
 
 	@ApiProperty()
 	name: string;
@@ -20,5 +14,10 @@ export class UserEntity implements User {
 
 	@ApiProperty()
 	username: string;
-	posts: GraffitiEntity[];
+
+	@ApiProperty()
+	email: string;
+
+	@ApiProperty()
+	password: string;
 }
