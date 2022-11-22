@@ -7,6 +7,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ArtistModule } from './artist/artist.module';
+import { CommentModule } from './comment/comment.module';
 import { UserService } from './user/user.service';
 import { EmailTemplateModule } from './email-template/email-template.module';
 import { TagModule } from './tag/tag.module';
@@ -23,6 +25,8 @@ import { EmailModule } from './email/email.module';
 		UserModule,
 		AuthModule,
 		JwtModule,
+		ArtistModule,
+		CommentModule,
 	],
 	controllers: [AppController],
 	providers: [AppService, UserService],
