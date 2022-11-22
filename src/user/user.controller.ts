@@ -8,8 +8,9 @@ import {
 	Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/request/create-user.dto';
+import { UpdateUserDto } from './dto/request/update-user.dto';
+import UserMapper from './mapper/UserMapper';
 
 @Controller('api/v1/user')
 export class UserController {
@@ -26,17 +27,24 @@ export class UserController {
 	}
 
 	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.userService.findOne(+id);
+	async findById(@Param('id') id: string) {
+		let entity = await this.userService.findById(+id);
+
+		if (entity !== null) {
+			return UserMapper.toResponse(entity);
+		}
+		return null;
 	}
 
 	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-		return this.userService.update(+id, updateUserDto);
+	async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+		let entity = await this.userService.update(+id, updateUserDto);
+		return UserMapper.toResponse(entity);
 	}
 
 	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.userService.remove(+id);
+	async delete(@Param('id') id: string) {
+		let entity = await this.userService.delete(+id);
+		return UserMapper.toResponse(entity);
 	}
 }

@@ -7,12 +7,6 @@ export class UserEntity implements User {
 	id: number;
 
 	@ApiProperty()
-	email: string;
-
-	@ApiProperty()
-	password: string;
-
-	@ApiProperty()
 	name: string;
 
 	@ApiProperty()
@@ -20,5 +14,10 @@ export class UserEntity implements User {
 
 	@ApiProperty()
 	username: string;
-	posts: GraffitiEntity[];
+
+	@ApiProperty()
+	email: string;
+
+	@ApiProperty()
+	password: string;
 }
