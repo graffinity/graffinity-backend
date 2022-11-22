@@ -1,15 +1,18 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { CategoryEntry } from "./dto/request/category-entry.dto";
-import { CreateGraffitiDto } from "./dto/request/create-graffiti.dto";
-import { UpdateGraffitiDto } from "./dto/request/update-graffiti.dto";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { ArtistEntry } from './dto/request/artist-entry.dto';
+import { CategoryEntry } from './dto/request/category-entry.dto';
+import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
+import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
 
 @Injectable()
 export class GraffitiService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createGraffitiDto: CreateGraffitiDto) {
-		return await this.prisma.graffiti.create({ data: createGraffitiDto });
+		return await this.prisma.graffiti.create({
+			data: createGraffitiDto,
+		});
 	}
 
 	async findAll() {
@@ -25,13 +28,22 @@ export class GraffitiService {
 		return entity;
 	}
 
-	async findAllFilteredBy(userId?: number, categoryId?: number) {
+	async findAllFilteredBy(
+		userId?: number,
+		categoryId?: number,
+		artistId?: number,
+	) {
 		return await this.prisma.graffiti.findMany({
 			where: {
 				authorId: userId,
 				categories: {
 					some: {
 						categoryId: categoryId,
+					},
+				},
+				artists: {
+					some: {
+						artistId: artistId,
 					},
 				},
 			},
@@ -63,6 +75,38 @@ export class GraffitiService {
 			data: {
 				categories: {
 					delete: request.categoryIds.map((categoryId) => ({ id: categoryId })),
+				},
+			},
+		});
+		console.log(entity);
+		return entity;
+	}
+
+	async addArtistToGraffiti(id: number, request: ArtistEntry) {
+		let entity = await this.prisma.graffiti.update({
+			where: {
+				id: id,
+			},
+			data: {
+				artists: {
+					create: request.artistIds.map((artistId) => ({
+						artistId: artistId,
+					})),
+				},
+			},
+		});
+		console.log(entity);
+		return entity;
+	}
+
+	async removeArtistFromGraffiti(id: number, request: ArtistEntry) {
+		let entity = await this.prisma.graffiti.update({
+			where: {
+				id: id,
+			},
+			data: {
+				artists: {
+					delete: request.artistIds.map((artistId) => ({ id: artistId })),
 				},
 			},
 		});

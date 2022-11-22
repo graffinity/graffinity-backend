@@ -4,8 +4,8 @@ import { EmailTemplateController } from './email-template.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [EmailTemplateController],
-  providers: [EmailTemplateService]
+	imports: [PrismaModule],
+	controllers: [EmailTemplateController],
+	providers: [EmailTemplateService],
 })
 export class EmailTemplateModule {}

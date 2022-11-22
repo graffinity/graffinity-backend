@@ -1,45 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateEmailDto } from './dto/create-email.dto';
-import { UpdateEmailDto } from './dto/update-email.dto';
+import { EmailEntity } from './entities/email.entity';
 
 @Injectable()
 export class EmailService {
-  constructor(private prisma: PrismaService) {}
-  
-  create(createEmailDto: CreateEmailDto) {
-    return this.prisma.email.create({data: createEmailDto});
-  }
+	constructor(private prisma: PrismaService) {}
 
-  findAll() {
-    return   this.prisma.email.findMany();
-  }
+	create(createEmailEntity: EmailEntity) {
+		return this.prisma.email.create({ data: createEmailEntity });
+	}
 
-  findOne(id: number) {
-    return this.prisma.email.findUnique({
-      where: {
-        id: id,
-      },
-    });
-  }
+	findAll() {
+		return this.prisma.email.findMany();
+	}
 
-  update(id: number, updateEmailDto: UpdateEmailDto) {
-    return this.prisma.email.update({
-      where: {
-        id: id,
-      },
-      data: updateEmailDto,
-    });
-  }
+	findOne(id: number) {
+		return this.prisma.email.findUnique({
+			where: {
+				id: id,
+			},
+		});
+	}
 
-  remove(id: number) {
-    return this.prisma.email.delete({
-      where: {
-        id: id,
-      },
-    });
-  }
-  findAllFilteredBy() {
+	remove(id: number) {
+		return this.prisma.email.delete({
+			where: {
+				id: id,
+			},
+		});
+	}
+	findAllFilteredBy() {
 		return this.prisma.email.findMany({});
 	}
 }

@@ -1,9 +1,7 @@
-import { GraffitiResponseDto } from "../dto/response/graffiti-response.dto";
-import { GraffitiEntity } from "../entities/graffiti.entity";
+import { GraffitiResponseDto } from '../dto/response/graffiti-response.dto';
+import { GraffitiEntity } from '../entities/graffiti.entity';
 
 const GraffitiMapper = {
-	toEntity: () => {},
-
 	toResponse: (entity: GraffitiEntity) => {
 		let response: GraffitiResponseDto = {
 			id: entity.id,
@@ -11,6 +9,7 @@ const GraffitiMapper = {
 			description: entity.description,
 			location: entity.location,
 			authorId: entity.authorId,
+			creationDate: entity.createdAt,
 		};
 
 		return response;
