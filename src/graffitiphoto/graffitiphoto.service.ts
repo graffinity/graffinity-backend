@@ -1,14 +1,16 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { CreateGraffitiPhotoDto } from "./dto/request/create-graffitiphoto.dto";
-import { UpdateGraffitiPhotoDto } from "./dto/request/update-graffitiphoto.dto";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
+import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
 
 @Injectable()
 export class GraffitiPhotoService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
-		return await this.prisma.graffitiPhoto.create({ data: createGraffitiPhotoDto });
+		return await this.prisma.graffitiPhoto.create({
+			data: createGraffitiPhotoDto,
+		});
 	}
 
 	async findAll() {
