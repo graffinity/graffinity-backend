@@ -19,6 +19,8 @@ model Graffiti {
 
   authorId    Int
   author      User                 @relation(fields: [authorId], references: [id])
+  artists     ArtistToGraffiti[]
+  //comments         Comment[]
 }
 
 model Category {
@@ -83,4 +85,19 @@ model User {
   username String     @unique
   posts    Graffiti[]
   comment  Comment[]
+}
+
+model Artist {
+  id            Int                @id @default(autoincrement())
+  name          String             @unique
+  surname       String
+  graffitis ArtistToGraffiti[]
+}
+
+model ArtistToGraffiti {
+  id         Int      @id @default(autoincrement())
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  graffitiId Int
+  artist     Artist   @relation(fields: [artistId], references: [id])
+  artistId   Int
 }

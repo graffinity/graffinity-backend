@@ -10,5 +10,8 @@
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"typescript.format.insertSpaceAfterTypeAssertion": true,
 	"javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
-	"css.lint.float": "warning"
+	"css.lint.float": "warning",
+	"[prisma]": {
+		"editor.defaultFormatter": "Prisma.prisma"
+	}
 }
