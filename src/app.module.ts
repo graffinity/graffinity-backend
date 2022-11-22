@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ArtistModule } from './artist/artist.module';
 import { CommentModule } from './comment/comment.module';
+import { UserService } from './user/user.service';
 import { EmailTemplateModule } from './email-template/email-template.module';
 import { TagModule } from './tag/tag.module';
 import { EmailModule } from './email/email.module';
@@ -28,6 +29,6 @@ import { EmailModule } from './email/email.module';
 		CommentModule,
 	],
 	controllers: [AppController],
-	providers: [AppService],
+	providers: [AppService, UserService],
 })
 export class AppModule {}
