@@ -1,25 +1,25 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Report } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
+import { Report } from '@prisma/client';
 
 export class ReportEntity implements Report {
-    @ApiProperty()
+	@ApiProperty()
 	id: number;
 
-    @ApiProperty()
-    graffitiId: number;
+	@ApiProperty()
+	graffitiId: number;
 
-    @ApiProperty()
-    userId: number;
+	@ApiProperty()
+	userId: number;
 
-    @ApiProperty()
+	@ApiProperty()
 	createdAt: Date;
-    
-    @ApiProperty()
-    reportReason: string;
 
-    @ApiProperty()
-    status: string;
+	@ApiProperty()
+	reportReason: string;
 
-    @ApiProperty()
-    comment: string | null;
+	@ApiProperty()
+	status: string;
+
+	@ApiProperty()
+	comment: string | null;
 }

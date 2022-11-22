@@ -1,5 +1,5 @@
-import { GraffitiPhotoResponseDto } from "../dto/response/graffitiphoto.response.dto";
-import { GraffitiPhotoEntity } from "../entities/graffitiphoto.entity";
+import { GraffitiPhotoResponseDto } from '../dto/response/graffitiphoto.response.dto';
+import { GraffitiPhotoEntity } from '../entities/graffitiphoto.entity';
 
 const GraffitiPhotoMapper = {
 	toEntity: () => {},
@@ -9,7 +9,6 @@ const GraffitiPhotoMapper = {
 			id: entity.id,
 			graffitiId: entity.graffitiId,
 			url: entity.url,
-			
 		};
 
 		return response;
