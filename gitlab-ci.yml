@@ -1,0 +1,28 @@
+stages:
+  - mirror
+mirror-from-external:
+  stage: mirror
+  image: ubuntu:18.04
+  before_script:
+    - apt-get update -y && apt-get install openssh-client -y
+    - apt install git -y
+    - eval $(ssh-agent -s)
+    - echo "$GIT_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $GIT_LAB_HOST >> ~/.ssh/known_hosts
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - git config --global user.name "${GIT_USER_NAME}"
+    - git config --global user.email "${GIT_USER_EMAIL}"
+    - ssh "git@$GIT_LAB_HOST"
+  script:
+    - echo $SOURCE_REPOSITORY
+    - git clone --mirror $SOURCE_REPOSITORY Your_Repo_folder_name
+    - cd Your_Repo_folder_name
+    - git remote remove origin
+    - git remote add origin $DESTINATION_REPOSITORY
+    - git push --prune --all
+    - git push --prune --tags
+  only:
+    - branches
