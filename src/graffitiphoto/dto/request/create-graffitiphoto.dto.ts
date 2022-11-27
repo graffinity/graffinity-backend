@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { iFile, IFile } from '../../../s3/S3service';
 
 export class CreateGraffitiPhotoDto {
 	// @ApiProperty({
@@ -26,4 +27,10 @@ export class CreateGraffitiPhotoDto {
 		default: new Date(),
 	})
 	addedAt: Date;
+
+	@ApiProperty({
+		type: iFile,
+		description: 'The file of a graffiti is a required value',
+	})
+	file: IFile;
 }

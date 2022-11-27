@@ -128,3 +128,10 @@ model Report {
   status      String
   comment     String?//optional field?
 }
+
+model Image {
+  id       Int @id @default(autoincrement())
+  publicId Int @unique
+  format   String
+  version  String
+}

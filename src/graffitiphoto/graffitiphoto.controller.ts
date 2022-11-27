@@ -12,9 +12,10 @@ import { GraffitiPhotoService } from './graffitiphoto.service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
 import GraffitiPhotoMapper from './mapper/GraffitiPhotoMapper';
+import { IFile } from '../s3/S3service';
 
-@ApiTags('graffitiphoto')
-@Controller('api/v1/graffitiphoto')
+@ApiTags('api/v1/graffiti-photo')
+@Controller('api/v1/graffiti-photo')
 export class GraffitiPhotoController {
 	constructor(private readonly graffitiPhotoService: GraffitiPhotoService) {}
 

@@ -1,15 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { IFile, S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
 
 @Injectable()
 export class GraffitiPhotoService {
 	constructor(private prisma: PrismaService) {}
+	@Inject(S3Service)
+	private S3Service: S3Service;
 
 	async create(createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
+		console.log('createGraffitiPhotoDto', createGraffitiPhotoDto);
+		await this.S3Service.uploadFile(createGraffitiPhotoDto.file);
 		return await this.prisma.graffitiPhoto.create({
-			data: createGraffitiPhotoDto,
+			data: {
+				graffiti: {
+					connect: {
+						id: createGraffitiPhotoDto.graffitiId,
+					},
+				},
+				url: createGraffitiPhotoDto.url,
+				addedAt: createGraffitiPhotoDto.addedAt,
+			},
 		});
 	}
 
