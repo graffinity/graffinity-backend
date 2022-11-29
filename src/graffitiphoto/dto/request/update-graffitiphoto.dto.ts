@@ -30,4 +30,10 @@ export class UpdateGraffitiPhotoDto extends PartialType(
 		default: new Date(),
 	})
 	addedAt: Date;
+
+	@ApiProperty({
+		type: Number,
+		description: 'UserId is a required value',
+	})
+	userId: number;
 }

@@ -20,8 +20,9 @@ export class ReportController {
 
 	@Post()
 	@ApiOperation({ summary: 'Create a report' })
-	create(@Body() createReportDto: CreateReportDto) {
-		return this.reportService.create(createReportDto);
+	async create(@Body() createReportDto: CreateReportDto) {
+		let entity = await this.reportService.create(createReportDto);
+		return ReportMapper.toResponse(entity);
 	}
 
 	@Get()

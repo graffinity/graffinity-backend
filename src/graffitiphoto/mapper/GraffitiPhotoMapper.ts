@@ -2,13 +2,12 @@ import { GraffitiPhotoResponseDto } from '../dto/response/graffitiphoto.response
 import { GraffitiPhotoEntity } from '../entities/graffitiphoto.entity';
 
 const GraffitiPhotoMapper = {
-	toEntity: () => {},
-
 	toResponse: (entity: GraffitiPhotoEntity) => {
 		let response: GraffitiPhotoResponseDto = {
 			id: entity.id,
 			graffitiId: entity.graffitiId,
 			url: entity.url,
+			userId: entity.userId,
 		};
 
 		return response;

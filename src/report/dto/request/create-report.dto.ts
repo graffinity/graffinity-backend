@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateReportDto {
-	// @ApiProperty({
-	// 	type: Number,
-	// 	description: "Id is a required value",
-	// })
-	// id: number;
-
 	@ApiProperty({
 		type: Number,
 		description: 'The graffitiId of a report is a required value',
@@ -38,10 +32,4 @@ export class CreateReportDto {
 		description: 'The status of a report is a required value',
 	})
 	status: string;
-
-	// @ApiProperty({
-	//     type: String,
-	//     description: "The comment of a report is not a required value",
-	// })
-	// comment: string?;
 }
