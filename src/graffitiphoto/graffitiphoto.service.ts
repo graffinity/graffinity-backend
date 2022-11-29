@@ -15,13 +15,18 @@ export class GraffitiPhotoService {
 		await this.S3Service.uploadFile(createGraffitiPhotoDto.file);
 		return await this.prisma.graffitiPhoto.create({
 			data: {
+				url: createGraffitiPhotoDto.url,
+				addedAt: createGraffitiPhotoDto.addedAt,
+				user: {
+					connect: {
+						id: createGraffitiPhotoDto.userId,
+					},
+				},
 				graffiti: {
 					connect: {
 						id: createGraffitiPhotoDto.graffitiId,
 					},
 				},
-				url: createGraffitiPhotoDto.url,
-				addedAt: createGraffitiPhotoDto.addedAt,
 			},
 		});
 	}

@@ -15,6 +15,9 @@ export class GraffitiPhotoEntity implements GraffitiPhoto {
 	addedAt: Date;
 
 	@ApiProperty()
+	userId: number;
+
+	@ApiProperty()
 	comment?: string;
 }
 //cia kazkas netaip turbut

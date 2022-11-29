@@ -2,12 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { iFile, IFile } from '../../../s3/S3service';
 
 export class CreateGraffitiPhotoDto {
-	// @ApiProperty({
-	// 	type: Number,
-	// 	description: "Id is a required value",
-	// })
-	// id: number;
-
 	@ApiProperty({
 		type: Number,
 		description: 'GraffitiId is a required value',
@@ -33,4 +27,10 @@ export class CreateGraffitiPhotoDto {
 		description: 'The file of a graffiti is a required value',
 	})
 	file: IFile;
+
+	@ApiProperty({
+		type: Number,
+		description: 'UserId is a required value',
+	})
+	userId: number;
 }
