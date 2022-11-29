@@ -59,3 +59,12 @@ export class S3Service {
 		}
 	}
 }
+
+export interface IFile {
+	buffer: string | Buffer | Uint8Array | Blob | Readable;
+	mimetype: string;
+	originalname: string;
+}
+
+export declare var iFile: IFile;
+export default S3Service;
