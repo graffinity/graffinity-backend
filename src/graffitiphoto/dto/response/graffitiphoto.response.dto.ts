@@ -18,4 +18,10 @@ export class GraffitiPhotoResponseDto {
 		example: 'wwww.example.com',
 	})
 	url: string;
+
+	@ApiProperty({
+		description: 'The UserId of a graffirti photo',
+		example: 1,
+	})
+	userId: number;
 }

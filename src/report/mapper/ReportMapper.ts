@@ -2,8 +2,6 @@ import { ReportResponseDto } from '../dto/response/report-response.dto';
 import { ReportEntity } from '../entities/report.entity';
 
 const ReportMapper = {
-	toEntity: () => {},
-
 	toResponse: (entity: ReportEntity) => {
 		let response: ReportResponseDto = {
 			id: entity.id,

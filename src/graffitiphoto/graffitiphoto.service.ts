@@ -9,7 +9,20 @@ export class GraffitiPhotoService {
 
 	async create(createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
 		return await this.prisma.graffitiPhoto.create({
-			data: createGraffitiPhotoDto,
+			data: {
+				url: createGraffitiPhotoDto.url,
+				addedAt: createGraffitiPhotoDto.addedAt,
+				user: {
+					connect: {
+						id: createGraffitiPhotoDto.userId,
+					},
+				},
+				graffiti: {
+					connect: {
+						id: createGraffitiPhotoDto.graffitiId,
+					},
+				},
+			},
 		});
 	}
 

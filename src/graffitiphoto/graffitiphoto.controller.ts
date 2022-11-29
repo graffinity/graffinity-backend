@@ -19,9 +19,10 @@ export class GraffitiPhotoController {
 	constructor(private readonly graffitiPhotoService: GraffitiPhotoService) {}
 
 	@Post()
-	@ApiOperation({ summary: 'Create a graffitiphoto entity' })
-	create(@Body() createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
-		return this.graffitiPhotoService.create(createGraffitiPhotoDto);
+	@ApiOperation({ summary: 'Create a GraffitiPhoto' })
+	async create(@Body() createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
+		let entity = await this.graffitiPhotoService.create(createGraffitiPhotoDto);
+		return GraffitiPhotoMapper.toResponse(entity);
 	}
 
 	@Get()
