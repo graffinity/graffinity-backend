@@ -13,6 +13,8 @@ import { UserService } from './user/user.service';
 import { EmailTemplateModule } from './email-template/email-template.module';
 import { TagModule } from './tag/tag.module';
 import { EmailModule } from './email/email.module';
+import { GraffitiPhotoModule } from './graffitiphoto/graffitiphoto.module';
+import { ReportModule } from './report/report.module';
 
 @Module({
 	imports: [
@@ -25,6 +27,8 @@ import { EmailModule } from './email/email.module';
 		UserModule,
 		AuthModule,
 		JwtModule,
+		GraffitiPhotoModule,
+		ReportModule,
 		ArtistModule,
 		CommentModule,
 	],
