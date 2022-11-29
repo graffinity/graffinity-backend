@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateGraffitiPhotoDto {
-
 	@ApiProperty({
 		type: Number,
 		description: 'GraffitiId is a required value',
@@ -13,7 +12,7 @@ export class CreateGraffitiPhotoDto {
 		description: 'The url of a graffiti is a required value and must be unique',
 	})
 	url: string;
-	
+
 	@ApiProperty({
 		type: Date,
 		description:
