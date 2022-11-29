@@ -9,10 +9,13 @@ export class S3Service {
 	s3 = new AWS.S3({
 		accessKeyId: process.env.AWS_S3_ACCESS_KEY,
 		secretAccessKey: process.env.AWS_S3_KEY_SECRET,
-		region: 'eu-central-1',
 	});
 
-	async uploadFile(file: IFile) {
+	async uploadFile(file: {
+		buffer: string | Buffer | Uint8Array | Blob | Readable;
+		mimetype: string;
+		originalname: string;
+	}) {
 		const { originalname } = file;
 
 		if (this.AWS_S3_BUCKET_NAME) {
@@ -36,30 +39,23 @@ export class S3Service {
 		const params = {
 			Bucket: bucket,
 			Key: String(name),
-			Body: file.toString('base64'),
+			Body: file,
 			ACL: 'public-read',
 			ContentType: mimetype,
 			ContentDisposition: 'inline',
 			CreateBucketConfiguration: {
-				LocationConstraint: 'eu-central-1',
+				LocationConstraint: 'ap-south-1',
 			},
 		};
 
-		// console.log(params);
+		console.log(params);
 
 		try {
 			let s3Response = await this.s3.upload(params).promise();
-			console.log('s3Response: ', s3Response);
+
+			console.log(s3Response);
 		} catch (e) {
 			console.log(e);
 		}
 	}
 }
-export interface IFile {
-	buffer: string | Buffer | Uint8Array | Blob | Readable;
-	mimetype: string;
-	originalname: string;
-}
-
-export declare var iFile: IFile;
-export default S3Service;
