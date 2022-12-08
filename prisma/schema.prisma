@@ -128,5 +128,5 @@ model Report {
   createdAt    DateTime @default(now())
   reportReason     String 
   status      String
-  comment     String?
+  comment     String?//optional field?
 }
