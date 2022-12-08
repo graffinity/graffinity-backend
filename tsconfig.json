@@ -23,7 +23,13 @@
 		"isolatedModules": true,
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"outDir": "./dist",
-		"baseUrl": "./"
+		"baseUrl": "./",
+		"paths": {
+			"@src": ["src"],
+			"@test": ["test"],
+			"@types": ["types"],
+			"@prisma": ["prisma"]
+		}
 	},
 	"include": ["src/**/*"]
 }

@@ -1,16 +1,18 @@
-import { PrismaClient } from '@prisma/client';
+import { Graffiti, PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 import * as faker from '@faker-js/faker';
+import { CreateGraffitiDto } from '../src/graffiti/dto/request/create-graffiti.dto';
 
 const prisma = new PrismaClient();
 
-// generate random data for graffiti posts using faker
-const graffitiTestData = (userId: number): any => ({
+const graffitiTestData = (userId: number): CreateGraffitiDto => ({
 	name: faker.faker.internet.domainWord(),
 	description: faker.faker.lorem.sentence(),
 	location: faker.faker.address.city(),
 	createdAt: faker.faker.date.past(),
 	authorId: userId,
+	categoryIds: [],
+	artistIds: [],
 });
 
 const categoryTestDataCreation = (): any => ({
@@ -24,8 +26,10 @@ async function main() {
 	console.log('Seeding...');
 
 	// User test data
-	let user = await prisma.user.create({
-		data: {
+	let user = await prisma.user.upsert({
+		where: { email: 'johndoe@gmail.com' },
+		update: {},
+		create: {
 			name: 'john',
 			lastname: 'doe',
 			username: 'johndoe',
@@ -37,7 +41,11 @@ async function main() {
 
 	// GraffitiPost test data
 	for (let i = 0; i < fakerRounds; i++) {
-		await prisma.graffiti.create({ data: graffitiTestData(user.id) });
+		await prisma.graffiti.upsert({
+			where: { id: graffitiTestData(user.id)[i].id },
+			update: {},
+			create: graffitiTestData(user.id),
+		});
 	}
 	console.log('Graffiti data seed success!');
 
@@ -53,7 +61,10 @@ async function main() {
 }
 
 main()
-	.catch((e) => console.error(e))
+	.catch((e) => {
+		console.error(e);
+	})
 	.finally(async () => {
 		await prisma.$disconnect();
+		process.exit(0);
 	});
