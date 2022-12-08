@@ -6,6 +6,8 @@ import {
 	Put,
 	Param,
 	Delete,
+	UploadedFile,
+	UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GraffitiPhotoService } from './graffitiphoto.service';
@@ -13,6 +15,7 @@ import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
 import GraffitiPhotoMapper from './mapper/GraffitiPhotoMapper';
 import { IFile } from '../s3/S3service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('api/v1/graffiti-photo')
 @Controller('api/v1/graffiti-photo')
@@ -20,9 +23,20 @@ export class GraffitiPhotoController {
 	constructor(private readonly graffitiPhotoService: GraffitiPhotoService) {}
 
 	@Post()
+	@UseInterceptors(FileInterceptor('file'))
+	@UseInterceptors()
 	@ApiOperation({ summary: 'Create a GraffitiPhoto' })
-	async create(@Body() createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
-		let entity = await this.graffitiPhotoService.create(createGraffitiPhotoDto);
+	async create(
+		@Body() body: string,
+		@UploadedFile() file: Express.Multer.File,
+	) {
+		let newBody = JSON.parse(JSON.stringify(body));
+		let bruh: CreateGraffitiPhotoDto = JSON.parse(newBody.body);
+		console.log('file', file);
+		console.log('body', body);
+		console.log('newBody', newBody);
+		console.log('bruh', bruh);
+		let entity = await this.graffitiPhotoService.create(bruh, file);
 		return GraffitiPhotoMapper.toResponse(entity);
 	}
 

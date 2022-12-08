@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { IFile, S3Service } from '../s3/S3service';
+import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
 
@@ -10,9 +10,11 @@ export class GraffitiPhotoService {
 	@Inject(S3Service)
 	private S3Service: S3Service;
 
-	async create(createGraffitiPhotoDto: CreateGraffitiPhotoDto) {
-		console.log('createGraffitiPhotoDto', createGraffitiPhotoDto);
-		await this.S3Service.uploadFile(createGraffitiPhotoDto.file);
+	async create(
+		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
+		file: Express.Multer.File,
+	) {
+		await this.S3Service.uploadFile(createGraffitiPhotoDto.file, file);
 		return await this.prisma.graffitiPhoto.create({
 			data: {
 				url: createGraffitiPhotoDto.url,

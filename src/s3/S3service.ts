@@ -1,6 +1,6 @@
-import { Injectable, Req, Res } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
-import { Readable } from 'node:stream';
+import { S3 } from 'aws-sdk';
 
 @Injectable()
 export class S3Service {
@@ -11,19 +11,13 @@ export class S3Service {
 		secretAccessKey: process.env.AWS_S3_KEY_SECRET,
 	});
 
-	async uploadFile(file: {
-		buffer: string | Buffer | Uint8Array | Blob | Readable;
-		mimetype: string;
-		originalname: string;
-	}) {
-		const { originalname } = file;
-
+	async uploadFile(prevFile: IFile, file: Express.Multer.File) {
 		if (this.AWS_S3_BUCKET_NAME) {
 			await this.s3_upload(
-				file.buffer,
 				this.AWS_S3_BUCKET_NAME,
-				originalname,
+				file.originalname,
 				file.mimetype,
+				file.buffer,
 			);
 		} else {
 			console.log('No bucket name');
@@ -31,26 +25,29 @@ export class S3Service {
 	}
 
 	async s3_upload(
-		file: string | Buffer | Uint8Array | Blob | Readable,
 		bucket: string,
-		name: string,
+		fileName: string,
 		mimetype: string,
+		dataBuffer: Buffer,
 	) {
-		const params = {
-			Bucket: bucket,
-			Key: String(name),
-			Body: file,
-			ACL: 'public-read',
-			ContentType: mimetype,
-			ContentDisposition: 'inline',
-			CreateBucketConfiguration: {
-				LocationConstraint: 'ap-south-1',
-			},
-		};
-
-		console.log(params);
-
 		try {
+			// const blob = new Blob([new Uint8Array(await file.stream())], {
+			// 	type: file.type,
+			// });
+
+			const params: S3.Types.PutObjectRequest = {
+				Bucket: bucket,
+				Key: fileName,
+				Body: dataBuffer,
+				ACL: 'public-read',
+				ContentType: mimetype,
+				ContentDisposition: 'inline',
+				// CreateBucketConfiguration: {
+				// 	LocationConstraint: process.env.AWS_S3_REGION,
+				// },
+			};
+			console.log(params);
+
 			let s3Response = await this.s3.upload(params).promise();
 
 			console.log(s3Response);
@@ -61,7 +58,7 @@ export class S3Service {
 }
 
 export interface IFile {
-	buffer: string | Buffer | Uint8Array | Blob | Readable;
+	buffer: File;
 	mimetype: string;
 	originalname: string;
 }
