@@ -17,13 +17,15 @@ export class UserController {
 	constructor(private readonly userService: UserService) {}
 
 	@Post()
-	create(@Body() createUserDto: CreateUserDto) {
-		return this.userService.create(createUserDto);
+	async create(@Body() createUserDto: CreateUserDto) {
+		let entity = await this.userService.create(createUserDto);
+		return UserMapper.toResponse(entity);
 	}
 
 	@Get()
-	findAll() {
-		return this.userService.findAll();
+	async findAll() {
+		let entities = await this.userService.findAll();
+		return UserMapper.toResponses(entities);
 	}
 
 	@Get(':id')
