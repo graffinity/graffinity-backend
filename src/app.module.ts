@@ -15,6 +15,9 @@ import { TagModule } from './tag/tag.module';
 import { EmailModule } from './email/email.module';
 import { GraffitiPhotoModule } from './graffitiphoto/graffitiphoto.module';
 import { ReportModule } from './report/report.module';
+import { S3Module } from './s3/S3module';
+import { FileController } from './file/file.controller';
+import { FileService } from './file/file.service';
 
 @Module({
 	imports: [
@@ -31,8 +34,9 @@ import { ReportModule } from './report/report.module';
 		ReportModule,
 		ArtistModule,
 		CommentModule,
+		S3Module,
 	],
-	controllers: [AppController],
-	providers: [AppService, UserService],
+	controllers: [AppController, FileController],
+	providers: [AppService, UserService, FileService],
 })
 export class AppModule {}
