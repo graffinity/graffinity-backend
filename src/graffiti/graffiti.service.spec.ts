@@ -41,13 +41,12 @@ describe('GraffitiService', () => {
 	});
 });
 
+// Start by collecting the photo metadata for each picture, including values such as exposure, focus, color balance, and composition.
 
-    // Start by collecting the photo metadata for each picture, including values such as exposure, focus, color balance, and composition.
+// Create a set of weighting factors for each metadata value, based on its importance in determining the overall quality of the picture.
 
-    // Create a set of weighting factors for each metadata value, based on its importance in determining the overall quality of the picture.
+// Calculate the overall score for each picture by multiplying each metadata value by its corresponding weighting factor and summing the results.
 
-    // Calculate the overall score for each picture by multiplying each metadata value by its corresponding weighting factor and summing the results.
+// Sort the pictures by their overall score in descending order, with the highest scoring picture at the top of the list.
 
-    // Sort the pictures by their overall score in descending order, with the highest scoring picture at the top of the list.
-
-    // Output the list of pictures ranked from best to worst.
+// Output the list of pictures ranked from best to worst.
