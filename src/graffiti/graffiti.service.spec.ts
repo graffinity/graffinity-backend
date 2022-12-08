@@ -16,4 +16,10 @@ describe('GraffitiService', () => {
 	it('should be defined', () => {
 		expect(service).toBeDefined();
 	});
+
+	it('should return all graffiti', async () => {
+		const graffiti = await service.findAll();
+
+		expect(graffiti).toBeDefined();
+	});
 });
