@@ -24,5 +24,4 @@ describe('CategoryController', () => {
 
 		expect(categories).toBeDefined();
 	});
-		
 });
