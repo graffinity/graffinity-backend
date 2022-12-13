@@ -18,21 +18,21 @@ describe('GraffitiService', () => {
 		expect(service).toBeDefined();
 	});
 
-	it('should return successfuly create a graffiti', async () => {
-		let testGraffiti: CreateGraffitiDto = {
-			name: 'test',
-			description: 'test',
-			location: 'test',
-			createdAt: new Date(),
-			categoryIds: [1],
-			artistIds: [1],
-			authorId: 1,
-		};
-		let graffiti = await service.create(testGraffiti);
+	// it('should return successfuly create a graffiti', async () => {
+	// 	let testGraffiti: CreateGraffitiDto = {
+	// 		name: 'test',
+	// 		description: 'test',
+	// 		location: 'test',
+	// 		createdAt: new Date(),
+	// 		categoryIds: [1],
+	// 		artistIds: [1],
+	// 		authorId: 1,
+	// 	};
+	// 	let graffiti = await service.create(testGraffiti);
 
-		console.log('created: ', graffiti);
-		expect(graffiti).toBeDefined();
-	});
+	// 	console.log('created: ', graffiti);
+	// 	expect(graffiti).toBeDefined();
+	// });
 
 	it('should return all graffiti', async () => {
 		const graffiti = await service.findAll();
