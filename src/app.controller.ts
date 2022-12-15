@@ -35,7 +35,7 @@ export class AppController {
 	async login(@Request() req: any, @Body() request: LoginRequest) {
 		let user = await this.authService.validateUser(request);
 		if (user !== null) {
-			let token = await this.authService.login(user);
+			let token = await this.authService.login(request);
 
 			return {
 				access_token: token.accessToken,
@@ -66,7 +66,7 @@ export class AppController {
 	@UseGuards(JwtAuthGuard)
 	@Get('/api/v1/profile')
 	async getProfile(@Body() request: LoginRequest) {
-		let user = await this.userService.findByUsername(request.username);
+		let user = await this.userService.findByUsername(request.loginBy.username);
 		if (!user) {
 			return UserMapper.toResponse(user);
 		}
