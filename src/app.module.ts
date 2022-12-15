@@ -26,6 +26,7 @@ import { ConfigModule } from '@nestjs/config';
 			isGlobal: true,
 			envFilePath: ['.env', '.env.dev.local', '.env.dev', '.env.local'],
 		}),
+		AuthModule,
 		EmailModule,
 		EmailTemplateModule,
 		TagModule,

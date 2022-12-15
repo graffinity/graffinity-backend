@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { PrismaModule } from '../prisma/prisma.module';
 import { UserModule } from '../user/user.module';
@@ -17,6 +17,7 @@ import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 		AccessTokenStrategy,
 		RefreshTokenStrategy,
 		UserService,
+		JwtService,
 	],
 	controllers: [AuthController],
 	exports: [AuthService],
