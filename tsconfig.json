@@ -16,7 +16,6 @@
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
 		"allowJs": true,
-		// "strict": false,
 		"esModuleInterop": true,
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
