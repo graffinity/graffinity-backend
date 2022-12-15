@@ -30,10 +30,6 @@ jobs:
           --health-retries 5
         ports:
           - ${{ secrets.DB_PORT }}:5432
-    env:
-      POSTGRES_USER: ${{env.POSTGRES_USER}}
-      POSTGRES_PASSWORD: ${{env.POSTGRES_PASSWORD}}
-      DATABASE_URL: ${{env.POSTGRES_URL}}
     steps:
       - name: Check out source code
         uses: actions/checkout@v3
