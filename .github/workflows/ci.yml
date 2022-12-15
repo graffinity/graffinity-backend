@@ -20,8 +20,8 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: ${{env.POSTGRES_USER}}
-          POSTGRES_PASSWORD: ${{env.POSTGRESPASSWORD}}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD}}
 
         options: >-
           --health-cmd pg_isready
