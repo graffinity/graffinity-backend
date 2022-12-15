@@ -29,7 +29,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - ${{ env.POSTGRES_PORT }}:5432
+          - ${{ secrets.DB_PORT }}:5432
     env:
       POSTGRES_USER: ${{env.POSTGRES_USER}}
       POSTGRES_PASSWORD: ${{env.POSTGRES_PASSWORD}}
