@@ -1,17 +1,18 @@
-import { APP_PIPE, NestFactory } from '@nestjs/core';
+import { INestApplication } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import session from 'express-session';
 import passport from 'passport';
 import { AppModule } from './app.module';
 import { CategoryModule } from './category/category.module';
 import { GraffitiModule } from './graffiti/graffiti.module';
-import session from 'express-session';
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
+	const app: INestApplication = await NestFactory.create(AppModule);
 
 	const config = new DocumentBuilder()
 		.setTitle('Graffinity')
-		.setDescription('Graffinity API documentation')
-		.setVersion('0.0.1')
+		.setDescription('Graffinity backend')
+		.setVersion('0.3.0')
 		.addTag('graffiti')
 		.build();
 
@@ -32,6 +33,12 @@ async function bootstrap() {
 	app.use(passport.session());
 
 	await app.listen(8080);
-	console.log(`Application is running on: ${await app.getUrl()}`);
+	console.log(
+		`Application is running on: ${
+			(await app.getUrl()) === 'http://[::1]:8080'
+				? 'http://localhost:8080'
+				: app.getUrl()
+		}`,
+	);
 }
 bootstrap();
