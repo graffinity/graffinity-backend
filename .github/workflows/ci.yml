@@ -1,5 +1,12 @@
 name: backend continuous integration
 
+env:
+  POSTGRES_USER: ${{ secrets.DB_USER }}
+  POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  POSTGRES_PORT: ${{ secrets.DB_PORT }}
+  POSTGRES_HOST: ${{ secrets.DB_HOST }}
+  POSTGRES_NAME: ${{ secrets.DB_NAME }}
+  POSTGRES_URL: postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }}
 on:
     push:
         branches: [master]
@@ -13,11 +20,8 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: ${{ secrets.DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          POSTGRES_PORT: ${{ secrets.DB_PORT }}
-          POSTGRES_HOST: ${{ secrets.DB_HOST }}
-          POSTGRES_NAME: ${{ secrets.DB_NAME }}
+          POSTGRES_USER: ${{env.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{env.POSTGRESPASSWORD}}
 
         options: >-
           --health-cmd pg_isready
@@ -25,14 +29,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - ${{ secrets.DB_PORT }}:5432
+          - ${{ env.POSTGRES_PORT }}:5432
     env:
-      POSTGRES_USER: ${{ secrets.DB_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      POSTGRES_PORT: ${{ secrets.DB_PORT }}
-      POSTGRES_HOST: ${{ secrets.DB_HOST }}
-      POSTGRES_NAME: ${{ secrets.DB_NAME }}
-      DATABASE_URL: postgresql://${{env.POSTGRES_USER}}:${{env.POSTGRES_PASSWORD}}@${{env.POSTGRES_HOST}}:${{env.POSTGRES_PORT}}/${{env.POSTGRES_NAME}}
+      POSTGRES_USER: ${{env.POSTGRES_USER}}
+      POSTGRES_PASSWORD: ${{env.POSTGRES_PASSWORD}}
+      DATABASE_URL: ${{env.POSTGRES_URL}}
     steps:
       - name: Check out source code
         uses: actions/checkout@v3
