@@ -1,5 +1,9 @@
 name: backend continuous integration
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   POSTGRES_USER: ${{ secrets.DB_USER }}
   POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -12,6 +16,8 @@ on:
         branches: [master]
     pull_request:
         branches: [master]
+    workflow_dispatch:
+      
 
 jobs:
   build:
@@ -20,7 +26,7 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_USER: ${{  }}
           POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD}}
 
         options: >-
