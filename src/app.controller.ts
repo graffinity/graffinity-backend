@@ -11,8 +11,9 @@ import { AuthService } from './auth/auth.service';
 import { LoginRequest } from './auth/dto/request/login-request.dto';
 import { StatusResponse } from './auth/dto/response/status-response-dto';
 import { AuthenticatedGuard } from './auth/guards/authenticated.guard';
-import { JwtAuthGuard } from './auth/jwt-auth.guards';
-import { LocalAuthGuard } from './auth/local-auth.guard';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guards';
+import { LocalAuthGuard } from './auth/guards/local-auth.guard';
+
 import UserMapper from './user/mapper/UserMapper';
 import { UserService } from './user/user.service';
 
@@ -34,11 +35,11 @@ export class AppController {
 	async login(@Request() req: any, @Body() request: LoginRequest) {
 		let user = await this.authService.validateUser(request);
 		if (user !== null) {
-			let token = await this.authService.login(user);
+			let token = await this.authService.login(request);
 
 			return {
-				access_token: token.access_token,
-				success: token.access_token !== undefined,
+				access_token: token.accessToken,
+				success: token.accessToken !== undefined,
 			};
 		}
 		return {
@@ -65,8 +66,8 @@ export class AppController {
 	@UseGuards(JwtAuthGuard)
 	@Get('/api/v1/profile')
 	async getProfile(@Body() request: LoginRequest) {
-		let user = await this.userService.findByUsername(request.username);
-		if (user != null) {
+		let user = await this.userService.findByUsername(request.loginBy.username);
+		if (!user) {
 			return UserMapper.toResponse(user);
 		}
 		return null;

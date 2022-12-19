@@ -1,23 +1,54 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '@prisma/client';
-import { GraffitiEntity } from '../../graffiti/entities/graffiti.entity';
 
 export class UserEntity implements User {
-	@ApiProperty()
+	@ApiProperty({
+		description: 'User id',
+
+		example: 1,
+
+		required: true,
+	})
 	id: number;
 
-	@ApiProperty()
+	@ApiProperty({
+		description: 'User name',
+		example: 'John',
+		required: true,
+	})
 	name: string;
 
-	@ApiProperty()
+	@ApiProperty({
+		description: 'User last name',
+		example: 'Doe',
+		required: true,
+	})
 	lastname: string;
 
-	@ApiProperty()
+	@ApiProperty({
+		description: 'User name',
+		example: 'admin',
+		required: true,
+	})
 	username: string;
 
-	@ApiProperty()
+	@ApiProperty({
+		description: "User's email",
+		example: 'as.studentas@mif.stud.vu.lt',
+		required: true,
+	})
 	email: string;
 
-	@ApiProperty()
+	@ApiProperty({
+		description: "User's birth date",
+		example: '1999-12-31',
+		required: true,
+	})
 	password: string;
+
+	@ApiProperty({
+		description: "User's refresh token",
+		example: 'some-refresh-token',
+	})
+	refreshToken: string;
 }

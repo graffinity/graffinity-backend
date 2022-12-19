@@ -18,4 +18,10 @@ describe('GraffitiController', () => {
 	it('should be defined', () => {
 		expect(controller).toBeDefined();
 	});
+
+	it('should return all graffiti', async () => {
+		const graffiti = await controller.findAll();
+
+		expect(graffiti).toBeDefined();
+	});
 });
