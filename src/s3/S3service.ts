@@ -11,7 +11,7 @@ export class S3Service {
 		secretAccessKey: process.env.AWS_S3_KEY_SECRET,
 	});
 
-	async uploadFile(prevFile: IFile, file: Express.Multer.File) {
+	async uploadFile(file: Express.Multer.File) {
 		if (this.AWS_S3_BUCKET_NAME) {
 			await this.s3_upload(
 				this.AWS_S3_BUCKET_NAME,
@@ -31,10 +31,6 @@ export class S3Service {
 		dataBuffer: Buffer,
 	) {
 		try {
-			// const blob = new Blob([new Uint8Array(await file.stream())], {
-			// 	type: file.type,
-			// });
-
 			const params: S3.Types.PutObjectRequest = {
 				Bucket: bucket,
 				Key: fileName,
@@ -43,7 +39,7 @@ export class S3Service {
 				ContentType: mimetype,
 				ContentDisposition: 'inline',
 				// CreateBucketConfiguration: {
-				// 	LocationConstraint: process.env.AWS_S3_REGION,
+				// 	LocationConstraint: process.env.AWS_S3_REGION ?? 'eu-west-1',
 				// },
 			};
 			console.log(params);
@@ -51,17 +47,12 @@ export class S3Service {
 			let s3Response = await this.s3.upload(params).promise();
 
 			console.log(s3Response);
+			let url = s3Response.Location;
+			console.log(url);
 		} catch (e) {
 			console.log(e);
 		}
 	}
 }
 
-export interface IFile {
-	buffer: File;
-	mimetype: string;
-	originalname: string;
-}
-
-export declare var iFile: IFile;
 export default S3Service;

@@ -1,21 +1,20 @@
 import {
-	Controller,
-	Get,
-	Post,
 	Body,
-	Put,
-	Param,
+	Controller,
 	Delete,
+	Get,
+	Param,
+	Post,
+	Put,
 	UploadedFile,
 	UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { GraffitiPhotoService } from './graffitiphoto.service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
+import { GraffitiPhotoService } from './graffitiphoto.service';
 import GraffitiPhotoMapper from './mapper/GraffitiPhotoMapper';
-import { IFile } from '../s3/S3service';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('api/v1/graffiti-photo')
 @Controller('api/v1/graffiti-photo')
