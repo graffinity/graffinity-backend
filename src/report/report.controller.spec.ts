@@ -18,4 +18,11 @@ describe('ReportController', () => {
 	it('should be defined', () => {
 		expect(controller).toBeDefined();
 	});
+
+	it('should return all reports', async () => {
+
+		const reports = await controller.findAll();
+
+		expect(reports).toEqual([]);
+	});
 });

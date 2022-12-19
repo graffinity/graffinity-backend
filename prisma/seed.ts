@@ -35,6 +35,36 @@ async function main() {
 	});
 	console.log('User data seed success!');
 
+	// Report test data
+	let report1 = await prisma.report.create({
+		data: {
+			id: 1,
+			userId: 1,	
+			graffitiId: 1,
+			createdAt: new Date(),	
+			reportReason: 'Inapropriate content',
+			status: 'pending',
+			//comment: 'This is comment tralala',
+
+		},
+	});
+	console.log('Report1 data seed success!');
+
+	// Report test data
+	let report2 = await prisma.report.create({
+		data: {
+			id: 2,
+			userId: 1,	
+			graffitiId: 2,
+			createdAt: new Date(),	
+			reportReason: 'Wrong location',
+			status: 'aprooved',
+			comment: 'This is comment',
+
+		},
+	});
+	console.log('Report2 data seed success!');
+
 	// GraffitiPost test data
 	for (let i = 0; i < fakerRounds; i++) {
 		await prisma.graffiti.create({ data: graffitiTestData(user.id) });
