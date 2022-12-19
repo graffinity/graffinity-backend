@@ -4,10 +4,11 @@ import { GraffitiPhotoController } from './graffitiphoto.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 import { S3Module } from '../s3/S3module';
 import S3Service from '../s3/S3service';
+import { MetadataStrippingService } from '../Metadata/metadataStripping.service';
 
 @Module({
 	imports: [PrismaModule, S3Module],
 	controllers: [GraffitiPhotoController],
-	providers: [GraffitiPhotoService, S3Service],
+	providers: [GraffitiPhotoService, S3Service, MetadataStrippingService],
 })
 export class GraffitiPhotoModule {}

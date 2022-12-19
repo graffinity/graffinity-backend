@@ -1,4 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { MetadataService } from 'aws-sdk';
+import { MetadataStrippingService } from '../Metadata/metadataStripping.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
@@ -10,10 +12,14 @@ export class GraffitiPhotoService {
 	@Inject(S3Service)
 	private S3Service: S3Service;
 
+	@Inject(MetadataStrippingService)
+	private metadataStrippingService: MetadataStrippingService;
+
 	async create(
 		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
 		file: Express.Multer.File,
 	) {
+		await this.metadataStrippingService.stripMetadata(file.buffer);
 		await this.S3Service.uploadFile(createGraffitiPhotoDto.file, file);
 		return await this.prisma.graffitiPhoto.create({
 			data: {
@@ -21,7 +27,7 @@ export class GraffitiPhotoService {
 				addedAt: createGraffitiPhotoDto.addedAt,
 				user: {
 					connect: {
-						id: createGraffitiPhotoDto.userId,
+						id: createGraffitiPhotoDto.userId ?? 1,
 					},
 				},
 				graffiti: {

@@ -37,6 +37,7 @@
 		"aws-sdk": "^2.1277.0",
 		"dotenv": "^16.0.3",
 		"express-session": "^1.17.3",
+		"fs": "^0.0.1-security",
 		"geolocation": "^0.0.0",
 		"nearestneighbour": "^0.1.1",
 		"passport": "^0.6.0",
@@ -45,7 +46,9 @@
 		"reflect-metadata": "^0.1.13",
 		"rimraf": "^3.0.2",
 		"rxjs": "^7.6.0",
-		"sort-by-typescript": "^1.2.3"
+		"sharp": "^0.31.2",
+		"sort-by-typescript": "^1.2.3",
+		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^7.6.0",
@@ -59,7 +62,9 @@
 		"@types/node": "^18.11.15",
 		"@types/passport-jwt": "^3.0.7",
 		"@types/passport-local": "^1.0.34",
+		"@types/sharp": "^0.31.0",
 		"@types/supertest": "^2.0.11",
+		"@types/uuid": "^9.0.0",
 		"@typescript-eslint/eslint-plugin": "^5.46.1",
 		"@typescript-eslint/parser": "^5.46.1",
 		"eslint": "^8.29.0",
