@@ -1,8 +1,8 @@
+import { User } from '@prisma/client';
 import { UserInfoResponse } from '../dto/response/user-info-response.dto';
-import { UserEntity } from '../entities/user.entity';
 
 const UserMapper = {
-	toResponse: (entity: UserEntity) => {
+	toResponse: (entity: User) => {
 		let response: UserInfoResponse = {
 			name: entity.name,
 			lastname: entity.lastname,
@@ -12,7 +12,7 @@ const UserMapper = {
 
 		return response;
 	},
-	toResponses: (entities: UserEntity[]) => {
+	toResponses: (entities: User[]) => {
 		return entities.map((entity) => UserMapper.toResponse(entity));
 	},
 };
