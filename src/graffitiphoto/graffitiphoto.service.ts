@@ -18,10 +18,9 @@ export class GraffitiPhotoService {
 	async create(
 		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
 		file: Express.Multer.File,
-		photo: Express.Multer.File,
 	) {
-		console.log('tavo mama');
-		this.meta.extractMetadata;
+		let exif = await this.meta.extractMetadata(file);
+		console.log('exif (PhotoService): ', exif);
 		await this.S3Service.uploadFile(createGraffitiPhotoDto.file, file);
 		return await this.prisma.graffitiPhoto.create({
 			data: {

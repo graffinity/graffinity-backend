@@ -37,6 +37,7 @@ export class GraffitiPhotoController {
 		console.log('newBody', newBody);
 		console.log('bruh', bruh);
 		let entity = await this.graffitiPhotoService.create(bruh, file);
+
 		return GraffitiPhotoMapper.toResponse(entity);
 	}
 
