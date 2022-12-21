@@ -19,8 +19,16 @@ export class GraffitiPhotoService {
 		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
 		file: Express.Multer.File,
 	) {
-		await this.metadataStrippingService.stripMetadata(file.buffer);
-		await this.S3Service.uploadFile(createGraffitiPhotoDto.file, file);
+		// await this.metadataStrippingService.saveImageToTempFile(buffer);
+		let response = await this.S3Service.uploadFile(
+			createGraffitiPhotoDto.file,
+			file,
+		);
+		if (response) {
+			file.path = createGraffitiPhotoDto.url;
+		}
+
+		let buffer = await this.metadataStrippingService.stripMetadata(file);
 		return await this.prisma.graffitiPhoto.create({
 			data: {
 				url: createGraffitiPhotoDto.url,

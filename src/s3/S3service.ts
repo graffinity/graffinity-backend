@@ -13,12 +13,13 @@ export class S3Service {
 
 	async uploadFile(prevFile: IFile, file: Express.Multer.File) {
 		if (this.AWS_S3_BUCKET_NAME) {
-			await this.s3_upload(
+			let response = await this.s3_upload(
 				this.AWS_S3_BUCKET_NAME,
 				file.originalname,
 				file.mimetype,
 				file.buffer,
 			);
+			return response;
 		} else {
 			console.log('No bucket name');
 		}
@@ -51,6 +52,7 @@ export class S3Service {
 			let s3Response = await this.s3.upload(params).promise();
 
 			console.log(s3Response);
+			return s3Response;
 		} catch (e) {
 			console.log(e);
 		}
