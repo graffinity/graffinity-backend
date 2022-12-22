@@ -1,25 +1,60 @@
 import { Injectable, Body, Param } from '@nestjs/common';
-import piexif, { IExif, IExifElement, TagValues } from 'piexif-ts';
+//import piexif, { IExif, IExifElement, TagValues } from 'piexif-ts';
 const fs = require('fs');
-// const piexif = require('piexifjs');
+const piexif = require('piexifjs');
 
 @Injectable()
 export class MetadataStrippingService {
+	// async stripMetadata(file: Blob) {
+	// 	const reader = new FileReader();
+	// 	reader.onloadend = () => {
+	// 		const result = load(reader.result as string);
+	// 		console.log('result:', result); // to see the original exif data
+	// 		const removed = remove(reader.result as string);
+	// 		console.log('after removed:', load(removed)); // now you can see all the exif data is gone.
+	// 	};
+	// 	reader.readAsText(file);
+	// 	let arraybuffer = await file.arrayBuffer();
+	// 	let buffer = Buffer.from(arraybuffer);
+	// 	return buffer;
+	// }
+	// }
+
 	async stripMetadata(file: Express.Multer.File): Promise<Buffer> {
 		// Handy utility functions
 		const getBase64DataFromJpegFile = (filename: string) =>
-			fs.readFileSync(file.path).toString('binary');
+			fs.readFileSync(file.originalname).toString('binary');
 		const getExifFromJpegFile = (filename: string) =>
-			piexif.load(getBase64DataFromJpegFile(file.path));
+			piexif.load(getBase64DataFromJpegFile(file.originalname));
 
 		const ImageData = getBase64DataFromJpegFile(file.path);
 		const scrubbedImageData = piexif.remove(ImageData);
 		const fileBuffer = Buffer.from(scrubbedImageData, 'binary');
 		fs.writeFileSync(file.path, fileBuffer);
 
+		function debugExif(exif: any) {
+			for (const ifd in exif) {
+				if (ifd == 'thumbnail') {
+					const thumbnailData = exif[ifd] === null ? 'null' : exif[ifd];
+					console.log(`- thumbnail: ${thumbnailData}`);
+				} else {
+					console.log(`- ${ifd}`);
+					for (const tag in exif[ifd]) {
+						console.log(
+							`    - ${piexif.TAGS[ifd][tag]['name']}: ${exif[ifd][tag]}`,
+						);
+					}
+				}
+			}
+		}
+
+		debugExif(getExifFromJpegFile(file.path));
+
 		return fileBuffer;
+		// }
 	}
 }
+
 // import { readFile, writeFile, unlink } from 'fs';
 // import { promisify } from 'util';
 // import sharp from 'sharp';
