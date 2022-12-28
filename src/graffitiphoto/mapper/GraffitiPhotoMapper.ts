@@ -8,6 +8,7 @@ const GraffitiPhotoMapper = {
 			graffitiId: entity.graffitiId,
 			url: entity.url,
 			userId: entity.userId,
+			pictureScore: entity.pictureScore,
 		};
 
 		return response;
