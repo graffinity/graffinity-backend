@@ -14,10 +14,10 @@ export class GraffitiPhotoService {
 		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
 		file: Express.Multer.File,
 	) {
-		await this.S3Service.uploadFile(file);
+		let response = await this.S3Service.uploadFile(file);
 		return await this.prisma.graffitiPhoto.create({
 			data: {
-				url: createGraffitiPhotoDto.url,
+				url: response.Location,
 				addedAt: createGraffitiPhotoDto.addedAt,
 				user: {
 					connect: {

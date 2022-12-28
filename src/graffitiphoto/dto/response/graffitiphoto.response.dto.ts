@@ -20,6 +20,12 @@ export class GraffitiPhotoResponseDto {
 	url: string;
 
 	@ApiProperty({
+		description: 'The given score of a graffiti photo',
+		example: 1,
+	})
+	pictureScore: number | null;
+
+	@ApiProperty({
 		description: 'The UserId of a graffirti photo',
 		example: 1,
 	})
