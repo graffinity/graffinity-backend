@@ -37,4 +37,10 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 		example: '123456',
 	})
 	password: string;
+
+	@ApiProperty({
+		type: Array<Number>,
+		description: 'Likes posts of a user',
+	})
+	likes: number[];
 }
