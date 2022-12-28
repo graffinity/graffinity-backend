@@ -18,9 +18,15 @@ import { ReportModule } from './report/report.module';
 import { S3Module } from './s3/S3module';
 import { FileController } from './file/file.controller';
 import { FileService } from './file/file.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
 	imports: [
+		ConfigModule.forRoot({
+			isGlobal: true,
+			envFilePath: ['.env', '.env.dev.local', '.env.dev', '.env.local'],
+		}),
+		AuthModule,
 		EmailModule,
 		EmailTemplateModule,
 		TagModule,

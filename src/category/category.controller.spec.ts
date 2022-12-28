@@ -19,5 +19,9 @@ describe('CategoryController', () => {
 		expect(controller).toBeDefined();
 	});
 
-	
+	it('should return all categories', async () => {
+		const categories = await controller.findAll();
+
+		expect(categories).toBeDefined();
+	});
 });

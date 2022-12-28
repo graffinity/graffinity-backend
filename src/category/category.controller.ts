@@ -32,7 +32,8 @@ export class CategoryController {
 
 	@Get(':id')
 	@ApiOperation({ summary: 'Find a category by id' })
-	findOne(@Param('id') id: string) {
+	findOne(@Param('id') id: number) {
+		console.log(id);
 		return this.categoryService.findOne(+id);
 	}
 

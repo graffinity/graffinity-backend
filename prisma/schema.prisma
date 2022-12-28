@@ -18,15 +18,13 @@ model Graffiti {
   tags        TagToGraffiti[]
   photos      GraffitiPhoto[]
   reports     Report[]
-
   authorId    Int
-  author     User                 @relation(fields: [authorId], references: [id])
+  author      User                 @relation(fields: [authorId], references: [id])
   artists     ArtistToGraffiti[]
-
 }
 
 model Category {
-  id        Int                  @id @default(autoincrement()) 
+  id        Int                  @id @default(autoincrement())
   name      String               @unique
   graffitis CategoryToGraffiti[]
 }
@@ -52,16 +50,16 @@ model Comment {
 model Email {
   id       Int      @id @default(autoincrement())
   dateSent DateTime @default(now())
-  subject  String   
+  subject  String
   body     String
-  status   String 
+  status   String
 }
 
 model EmailTemplate {
-  name     String 
-  id       Int      @id @default(autoincrement())
-  subject  String   
-  body     String 
+  name    String
+  id      Int    @id @default(autoincrement())
+  subject String
+  body    String
 }
 
 model Tag {
@@ -89,24 +87,24 @@ model GraffitiPhoto {
   user       User     @relation(fields: [userId], references: [id])
 }
 
-
 model User {
-  id       Int        @id @default(autoincrement())
-  email    String     @unique
-  password String
-  name     String
-  lastname String
-  username String     @unique
-  posts    Graffiti[]
-  reports  Report[]
-  comment  Comment[]
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  password       String
+  name           String
+  lastname       String
+  username       String          @unique
+  posts          Graffiti[]
+  reports        Report[]
+  comment        Comment[]
   graffitiPhotos GraffitiPhoto[]
+  refreshToken   String?
 }
 
 model Artist {
-  id            Int                @id @default(autoincrement())
-  name          String             @unique
-  surname       String
+  id        Int                @id @default(autoincrement())
+  name      String             @unique
+  surname   String
   graffitis ArtistToGraffiti[]
 }
 
@@ -122,11 +120,11 @@ model Report {
   id         Int      @id @default(autoincrement())
   graffitiId Int
   graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  userId    Int
-  user   User @relation(fields: [userId], references: [id])
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
 
   createdAt    DateTime @default(now())
-  reportReason     String 
-  status      String
-  comment     String?//optional field?
+  reportReason String
+  status       String
+  comment      String? //optional field?
 }
