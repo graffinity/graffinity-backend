@@ -19,6 +19,9 @@ import { S3Module } from './s3/S3module';
 import { FileController } from './file/file.controller';
 import { FileService } from './file/file.service';
 import { ConfigModule } from '@nestjs/config';
+import AtGuard from './auth/guards/access-token.guard';
+import { LocalStrategy } from './auth/strategies/local.strategy';
+import { AccessTokenStrategy } from './auth/strategies/access-token.strategy';
 
 @Module({
 	imports: [
@@ -43,6 +46,14 @@ import { ConfigModule } from '@nestjs/config';
 		S3Module,
 	],
 	controllers: [AppController, FileController],
-	providers: [AppService, UserService, FileService],
+	providers: [
+		{
+			provide: 'APP_GUARD',
+			useClass: AccessTokenStrategy,
+		},
+		AppService,
+		UserService,
+		FileService,
+	],
 })
 export class AppModule {}

@@ -8,7 +8,7 @@ import { JwtPayload, JwtPayloadWithRefreshToken } from '../types';
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
 	Strategy,
-	'jwt-refresh-token',
+	'jwt-refresh',
 ) {
 	constructor() {
 		super({
