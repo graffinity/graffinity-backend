@@ -48,8 +48,8 @@ export class AuthController {
 		return this.authService.login2(req.user);
 	}
 
-	@UseGuards(JwtAuthGuard)
 	@Get('profile')
+	@UseGuards(JwtAuthGuard)
 	getProfile(@Req() req: Request) {
 		console.log('getProfile req', req.user);
 		return req.user;

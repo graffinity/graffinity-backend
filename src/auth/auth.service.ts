@@ -65,10 +65,11 @@ export class AuthService {
 
 	async login2(user: any) {
 		const payload = {
+			sub: user.id,
 			userId: user.id,
 			username: user.username,
-			sub: user.userId,
 			email: user.email,
+			isLoggedIn: true,
 		};
 		console.log('payload', payload);
 		return {
@@ -80,6 +81,7 @@ export class AuthService {
 	}
 
 	async logout(userId: number) {
+
 		await this.prisma.user.updateMany({
 			where: {
 				id: userId,
@@ -91,6 +93,7 @@ export class AuthService {
 				refreshToken: null,
 			},
 		});
+
 		return true;
 	}
 
