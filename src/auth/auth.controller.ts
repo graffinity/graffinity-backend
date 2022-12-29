@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Get,
 	HttpCode,
 	HttpStatus,
 	Post,
@@ -19,6 +20,8 @@ import RtGuard from './guards/refresh-token.guard';
 import { Response, Request } from 'express';
 import GetCurrentUser from './decorators/get-current-user.decorator';
 import AtGuard from './guards/access-token.guard';
+import { LocalAuthGuard } from './guards/local.guard';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 @ApiTags('auth')
 @Controller('api/v1/auth')
@@ -32,11 +35,24 @@ export class AuthController {
 		return this.authService.signup(dto);
 	}
 
-	@Public()
+	// @Public()
+	// @Post('login')
+	// @HttpCode(HttpStatus.OK)
+	// login(@Body() dto: LoginRequest): Promise<Tokens> {
+	// 	return this.authService.login(dto);
+	// }
+
+	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	@HttpCode(HttpStatus.OK)
-	login(@Body() dto: LoginRequest): Promise<Tokens> {
-		return this.authService.login(dto);
+	login(@Req() req: Request) {
+		return this.authService.login2(req.user);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Get('profile')
+	getProfile(@Req() req: Request) {
+		console.log('getProfile req', req);
+		return req.user;
 	}
 
 	@Post('logout')

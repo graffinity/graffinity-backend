@@ -6,10 +6,13 @@ import passport from 'passport';
 import { AppModule } from './app.module';
 import { CategoryModule } from './category/category.module';
 import { GraffitiModule } from './graffiti/graffiti.module';
-import cookieParser from 'cookie-parser';
+import * as dotenv from 'dotenv';
+import 'dotenv/config';
+
 async function bootstrap() {
 	const app: INestApplication = await NestFactory.create(AppModule);
 	app.useGlobalPipes(new ValidationPipe());
+	dotenv.config();
 
 	const config = new DocumentBuilder()
 		.setTitle('Graffinity')

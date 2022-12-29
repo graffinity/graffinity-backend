@@ -63,6 +63,17 @@ export class AuthService {
 		return tokens;
 	}
 
+	async login2(user: any) {
+		const payload = { username: user.username, sub: user.userId };
+		// console.log('payload', payload);
+		return {
+			access_token: this.jwtService.sign(payload, {
+				secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+				// privateKey: process.env.JWT_ACCESS_TOKEN_SECRET,
+			}),
+		};
+	}
+
 	async logout(userId: number) {
 		await this.prisma.user.updateMany({
 			where: {
