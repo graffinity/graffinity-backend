@@ -26,4 +26,3 @@ export class GraffitiPhotoEntity implements GraffitiPhoto {
 	@ApiProperty()
 	likes?: Likes[];
 }
-
