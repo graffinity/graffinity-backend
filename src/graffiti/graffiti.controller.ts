@@ -37,10 +37,7 @@ export class GraffitiController {
 	@ApiOperation({
 		summary: 'Find all graffiti posts',
 	})
-	async findAll(@Req() req: Request) {
-		console.log('req', req);
-		let huh = req.cookies;
-		console.log('huh', huh);
+	async findAll() {
 		let entities = await this.graffitiService.findAll();
 		return GraffitiMapper.toResponses(entities);
 	}
