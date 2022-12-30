@@ -1,5 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
+import { Likes } from '@prisma/client';
+import { arrayBuffer } from 'stream/consumers';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
 	@ApiProperty({
@@ -39,10 +41,10 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 	password: string;
 
 	@ApiProperty({
-		type: Array<Number>,
-		description: 'Likes posts of a user',
+		type: Array<number>,
+		description: 'Liked photos of a user',
 	})
-	likes: number[];
+	graffitiPhotoIds: number[];
 
 	@ApiProperty({
 		description: 'Refresh token of the user',
