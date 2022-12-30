@@ -6,15 +6,8 @@ export class MetadataServiceJS {
 	constructor() {}
 
 	getMetadata = async (file) => {
-		// console.log(file);
-		let exif = await sharp(file.buffer).metadata();
-		exif.exif?.map(() => {
-			return 0;
-		});
 		const getBase64DataFromJpegFile = (filename) =>
 			fs.readFileSync(filename).toString('binary');
-		const getExifFromJpegFile = (filename) =>
-			piexif.load(getBase64DataFromJpegFile(filename));
 
 		const hotelImageData = getBase64DataFromJpegFile(
 			'/Users/kernius/graffinity/backend-graffinity/src/metadata/out.jpg',
