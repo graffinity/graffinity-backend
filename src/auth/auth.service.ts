@@ -8,7 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import argon2 from 'argon2';
-import { RefreshToken } from 'aws-sdk/clients/ssooidc';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { LoginRequest } from './dto/request/login-request.dto';
@@ -64,6 +63,23 @@ export class AuthService {
 		return tokens;
 	}
 
+	async login2(user: any) {
+		const payload = {
+			sub: user.id,
+			userId: user.id,
+			username: user.username,
+			email: user.email,
+			isLoggedIn: true,
+		};
+		console.log('payload', payload);
+		return {
+			access_token: this.jwtService.sign(payload, {
+				secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+				// privateKey: process.env.JWT_ACCESS_TOKEN_SECRET,
+			}),
+		};
+	}
+
 	async logout(userId: number) {
 		await this.prisma.user.updateMany({
 			where: {
@@ -76,6 +92,7 @@ export class AuthService {
 				refreshToken: null,
 			},
 		});
+
 		return true;
 	}
 
@@ -84,9 +101,9 @@ export class AuthService {
 	// }
 
 	async validateUser(request: LoginRequest): Promise<User> {
-		let user =
-			(await this.userService.findByUsername(request.loginBy.username)) ||
-			(await this.userService.findByEmail(request.loginBy.email));
+		let user = await this.userService.findByUsername(request.username);
+		// ||
+		// (await this.userService.findByEmail(request.loginBy.email));
 
 		if (!user) {
 			throw new NotFoundException('User not found');
