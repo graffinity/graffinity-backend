@@ -1,8 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma/prisma.service';
+import { S3Service } from '../s3/S3service';
 import { GraffitiPhotoController } from './graffitiphoto.controller';
 import { GraffitiPhotoService } from './graffitiphoto.service';
-import { S3Service } from '../s3/S3service';
+import { MetadataService } from '../metadata/metadata.service';
+import { MetadataServiceJS } from '../metadata/metadata.servicejs';
 
 describe('GraffitiPhotoController', () => {
 	let controller: GraffitiPhotoController;
@@ -10,7 +12,13 @@ describe('GraffitiPhotoController', () => {
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			controllers: [GraffitiPhotoController],
-			providers: [S3Service, GraffitiPhotoService, PrismaService],
+			providers: [
+				S3Service,
+				GraffitiPhotoService,
+				PrismaService,
+				MetadataService,
+				MetadataServiceJS,
+			],
 		}).compile();
 
 		controller = module.get<GraffitiPhotoController>(GraffitiPhotoController);
