@@ -9,11 +9,24 @@ import { AuthService } from './auth.service';
 import { AccessTokenStrategy } from './strategies/access-token.strategy';
 
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { jwtConstants } from './constants';
 
 @Module({
-	imports: [UserModule, PassportModule, PrismaModule],
+	imports: [
+		UserModule,
+		PassportModule,
+		PrismaModule,
+		JwtModule.register({
+			secret: jwtConstants.secret,
+			signOptions: { expiresIn: '3600s' },
+		}),
+	],
 	providers: [
 		AuthService,
+		LocalStrategy,
+		JwtStrategy,
 		AccessTokenStrategy,
 		RefreshTokenStrategy,
 		UserService,

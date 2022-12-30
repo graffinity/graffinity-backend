@@ -6,6 +6,8 @@ import {
 	Param,
 	Post,
 	Put,
+	Req,
+	UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoryEntry } from './dto/request/category-entry.dto';
@@ -14,6 +16,10 @@ import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
 import { GraffitiService } from './graffiti.service';
 import GraffitiMapper from './mapper/GraffitiMapper';
+import { AccessTokenStrategy } from '../auth/strategies/access-token.strategy';
+import { Request } from 'express';
+import Public from '../auth/decorators/public.decorator';
+import AtGuard from '../auth/guards/access-token.guard';
 
 @ApiTags('graffiti')
 @Controller('api/v1/graffiti')
