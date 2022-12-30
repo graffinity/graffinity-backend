@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import sharp from 'sharp';
-import piexif from 'piexif-ts';
-import fs from 'fs';
-import ExifTransformer from 'exif-be-gone';
 
 @Injectable()
 export class MetadataService {

@@ -1,8 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import fs from 'fs';
 import sharp from 'sharp';
 const piexif = require('piexifjs');
-import fs from 'fs';
-import ExifTransformer from 'exif-be-gone';
 
 export class MetadataServiceJS {
 	constructor() {}
