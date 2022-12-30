@@ -19,6 +19,7 @@ import { S3Module } from './s3/S3module';
 import { FileController } from './file/file.controller';
 import { FileService } from './file/file.service';
 import { ConfigModule } from '@nestjs/config';
+import { MetadataModule } from './metadata/metadata.module';
 
 @Module({
 	imports: [
@@ -41,6 +42,7 @@ import { ConfigModule } from '@nestjs/config';
 		ArtistModule,
 		CommentModule,
 		S3Module,
+		MetadataModule,
 	],
 	controllers: [AppController, FileController],
 	providers: [AppService, UserService, FileService],
