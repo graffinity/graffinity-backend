@@ -61,19 +61,6 @@ async function main() {
 
 	console.log('Graffiti data seed success!');
 
-	// GraffitiPhoto test data
-
-	// let graffitiPhotos: GraffitiPhoto[] = testDataFactory.getListOfGraffitiPhotos();
-	// graffitis.forEach(async (graffiti) => {
-	// 	await prisma.graffiti.upsert({
-	// 		where: { id: graffiti.id },
-	// 		update: {},
-	// 		create: graffiti,
-	// 	});
-	// });
-
-	console.log('Graffiti data seed success!');
-
 	setTimeout(() => {
 		console.log('Finished...');
 	}, 300);
