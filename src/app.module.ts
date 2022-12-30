@@ -20,6 +20,7 @@ import { S3Module } from './s3/S3module';
 import { TagModule } from './tag/tag.module';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
+import { MetadataModule } from './metadata/metadata.module';
 
 @Module({
 	imports: [
