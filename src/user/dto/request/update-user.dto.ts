@@ -37,4 +37,10 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 		example: '123456',
 	})
 	password: string;
+
+	@ApiProperty({
+		description: 'Refresh token of the user',
+		example: '123456',
+	})
+	refreshToken?: string;
 }

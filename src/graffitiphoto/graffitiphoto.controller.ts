@@ -1,21 +1,22 @@
 import {
-	Controller,
-	Get,
-	Post,
 	Body,
-	Put,
-	Param,
+	Controller,
 	Delete,
+	Get,
+	Param,
+	Post,
+	Put,
 	UploadedFile,
+	UseGuards,
 	UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { GraffitiPhotoService } from './graffitiphoto.service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
+import { GraffitiPhotoService } from './graffitiphoto.service';
 import GraffitiPhotoMapper from './mapper/GraffitiPhotoMapper';
-import { IFile } from '../s3/S3service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { AccessTokenStrategy } from '../auth/strategies/access-token.strategy';
 
 @ApiTags('api/v1/graffiti-photo')
 @Controller('api/v1/graffiti-photo')
@@ -32,9 +33,7 @@ export class GraffitiPhotoController {
 	) {
 		let newBody = JSON.parse(JSON.stringify(body));
 		let bruh: CreateGraffitiPhotoDto = JSON.parse(newBody.body);
-		console.log('file', file);
-		console.log('body', body);
-		console.log('newBody', newBody);
+
 		console.log('bruh', bruh);
 		let entity = await this.graffitiPhotoService.create(bruh, file);
 		return GraffitiPhotoMapper.toResponse(entity);
