@@ -43,4 +43,10 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 		description: 'Likes posts of a user',
 	})
 	likes: number[];
+
+	@ApiProperty({
+		description: 'Refresh token of the user',
+		example: '123456',
+	})
+	refreshToken?: string;
 }

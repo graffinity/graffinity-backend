@@ -18,14 +18,14 @@ const handler = async (req: any, res: any) => {
 		});
 
 		// 3.
-		const post = await s3.createPresignedPost({
+		const post = s3.createPresignedPost({
 			Bucket: process.env.AWS_S3_BUCKET_NAME,
 			Fields: {
 				key: req.query.file,
 			},
-			Expires: 60, // seconds
+			Expires: 60,
 			Conditions: [
-				['content-length-range', 0, 5048576], // up to 1 MB
+				// ['content-length-range', 0, 5048576 * 50], // up to 1 MB
 			],
 		});
 
