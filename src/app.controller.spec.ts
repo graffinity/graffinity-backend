@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { PrismaService } from './prisma/prisma.service';
 import { UserService } from './user/user.service';
+import { MetadataServiceJS } from './metadata/metadata.servicejs';
+import { MetadataService } from './metadata/metadata.service';
 
 const appServiceMock = {
 	getHello: jest.fn().mockImplementation(() => 'Hello World!'),
@@ -26,6 +28,8 @@ describe('AppController', () => {
 				JwtService,
 				UserService,
 				PrismaService,
+				MetadataServiceJS,
+				MetadataService,
 			],
 		}).compile();
 
