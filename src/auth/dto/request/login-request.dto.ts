@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginRequest {
-	loginBy: LoginByUsername | LoginByEmail;
+	// loginBy: LoginByUsername | LoginByEmail;
+	username: string;
 
 	@ApiProperty({
 		description: 'The password of the user',
