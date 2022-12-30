@@ -4,6 +4,7 @@ import { UserInfoResponse } from '../dto/response/user-info-response.dto';
 const UserMapper = {
 	toResponse: (entity: User) => {
 		let response: UserInfoResponse = {
+			id: entity.id,
 			name: entity.name,
 			lastname: entity.lastname,
 			email: entity.email,

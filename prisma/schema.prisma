@@ -78,14 +78,15 @@ model TagToGraffiti {
 }
 
 model GraffitiPhoto {
-  id         Int      @id @default(autoincrement())
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  graffitiId Int
-  url        String   @unique
-  addedAt    DateTime @default(now())
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id])
-  likes      Likes[]
+  id           Int      @id @default(autoincrement())
+  graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
+  graffitiId   Int
+  url          String   @unique
+  addedAt      DateTime @default(now())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  pictureScore Int?
+  Likes        Likes[]
 }
 
 model User {
