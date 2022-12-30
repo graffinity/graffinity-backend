@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Graffiti, GraffitiPhoto } from '@prisma/client';
+import { Graffiti, GraffitiPhoto, Likes } from '@prisma/client';
 
 export class GraffitiPhotoEntity implements GraffitiPhoto {
 	@ApiProperty()
@@ -22,5 +22,8 @@ export class GraffitiPhotoEntity implements GraffitiPhoto {
 
 	@ApiProperty()
 	comment?: string;
+
+	@ApiProperty()
+	likes?: Likes[];
 }
-//cia kazkas netaip turbut
+

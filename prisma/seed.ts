@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as faker from '@faker-js/faker';
 import { CreateGraffitiDto } from '../src/graffiti/dto/request/create-graffiti.dto';
-import { Graffiti, PrismaClient } from '@prisma/client';
+import { Graffiti, GraffitiPhoto, PrismaClient } from '@prisma/client';
 import { TestDataFactory } from './data/util/TestDataFactory';
 
 export const prisma = new PrismaClient();
@@ -58,6 +58,19 @@ async function main() {
 			create: graffiti,
 		});
 	});
+
+	console.log('Graffiti data seed success!');
+
+	// GraffitiPhoto test data
+
+	// let graffitiPhotos: GraffitiPhoto[] = testDataFactory.getListOfGraffitiPhotos();
+	// graffitis.forEach(async (graffiti) => {
+	// 	await prisma.graffiti.upsert({
+	// 		where: { id: graffiti.id },
+	// 		update: {},
+	// 		create: graffiti,
+	// 	});
+	// });
 
 	console.log('Graffiti data seed success!');
 

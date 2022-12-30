@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import moment from 'moment';
+import { userInfo } from 'os';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
 import { LikesEntry } from './dto/request/likesEntry.dto';
 import { UpdateUserDto } from './dto/request/update-user.dto';
+import { UserInfoResponse } from './dto/response/user-info-response.dto';
 
 @Injectable()
 export class UserService {
@@ -46,7 +49,11 @@ export class UserService {
 				id: id,
 			},
 			data: {
-				...updateUserDto,
+				name: updateUserDto.name,
+				lastname: updateUserDto.lastname,
+				username: updateUserDto.username,
+				email: updateUserDto.email,
+				password: updateUserDto.password,
 				likes: {
 					create: updateUserDto.graffitiPhotoIds.map((graffitiPhotoId) => ({
 						graffitiPhotoId: graffitiPhotoId,
@@ -88,6 +95,32 @@ export class UserService {
 		});
 		console.log(entity);
 		return entity;
+	}
+
+	public async validRefreshToken(
+		email: string,
+		refreshToken: string,
+	): Promise<UserInfoResponse | null> {
+		const currentDate = moment().day(1).format('YYYY/MM/DD');
+		let user = await this.prisma.user.findFirst({
+			where: {
+				email: email,
+				refreshToken: refreshToken,
+			},
+		});
+
+		if (!user) {
+			return null;
+		}
+
+		let currentUser = new UserInfoResponse();
+		currentUser.id = user.id;
+		currentUser.name = user.name;
+		currentUser.lastname = user.lastname;
+		currentUser.email = user.email;
+		currentUser.username = user.username;
+
+		return currentUser;
 	}
 
 	async delete(id: number) {
