@@ -86,7 +86,7 @@ model GraffitiPhoto {
   userId       Int
   user         User     @relation(fields: [userId], references: [id])
   pictureScore Int?
-  Likes        Likes[]
+  likes        Likes[]
 }
 
 model User {

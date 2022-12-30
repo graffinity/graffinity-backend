@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
+import { LikesEntry } from './dto/request/likesEntry.dto';
 import { UpdateUserDto } from './dto/request/update-user.dto';
-import { UserInfoResponse } from './dto/response/user-info-response.dto';
-import moment from 'moment';
 
 @Injectable()
 export class UserService {
@@ -46,8 +45,49 @@ export class UserService {
 			where: {
 				id: id,
 			},
-			data: updateUserDto,
+			data: {
+				...updateUserDto,
+				likes: {
+					create: updateUserDto.graffitiPhotoIds.map((graffitiPhotoId) => ({
+						graffitiPhotoId: graffitiPhotoId,
+					})),
+				},
+			},
 		});
+	}
+
+	async addLikedPhoto(id: number, request: LikesEntry) {
+		let entity = await this.prisma.user.update({
+			where: {
+				id: id,
+			},
+			data: {
+				likes: {
+					create: request.graffitiPhotoId.map((graffitiPhotoId) => ({
+						graffitiPhotoId: graffitiPhotoId,
+					})),
+				},
+			},
+		});
+		console.log(entity);
+		return entity;
+	}
+
+	async removeLikedPhoto(id: number, request: LikesEntry) {
+		let entity = await this.prisma.user.update({
+			where: {
+				id: id,
+			},
+			data: {
+				likes: {
+					delete: request.graffitiPhotoId.map((graffitiPhotoId) => ({
+						id: graffitiPhotoId,
+					})),
+				},
+			},
+		});
+		console.log(entity);
+		return entity;
 	}
 
 	async delete(id: number) {
@@ -56,31 +96,5 @@ export class UserService {
 				id: id,
 			},
 		});
-	}
-
-	public async validRefreshToken(
-		email: string,
-		refreshToken: string,
-	): Promise<UserInfoResponse | null> {
-		const currentDate = moment().day(1).format('YYYY/MM/DD');
-		let user = await this.prisma.user.findFirst({
-			where: {
-				email: email,
-				refreshToken: refreshToken,
-			},
-		});
-
-		if (!user) {
-			return null;
-		}
-
-		let currentUser = new UserInfoResponse();
-		currentUser.id = user.id;
-		currentUser.name = user.name;
-		currentUser.lastname = user.lastname;
-		currentUser.email = user.email;
-		currentUser.username = user.username;
-
-		return currentUser;
 	}
 }
