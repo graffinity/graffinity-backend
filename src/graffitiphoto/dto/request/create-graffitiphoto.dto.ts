@@ -26,4 +26,10 @@ export class CreateGraffitiPhotoDto {
 		description: 'UserId is a required value',
 	})
 	userId: number;
+
+	@ApiProperty({
+		type: Array<Number>,
+		description: 'Likes is an array of likes ids',
+	})
+	likeIds: number[];
 }
