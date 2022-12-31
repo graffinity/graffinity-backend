@@ -3,6 +3,7 @@ import {
 	Controller,
 	Delete,
 	Get,
+	Inject,
 	Param,
 	Post,
 	Put,
@@ -20,6 +21,9 @@ import { AccessTokenStrategy } from '../auth/strategies/access-token.strategy';
 import { Request } from 'express';
 import Public from '../auth/decorators/public.decorator';
 import AtGuard from '../auth/guards/access-token.guard';
+import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
+import GraffitiPhotoMapper from '../graffitiphoto/mapper/GraffitiPhotoMapper';
+import { GraffitiResponseDto } from './dto/response/graffiti-response.dto';
 
 @ApiTags('graffiti')
 @Controller('api/v1/graffiti')
@@ -30,6 +34,7 @@ export class GraffitiController {
 	@ApiOperation({ summary: 'Create a graffiti post' })
 	async create(@Body() createGraffitiDto: CreateGraffitiDto) {
 		let entity = await this.graffitiService.create(createGraffitiDto);
+
 		return GraffitiMapper.toResponse(entity);
 	}
 

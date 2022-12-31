@@ -13,14 +13,14 @@ model Graffiti {
   description String
   location    String
   createdAt   DateTime             @default(now())
+  authorId    Int
+  artists     ArtistToGraffiti[]
   categories  CategoryToGraffiti[]
   comment     Comment[]
-  tags        TagToGraffiti[]
+  author      User                 @relation(fields: [authorId], references: [id])
   photos      GraffitiPhoto[]
   reports     Report[]
-  authorId    Int
-  author      User                 @relation(fields: [authorId], references: [id])
-  artists     ArtistToGraffiti[]
+  tags        TagToGraffiti[]
 }
 
 model Category {
@@ -31,20 +31,20 @@ model Category {
 
 model CategoryToGraffiti {
   id         Int      @id @default(autoincrement())
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId Int
-  category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
 }
 
 model Comment {
   id         Int      @id @default(autoincrement())
   body       String
   createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
   userId     Int
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId Int
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
 }
 
 model Email {
@@ -71,21 +71,21 @@ model Tag {
 
 model TagToGraffiti {
   id         Int      @id @default(autoincrement())
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId Int
-  tag        Tag      @relation(fields: [tagId], references: [id])
   tagId      Int
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  tag        Tag      @relation(fields: [tagId], references: [id])
 }
 
 model GraffitiPhoto {
   id           Int      @id @default(autoincrement())
-  graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId   Int
+  graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
   url          String   @unique
   addedAt      DateTime @default(now())
   userId       Int
-  user         User     @relation(fields: [userId], references: [id])
   pictureScore Int?
+  user         User     @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -95,11 +95,11 @@ model User {
   name           String
   lastname       String
   username       String          @unique
-  posts          Graffiti[]
-  reports        Report[]
-  comment        Comment[]
-  graffitiPhotos GraffitiPhoto[]
   refreshToken   String?
+  comment        Comment[]
+  posts          Graffiti[]
+  graffitiPhotos GraffitiPhoto[]
+  reports        Report[]
 }
 
 model Artist {
@@ -111,21 +111,20 @@ model Artist {
 
 model ArtistToGraffiti {
   id         Int      @id @default(autoincrement())
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId Int
-  artist     Artist   @relation(fields: [artistId], references: [id])
   artistId   Int
+  artist     Artist   @relation(fields: [artistId], references: [id])
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
 }
 
 model Report {
-  id         Int      @id @default(autoincrement())
-  graffitiId Int
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id])
-
+  id           Int      @id @default(autoincrement())
+  graffitiId   Int
+  userId       Int
   createdAt    DateTime @default(now())
   reportReason String
   status       String
-  comment      String? //optional field?
+  comment      String?
+  graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
+  user         User     @relation(fields: [userId], references: [id])
 }

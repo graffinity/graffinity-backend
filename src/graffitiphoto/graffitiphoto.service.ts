@@ -22,8 +22,8 @@ export class GraffitiPhotoService {
 		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
 		file: Express.Multer.File,
 	) {
-		let metadata = await this.metadataService.getMetadata(file);
-		let metadataJS = await this.MetadataService.getMetadata(file);
+		// let metadata = await this.metadataService.getMetadata(file);
+		// let metadataJS = await this.MetadataService.getMetadata(file);
 
 		let response = await this.S3Service.uploadFile(file);
 
