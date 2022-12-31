@@ -5,22 +5,35 @@ const piexif = require('piexifjs');
 export class MetadataServiceJS {
 	constructor() {}
 
-	getMetadata = async (file) => {
+	getMetadata = async () => {};
+
+	removeMetadata = async (file) => {
 		const getBase64DataFromJpegFile = (filename) =>
 			fs.readFileSync(filename).toString('binary');
 
-		const hotelImageData = getBase64DataFromJpegFile(
-			'/Users/kernius/graffinity/backend-graffinity/src/metadata/out.jpg',
-		);
-		const scrubbedHotelImageData = piexif.remove(hotelImageData);
-		let fileBuffer = Buffer.from(scrubbedHotelImageData, 'binary');
-		fs.writeFileSync('./scrubbed.jpg', fileBuffer);
+		let orientation = await sharp(file.buffer)
+			.metadata()
+			.then((metadata) => {
+				console.log('metadata', metadata);
+				return metadata.orientation;
+			});
 
-		return exif;
-	};
+		await sharp(file.buffer).toFile('temp.jpg');
 
-	removeMetadata = async () => {
-		return { name: 'MetadataRemoved' };
+		const imageData = getBase64DataFromJpegFile('temp.jpg');
+		const scrubbedData = piexif.remove(imageData);
+		let tempBuffer = Buffer.from(scrubbedData, 'binary');
+		console.log('orientation', orientation);
+		let fileBuffer = await sharp(tempBuffer)
+			.withMetadata({
+				orientation: orientation,
+			})
+			.toBuffer();
+		// fs.writeFileSync('./scrubbed.png', fileBuffer);
+
+		fs.unlinkSync('temp.jpg');
+
+		return fileBuffer;
 	};
 
 	calculatePictureScore = async () => {
