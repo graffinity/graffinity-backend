@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { MetadataService } from '../metadata/metadata.service';
+import { MetadataServiceJS } from '../metadata/metadata.servicejs';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
-import { MetadataService } from '../metadata/metadata.service';
-import { MetadataServiceJS } from '../metadata/metadata.servicejs';
 
 @Injectable()
 export class GraffitiPhotoService {
@@ -22,8 +22,13 @@ export class GraffitiPhotoService {
 		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
 		file: Express.Multer.File,
 	) {
-		// let metadata = await this.metadataService.getMetadata(file);
-		// let metadataJS = await this.MetadataService.getMetadata(file);
+		file.buffer = await this.MetadataService.removeMetadata(file);
+
+		let filenameEnd = mimetypes[file.mimetype];
+		if (filenameEnd) {
+			file.originalname = file.originalname.replace(filenameEnd, 'png');
+		}
+		file.mimetype = 'image/png';
 
 		let response = await this.S3Service.uploadFile(file);
 
@@ -96,3 +101,66 @@ export class GraffitiPhotoService {
 		return await this.prisma.graffitiPhoto.findMany({});
 	}
 }
+
+//   Image Extension   MIME Type
+const mimetypes: {
+	[key: string]: string;
+} = {
+	'image/x-jg': 'art',
+	'image/bmp': 'bmp',
+	'image/gif': 'gif',
+	'image/ief': 'ief',
+	'image/jpeg': 'jpg' || 'jpe' || 'jpeg',
+	'image/x-macpaint': 'mac',
+	'image/x-portable-bitmap': 'pbm',
+	'image/x-portable-graymap': 'pgm',
+	'image/pict': 'pic',
+	'image/png': 'png',
+	'image/x-portable-anymap': 'pnm',
+	'image/x-portable-pixmap': 'ppm',
+	'image/vnd.adobe.photoshop': 'psd',
+	'image/x-quicktime': 'qtif',
+	'image/x-cmu-raster': 'ras',
+	'image/x-rgb': 'rgb',
+	'image/svg+xml': 'svg',
+	'image/tiff': 'tiff',
+	'image/x-xbitmap': 'xbm',
+	'image/x-xpixmap': 'xpm',
+	'image/x-xwindowdump': 'xwd',
+	'image/vnd.wap.wbmp': 'wbmp',
+	'image/webp': 'webp',
+};
+
+const types2 = [
+	'art',
+	'bmp',
+	'dib',
+	'gif',
+	'ief',
+	'jpe',
+	'jpeg',
+	'jpg',
+	'mac',
+	'pbm',
+	'pct',
+	'pgm',
+	'pic',
+	'pict',
+	'png',
+	'pnm',
+	'pnt',
+	'ppm',
+	'psd',
+	'qti',
+	'qtif',
+	'ras',
+	'rgb',
+	'svg',
+	'svgz',
+	'tif',
+	'tiff',
+	'xbm',
+	'xpm',
+	'xwd',
+	'wbmp',
+];

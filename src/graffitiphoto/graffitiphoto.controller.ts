@@ -34,7 +34,6 @@ export class GraffitiPhotoController {
 		let newBody = JSON.parse(JSON.stringify(body));
 		let bruh: CreateGraffitiPhotoDto = JSON.parse(newBody.body);
 
-		console.log('bruh', bruh);
 		let entity = await this.graffitiPhotoService.create(bruh, file);
 		return GraffitiPhotoMapper.toResponse(entity);
 	}
