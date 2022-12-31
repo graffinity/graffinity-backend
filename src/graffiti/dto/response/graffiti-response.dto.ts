@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { GraffitiPhotoResponseDto } from '../../../graffitiphoto/dto/response/graffitiphoto.response.dto';
 
 export class GraffitiResponseDto {
 	@ApiProperty({
@@ -36,4 +37,17 @@ export class GraffitiResponseDto {
 		example: '2021-05-01T00:00:00.000Z',
 	})
 	creationDate: Date;
+
+	@ApiProperty({
+		description: 'The photos of the graffiti post',
+		example: [
+			{
+				id: 1,
+				url: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+				createdAt: '2021-05-01T00:00:00.000Z',
+				graffitiId: 1,
+			},
+		],
+	})
+	photos: GraffitiPhotoResponseDto[];
 }

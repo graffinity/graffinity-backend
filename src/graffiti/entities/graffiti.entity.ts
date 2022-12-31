@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CategoryToGraffiti, Graffiti, ArtistToGraffiti } from '@prisma/client';
-import { ArtistEntity } from '../../artist/entities/artist.entity';
-import { CategoryEntity } from '../../category/entities/category.entity';
+import { ArtistToGraffiti, CategoryToGraffiti, Graffiti } from '@prisma/client';
+import { GraffitiPhoto } from '@prisma/client';
 
 export class GraffitiEntity implements Graffiti {
 	@ApiProperty()
@@ -21,6 +20,9 @@ export class GraffitiEntity implements Graffiti {
 
 	@ApiProperty()
 	authorId: number;
+
+	@ApiProperty()
+	photos: GraffitiPhoto[];
 
 	@ApiProperty()
 	categories?: CategoryToGraffiti[];

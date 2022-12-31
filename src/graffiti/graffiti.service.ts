@@ -1,28 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
 import { CategoryEntry } from './dto/request/category-entry.dto';
 import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
+import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
 
 @Injectable()
 export class GraffitiService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService,
+		@Inject(GraffitiPhotoService)
+		private graffitiPhotoService: GraffitiPhotoService,
+	) {}
 
 	async create(createGraffitiDto: CreateGraffitiDto) {
 		return await this.prisma.graffiti.create({
 			data: createGraffitiDto,
+			include: {
+				photos: true,
+			},
 		});
 	}
 
 	async findAll() {
-		return await this.prisma.graffiti.findMany();
+		return await this.prisma.graffiti.findMany({ include: { photos: true } });
+	}
+
+	async findPhotosById(id: number) {
+		return await this.prisma.graffitiPhoto.findMany({
+			where: {
+				graffitiId: id,
+			},
+		});
 	}
 
 	async findOne(id: number) {
 		let entity = await this.prisma.graffiti.findUniqueOrThrow({
 			where: {
 				id: id,
+			},
+			include: {
+				photos: true,
 			},
 		});
 		return entity;
@@ -47,6 +66,9 @@ export class GraffitiService {
 					},
 				},
 			},
+			include: {
+				photos: true,
+			},
 		});
 	}
 
@@ -62,8 +84,10 @@ export class GraffitiService {
 					})),
 				},
 			},
+			include: {
+				photos: true,
+			},
 		});
-		console.log(entity);
 		return entity;
 	}
 
@@ -77,8 +101,10 @@ export class GraffitiService {
 					delete: request.categoryIds.map((categoryId) => ({ id: categoryId })),
 				},
 			},
+			include: {
+				photos: true,
+			},
 		});
-		console.log(entity);
 		return entity;
 	}
 
@@ -94,8 +120,11 @@ export class GraffitiService {
 					})),
 				},
 			},
+			include: {
+				photos: true,
+			},
 		});
-		console.log(entity);
+
 		return entity;
 	}
 
@@ -109,8 +138,11 @@ export class GraffitiService {
 					delete: request.artistIds.map((artistId) => ({ id: artistId })),
 				},
 			},
+			include: {
+				photos: true,
+			},
 		});
-		console.log(entity);
+
 		return entity;
 	}
 
@@ -120,6 +152,9 @@ export class GraffitiService {
 				id: id,
 			},
 			data: request,
+			include: {
+				photos: true,
+			},
 		});
 	}
 
@@ -127,6 +162,9 @@ export class GraffitiService {
 		return await this.prisma.graffiti.delete({
 			where: {
 				id: id,
+			},
+			include: {
+				photos: true,
 			},
 		});
 	}
