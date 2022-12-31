@@ -1,6 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
+import { MetadataService } from '../metadata/metadata.service';
+import { MetadataServiceJS } from '../metadata/metadata.servicejs';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
+import S3Service from '../s3/S3service';
 import { GraffitiService } from './graffiti.service';
 
 describe('GraffitiService', () => {
@@ -8,7 +11,14 @@ describe('GraffitiService', () => {
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [PrismaService, GraffitiService],
+			providers: [
+				PrismaService,
+				GraffitiService,
+				GraffitiPhotoService,
+				S3Service,
+				MetadataServiceJS,
+				MetadataService,
+			],
 		}).compile();
 
 		service = module.get<GraffitiService>(GraffitiService);

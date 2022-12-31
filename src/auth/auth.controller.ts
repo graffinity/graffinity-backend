@@ -6,22 +6,19 @@ import {
 	HttpStatus,
 	Post,
 	Req,
-	Res,
 	UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
-import { SignUpRequest } from './dto/request/signup-request.dto';
-import { Tokens } from './types';
-import { LoginRequest } from './dto/request/login-request.dto';
 import GetCurrentUserId from './decorators/get-current-user-id.decorator';
-import Public from './decorators/public.decorator';
-import RtGuard from './guards/refresh-token.guard';
-import { Response, Request } from 'express';
 import GetCurrentUser from './decorators/get-current-user.decorator';
-import AtGuard from './guards/access-token.guard';
-import { LocalAuthGuard } from './guards/local.guard';
+import Public from './decorators/public.decorator';
+import { SignUpRequest } from './dto/request/signup-request.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { LocalAuthGuard } from './guards/local.guard';
+import RtGuard from './guards/refresh-token.guard';
+import { Tokens } from './types';
 
 @ApiTags('auth')
 @Controller('api/v1/auth')

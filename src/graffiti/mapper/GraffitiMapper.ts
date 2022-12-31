@@ -1,7 +1,6 @@
 import { Graffiti, GraffitiPhoto } from '@prisma/client';
 import GraffitiPhotoMapper from '../../graffitiphoto/mapper/GraffitiPhotoMapper';
 import { GraffitiResponseDto } from '../dto/response/graffiti-response.dto';
-import { GraffitiEntity } from '../entities/graffiti.entity';
 
 const GraffitiMapper = {
 	toResponse: (
