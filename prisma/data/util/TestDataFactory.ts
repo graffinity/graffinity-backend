@@ -1,10 +1,4 @@
-import {
-	Category,
-	CategoryToGraffiti,
-	Graffiti,
-	PrismaClient,
-	User,
-} from '@prisma/client';
+import { Category, CategoryToGraffiti, Graffiti, User } from '@prisma/client';
 import argon2 from 'argon2';
 
 export class TestDataFactory {

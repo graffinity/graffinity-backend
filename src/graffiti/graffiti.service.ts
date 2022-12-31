@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
 import { CategoryEntry } from './dto/request/category-entry.dto';
 import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
-import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
 
 @Injectable()
 export class GraffitiService {
