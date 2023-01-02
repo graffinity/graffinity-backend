@@ -81,6 +81,9 @@ export class ArtistService {
 			where: {
 				id: id,
 			},
+			include: {
+				graffitis: true,
+			},
 		});
 	}
 }
