@@ -36,4 +36,10 @@ export class UpdateGraffitiPhotoDto extends PartialType(
 		description: 'UserId is a required value',
 	})
 	userId: number;
+
+	@ApiProperty({
+		type: Array<number>,
+		description: 'Users that liked the photo',
+	})
+	userIds: number[];
 }
