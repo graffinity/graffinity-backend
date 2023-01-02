@@ -81,6 +81,13 @@ export class ArtistService {
 			where: {
 				id: id,
 			},
+
+			select: {
+				id: true,
+				name: true,
+				surname: true,
+				graffitis: true,
+			},
 		});
 	}
 }
