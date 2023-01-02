@@ -45,7 +45,6 @@ CREATE TABLE "Email" (
     "subject" TEXT NOT NULL,
     "body" TEXT NOT NULL,
     "status" TEXT NOT NULL,
-    "to" TEXT NOT NULL,
 
     CONSTRAINT "Email_pkey" PRIMARY KEY ("id")
 );
@@ -134,6 +133,15 @@ CREATE TABLE "Report" (
     CONSTRAINT "Report_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Likes" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "graffitiPhotoId" INTEGER NOT NULL,
+
+    CONSTRAINT "Likes_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Graffiti_name_key" ON "Graffiti"("name");
 
@@ -193,3 +201,9 @@ ALTER TABLE "Report" ADD CONSTRAINT "Report_graffitiId_fkey" FOREIGN KEY ("graff
 
 -- AddForeignKey
 ALTER TABLE "Report" ADD CONSTRAINT "Report_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Likes" ADD CONSTRAINT "Likes_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Likes" ADD CONSTRAINT "Likes_graffitiPhotoId_fkey" FOREIGN KEY ("graffitiPhotoId") REFERENCES "GraffitiPhoto"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
