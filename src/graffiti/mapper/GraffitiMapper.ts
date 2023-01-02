@@ -7,7 +7,8 @@ const GraffitiMapper = {
 			id: entity.id,
 			name: entity.name,
 			description: entity.description,
-			location: entity.location,
+			latitude: entity.latitude,
+			longitude: entity.longitude,
 			authorId: entity.authorId,
 			creationDate: entity.createdAt,
 		};

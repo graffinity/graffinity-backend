@@ -17,9 +17,16 @@ export class CreateGraffitiDto {
 	@ApiProperty({
 		type: String,
 		description:
-			'The location of a graffiti can be described like: geo: Latitude, Longitude and is required',
+			'The latitude of a graffiti',
 	})
-	location: string;
+	latitude: string;
+
+	@ApiProperty({
+		type: String,
+		description:
+			'The longitude of a graffiti',
+	})
+	longitude: string;
 
 	@ApiProperty({
 		type: Date,
