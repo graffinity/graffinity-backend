@@ -35,6 +35,7 @@ export class AuthService {
 			.create({
 				...request,
 				password: hash,
+				likeIds: [],
 			})
 			.catch((error) => {
 				if (error instanceof PrismaClientKnownRequestError) {
