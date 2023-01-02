@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Artist } from '@prisma/client';
+import { Service } from 'aws-sdk';
 import { after } from 'node:test';
 import { AppModule } from '../app.module';
 import { PrismaService } from '../prisma/prisma.service';
@@ -69,6 +70,20 @@ describe('ArtistService', () => {
 
 			//expect(artists[0]).toMatchObject(artist1);
 			expect(artists).toBeDefined();
+		});
+	});
+
+	describe('FindOne method', () => {
+		it('Should return one artist', async () => {
+			const artist = await service.create(testArtist);
+			artistResult = artist;
+			expect(artist).not.toBeNull();
+			const artist3 = await service.findOne(artistResult.id);
+			const artist2 = await service.delete(artistResult.id);
+
+			console.log('expected: ', artist3);
+			console.log('actual: ', artist);
+			expect(artist3).toBeDefined();
 		});
 	});
 });
