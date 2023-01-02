@@ -17,6 +17,7 @@ import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
 import { GraffitiPhotoService } from './graffitiphoto.service';
 import GraffitiPhotoMapper from './mapper/GraffitiPhotoMapper';
 import { AccessTokenStrategy } from '../auth/strategies/access-token.strategy';
+import { LikesEntry } from './dto/request/LikesEntry';
 
 @ApiTags('api/v1/graffiti-photo')
 @Controller('api/v1/graffiti-photo')
@@ -62,6 +63,23 @@ export class GraffitiPhotoController {
 			+id,
 			updateGraffitiPhotoDto,
 		);
+		return GraffitiPhotoMapper.toResponse(entity);
+	}
+
+	@Put('/:id/likes/add')
+	@ApiOperation({ summary: 'Update photo likes by id' })
+	async addLikesToPhoto(@Param('id') id: string, @Body() request: LikesEntry) {
+		let entity = await this.graffitiPhotoService.addLikedPhoto(+id, request);
+		return GraffitiPhotoMapper.toResponse(entity);
+	}
+
+	@Put('/:id/likes/remove')
+	@ApiOperation({ summary: 'Update photo likes by id' })
+	async removeLikesFromPhoto(
+		@Param('id') id: string,
+		@Body() request: LikesEntry,
+	) {
+		let entity = await this.graffitiPhotoService.removeLikedPhoto(+id, request);
 		return GraffitiPhotoMapper.toResponse(entity);
 	}
 

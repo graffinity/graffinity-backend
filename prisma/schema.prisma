@@ -86,6 +86,7 @@ model GraffitiPhoto {
   userId       Int
   pictureScore Int?
   user         User     @relation(fields: [userId], references: [id])
+  likes        Likes[]
 }
 
 model User {
@@ -100,6 +101,7 @@ model User {
   posts          Graffiti[]
   graffitiPhotos GraffitiPhoto[]
   reports        Report[]
+  likes          Likes[]
 }
 
 model Artist {
@@ -127,4 +129,12 @@ model Report {
   comment      String?
   graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
   user         User     @relation(fields: [userId], references: [id])
+}
+
+model Likes {
+  id              Int           @id @default(autoincrement())
+  user            User          @relation(fields: [userId], references: [id])
+  userId          Int
+  graffitiPhoto   GraffitiPhoto @relation(fields: [graffitiPhotoId], references: [id])
+  graffitiPhotoId Int
 }
