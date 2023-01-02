@@ -5,6 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
+import { LikesEntry } from './dto/request/LikesEntry';
 
 @Injectable()
 export class GraffitiPhotoService {
@@ -87,6 +88,40 @@ export class GraffitiPhotoService {
 			},
 			data: updateGraffitiPhotoDto,
 		});
+	}
+
+	async addLikedPhoto(id: number, request: LikesEntry) {
+		let entity = await this.prisma.graffitiPhoto.update({
+			where: {
+				id: id,
+			},
+			data: {
+				likes: {
+					create: request.userId.map((userId) => ({
+						userId: userId,
+					})),
+				},
+			},
+		});
+		console.log(entity);
+		return entity;
+	}
+
+	async removeLikedPhoto(id: number, request: LikesEntry) {
+		let entity = await this.prisma.graffitiPhoto.update({
+			where: {
+				id: id,
+			},
+			data: {
+				likes: {
+					delete: request.userId.map((userId) => ({
+						id: userId,
+					})),
+				},
+			},
+		});
+		console.log(entity);
+		return entity;
 	}
 
 	async delete(id: number) {

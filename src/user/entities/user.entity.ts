@@ -1,12 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { Likes } from '@prisma/client';
 
 export class UserEntity implements User {
 	@ApiProperty({
 		description: 'User id',
-
 		example: 1,
-
 		required: true,
 	})
 	id: number;
@@ -51,4 +50,7 @@ export class UserEntity implements User {
 		example: 'some-refresh-token',
 	})
 	refreshToken: string;
+
+	@ApiProperty()
+	likes?: Likes[];
 }
