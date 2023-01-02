@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as faker from '@faker-js/faker';
 import { CreateGraffitiDto } from '../src/graffiti/dto/request/create-graffiti.dto';
-import { Graffiti, PrismaClient } from '@prisma/client';
+import { Graffiti, GraffitiPhoto, PrismaClient } from '@prisma/client';
 import { TestDataFactory } from './data/util/TestDataFactory';
 
 export const prisma = new PrismaClient();

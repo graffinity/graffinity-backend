@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import moment from 'moment';
+import { userInfo } from 'os';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
+import { LikesEntry } from './dto/request/likesEntry.dto';
 import { UpdateUserDto } from './dto/request/update-user.dto';
 import { UserInfoResponse } from './dto/response/user-info-response.dto';
-import moment from 'moment';
 
 @Injectable()
 export class UserService {
@@ -46,16 +48,53 @@ export class UserService {
 			where: {
 				id: id,
 			},
-			data: updateUserDto,
+			data: {
+				name: updateUserDto.name,
+				lastname: updateUserDto.lastname,
+				username: updateUserDto.username,
+				email: updateUserDto.email,
+				password: updateUserDto.password,
+				likes: {
+					create: updateUserDto.graffitiPhotoIds.map((graffitiPhotoId) => ({
+						graffitiPhotoId: graffitiPhotoId,
+					})),
+				},
+			},
 		});
 	}
 
-	async delete(id: number) {
-		return await this.prisma.user.delete({
+	async addLikedPhoto(id: number, request: LikesEntry) {
+		let entity = await this.prisma.user.update({
 			where: {
 				id: id,
 			},
+			data: {
+				likes: {
+					create: request.graffitiPhotoId.map((graffitiPhotoId) => ({
+						graffitiPhotoId: graffitiPhotoId,
+					})),
+				},
+			},
 		});
+		console.log(entity);
+		return entity;
+	}
+
+	async removeLikedPhoto(id: number, request: LikesEntry) {
+		let entity = await this.prisma.user.update({
+			where: {
+				id: id,
+			},
+			data: {
+				likes: {
+					delete: request.graffitiPhotoId.map((graffitiPhotoId) => ({
+						id: graffitiPhotoId,
+					})),
+				},
+			},
+		});
+		console.log(entity);
+		return entity;
 	}
 
 	public async validRefreshToken(
@@ -82,5 +121,13 @@ export class UserService {
 		currentUser.username = user.username;
 
 		return currentUser;
+	}
+
+	async delete(id: number) {
+		return await this.prisma.user.delete({
+			where: {
+				id: id,
+			},
+		});
 	}
 }
