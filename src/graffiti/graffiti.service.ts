@@ -135,7 +135,8 @@ export class GraffitiService {
 	}
 
 	
-
+	//k-nn algorithm
+	//---------------------------------------------
 	// Calculate the distance between two coordinates in kilometers using the Haversine formula
 	calculateDistance = async(lat1: string, lon1: string, lat2: string, lon2: string): Promise<number> =>{
 	const latitude1 = Number(lat1);
@@ -174,5 +175,5 @@ export class GraffitiService {
 
 	return nearestNeighbors;
 	}
-
+	//---------------------------------------------
 }
