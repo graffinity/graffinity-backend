@@ -135,10 +135,8 @@ export class GraffitiService {
 	}
 
 	
-	//k-nn algorithm
-	//---------------------------------------------
-	// Calculate the distance between two coordinates in kilometers using the Haversine formula
-	calculateDistance = async(lat1: string, lon1: string, lat2: string, lon2: string): Promise<number> =>{
+
+	async calculateDistance(lat1: string, lon1: string, lat2: string, lon2: string) {
 	const latitude1 = Number(lat1);
 	const longitude1 =Number(lon1);
 	const latitude2 = Number(lat2);
@@ -160,20 +158,19 @@ export class GraffitiService {
 	}
 
 	// Find the nearest neighbor graffiti to the given coordinates
-	findNearestNeighbor = async(graffitiList: Graffiti[], lat: string, lon: string): Promise<Graffiti[]> =>{
+	async findNearestNeighbor(graffitiList: Graffiti[], lat: string, lon: string) {
 	// Initialize the nearest neighbors array with the first graffiti in the list
 	let nearestNeighbors: Graffiti[] = [graffitiList[0]];
 
 	// Loop through the rest of the graffiti list and compare distances
 	for (let i = 1; i < graffitiList.length; i++) {
 		const graffiti = graffitiList[i];
-		const distance = this.calculateDistance(graffiti.latitude, graffiti.longitude, lat, lon);
-		if (await distance >= 1) {
+		const distance = await this.calculateDistance(graffiti.latitude, graffiti.longitude, lat, lon);
+		if (distance >= 1) {
 			nearestNeighbors.push(graffiti);
 		}
 	}
 
 	return nearestNeighbors;
 	}
-	//---------------------------------------------
 }
