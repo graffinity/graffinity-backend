@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import sharp from 'sharp';
 
 @Injectable()
 export class MetadataService {

@@ -5,6 +5,7 @@ import { ArtistEntry } from './dto/request/artist-entry.dto';
 import { CategoryEntry } from './dto/request/category-entry.dto';
 import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
+import { connect } from 'http2';
 
 @Injectable()
 export class GraffitiService {
@@ -16,7 +17,16 @@ export class GraffitiService {
 
 	async create(createGraffitiDto: CreateGraffitiDto) {
 		return await this.prisma.graffiti.create({
-			data: createGraffitiDto,
+			data: {
+				name: createGraffitiDto.name,
+				description: createGraffitiDto.description,
+				author: {
+					connect: {
+						id: +createGraffitiDto.authorId,
+					},
+				},
+				location: createGraffitiDto.location,
+			},
 			include: {
 				photos: true,
 			},

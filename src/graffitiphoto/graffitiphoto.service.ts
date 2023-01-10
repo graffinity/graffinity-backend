@@ -6,6 +6,7 @@ import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
 import { LikesEntry } from './dto/request/LikesEntry';
+import sharp from 'sharp';
 
 @Injectable()
 export class GraffitiPhotoService {
@@ -24,6 +25,11 @@ export class GraffitiPhotoService {
 		file: Express.Multer.File,
 	) {
 		file.buffer = await this.MetadataService.removeMetadata(file);
+		let md = await sharp(file.buffer).metadata();
+		console.log('metadata111:', md);
+		let exif = md.exif;
+
+		console.log('exif111: ', exif);
 
 		let filenameEnd = mimetypes[file.mimetype];
 		if (filenameEnd) {

@@ -18,6 +18,7 @@ import { GraffitiPhotoService } from './graffitiphoto.service';
 import GraffitiPhotoMapper from './mapper/GraffitiPhotoMapper';
 import { AccessTokenStrategy } from '../auth/strategies/access-token.strategy';
 import { LikesEntry } from './dto/request/LikesEntry';
+import { Express } from 'express';
 
 @ApiTags('api/v1/graffiti-photo')
 @Controller('api/v1/graffiti-photo')

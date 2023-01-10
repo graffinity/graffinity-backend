@@ -1,5 +1,6 @@
 import { Category, CategoryToGraffiti, Graffiti, User } from '@prisma/client';
 import argon2 from 'argon2';
+import { CreateGraffitiDto } from '../../../src/graffiti/dto/request/create-graffiti.dto';
 
 export class TestDataFactory {
 	private static instance: TestDataFactory;
@@ -106,39 +107,43 @@ export class TestDataFactory {
 		return newGraffiti;
 	}
 
-	public getListOfGraffitis(): Graffiti[] {
-		let graffitiList: Graffiti[] = [
+	public getListOfGraffitis(): CreateGraffitiDto[] {
+		let graffitiList: CreateGraffitiDto[] = [
 			{
-				id: 1,
 				name: 'Graffiti name 1',
 				description: 'Graffiti description 1',
 				authorId: 1,
 				createdAt: new Date(),
 				location: '54.660000,25.250000',
+				categoryIds: [],
+				artistIds: [],
 			},
 			{
-				id: 2,
 				name: 'Graffiti name 2',
 				description: 'Graffiti description 2',
 				authorId: 1,
 				createdAt: new Date(),
 				location: '54.670000,25.260000',
+				categoryIds: [],
+				artistIds: [],
 			},
 			{
-				id: 3,
 				name: 'Graffiti name 3',
 				description: 'Graffiti description 3',
 				authorId: 2,
 				createdAt: new Date(),
 				location: '54.680000,25.270000',
+				categoryIds: [],
+				artistIds: [],
 			},
 			{
-				id: 4,
 				name: 'Graffiti name 4',
 				description: 'Graffiti description 4',
 				authorId: 2,
 				createdAt: new Date(),
 				location: '54.690000,25.280000',
+				categoryIds: [],
+				artistIds: [],
 			},
 		];
 

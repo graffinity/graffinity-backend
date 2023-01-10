@@ -15,6 +15,7 @@ export class MetadataServiceJS {
 			.metadata()
 			.then((metadata) => {
 				console.log('metadata', metadata);
+				console.log('exif: ', metadata.exif);
 				return metadata.orientation;
 			});
 
@@ -31,11 +32,12 @@ export class MetadataServiceJS {
 			.toBuffer();
 		// fs.writeFileSync('./scrubbed.png', fileBuffer);
 
-		fs.unlinkSync('temp.jpg');
+		if (fs.existsSync('temp.jpg')) {
+			fs.unlinkSync('temp.jpg');
+		}
 
 		return fileBuffer;
 	};
-
 	calculatePictureScore = async () => {
 		return { name: 'PictureScore' };
 	};
