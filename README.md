@@ -33,6 +33,14 @@ Graffinity is a social network for artists. It allows users to create and share 
 npm install
 ```
 
+## Create docker containers
+
+  Create required docker containers for the application to run with the `docker-compose` command.
+  
+  ```bash
+  docker-compose -f docker-compose-local.yml up -d
+  ```
+
 ## Running the app
 
 ```bash
