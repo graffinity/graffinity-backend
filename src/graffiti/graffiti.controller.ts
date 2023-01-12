@@ -23,7 +23,6 @@ export class GraffitiController {
 	@Post()
 	@ApiOperation({ summary: 'Create a graffiti post' })
 	async create(@Body() createGraffitiDto: CreateGraffitiDto) {
-		console.log('request: ', createGraffitiDto);
 		let entity = await this.graffitiService.create(createGraffitiDto);
 
 		return GraffitiMapper.toResponse(entity);

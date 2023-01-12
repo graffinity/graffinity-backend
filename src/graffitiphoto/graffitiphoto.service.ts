@@ -120,8 +120,8 @@ export class GraffitiPhotoService {
 			},
 			data: {
 				likes: {
-					delete: request.userId.map((userId) => ({
-						id: userId,
+					deleteMany: request.userId.map((userId) => ({
+						userId: userId,
 					})),
 				},
 			},

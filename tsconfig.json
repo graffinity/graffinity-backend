@@ -24,11 +24,11 @@
 		"outDir": "./dist",
 		"baseUrl": ".",
 		"paths": {
-			"@src": ["src"],
-			"@test": ["test"],
-			"@types": ["types"],
-			"@prisma": ["prisma"]
+			"@src/*": ["src/*"],
+			"@test/*": ["test/*"],
+			"@config/*": ["config/*"]
 		}
 	},
-	"include": ["src/**/*"]
+	"include": ["./src/**/*", "./test/**Ø/*", "./config/**/*", "./prisma/**/*"],
+	"exclude": ["node_modules"]
 }

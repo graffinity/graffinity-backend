@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ArtistToGraffiti, CategoryToGraffiti, Graffiti } from '@prisma/client';
 import { GraffitiPhoto } from '@prisma/client';
+import GraffitiStatus from './graffiti-status.enum';
 
 export class GraffitiEntity implements Graffiti {
 	@ApiProperty()
@@ -14,6 +15,9 @@ export class GraffitiEntity implements Graffiti {
 
 	@ApiProperty()
 	location: string;
+
+	@ApiProperty()
+	status: GraffitiStatus;
 
 	@ApiProperty()
 	createdAt: Date;

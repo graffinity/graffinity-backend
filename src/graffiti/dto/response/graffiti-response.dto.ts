@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { GraffitiPhotoResponseDto } from '../../../graffitiphoto/dto/response/graffitiphoto.response.dto';
+import GraffitiStatus from '../../entities/graffiti-status.enum';
 
 export class GraffitiResponseDto {
 	@ApiProperty({
@@ -26,6 +27,11 @@ export class GraffitiResponseDto {
 	})
 	location: string;
 
+	@ApiProperty({
+		type: GraffitiStatus,
+		description: 'The status of the graffiti post submission',
+		example: 'PENDING',
+	})
 	@ApiProperty({
 		description: 'The author id of the graffiti post',
 		example: 1,

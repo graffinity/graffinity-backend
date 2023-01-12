@@ -1,19 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
 import { CategoryEntry } from './dto/request/category-entry.dto';
 import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
-import { connect } from 'http2';
 
 @Injectable()
 export class GraffitiService {
-	constructor(
-		private prisma: PrismaService,
-		@Inject(GraffitiPhotoService)
-		private graffitiPhotoService: GraffitiPhotoService,
-	) {}
+	constructor(private prisma: PrismaService) {}
 
 	async create(createGraffitiDto: CreateGraffitiDto) {
 		return await this.prisma.graffiti.create({
@@ -108,7 +102,9 @@ export class GraffitiService {
 			},
 			data: {
 				categories: {
-					delete: request.categoryIds.map((categoryId) => ({ id: categoryId })),
+					deleteMany: request.categoryIds.map((categoryId) => ({
+						categoryId: categoryId,
+					})),
 				},
 			},
 			include: {
@@ -145,7 +141,9 @@ export class GraffitiService {
 			},
 			data: {
 				artists: {
-					delete: request.artistIds.map((artistId) => ({ id: artistId })),
+					deleteMany: request.artistIds.map((artistId) => ({
+						artistId: artistId,
+					})),
 				},
 			},
 			include: {

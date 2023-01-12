@@ -1,11 +1,6 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTagDto {
-	@ApiProperty({
-		type: Number,
-		description: 'Id is a required value',
-	})
-	id: number;
 	@ApiProperty({
 		type: String,
 		description: 'Name has to be unique',

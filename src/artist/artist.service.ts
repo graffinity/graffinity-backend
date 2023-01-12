@@ -59,7 +59,9 @@ export class ArtistService {
 			},
 			data: {
 				graffitis: {
-					delete: request.graffitiIds.map((graffitiId) => ({ id: graffitiId })),
+					deleteMany: request.graffitiIds.map((graffitiId) => ({
+						graffitiId: graffitiId,
+					})),
 				},
 			},
 		});
