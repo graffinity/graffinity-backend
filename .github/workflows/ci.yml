@@ -102,11 +102,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET }}
-<<<<<<< Updated upstream
         aws-region: ${{ secrets.AWS_REGION }}
-=======
-        aws-region: eu-central-1
->>>>>>> Stashed changes
 
     - name: Login to Amazon ECR
       id: login-ecr
@@ -140,7 +136,6 @@ jobs:
     # - name: Copy file to remote via ssh
     #   uses: appleboy/scp-action@v0.0.1
 
-<<<<<<< Updated upstream
     # - uses: Burnett01/rsync-deployments@5.0
     #   name: Add start.sh script to remote
     #   with:
@@ -151,7 +146,6 @@ jobs:
     #     remote_user: ${{env.REMOTE_USERNAME}}
     #     remote_key: ${{env.REMOTE_KEY}}
         # remote_key_pass: ${{env.REMOTE_PASSPHRASE}}
-=======
       
 
     - uses: Burnett01/rsync-deployments@5.0
@@ -164,7 +158,6 @@ jobs:
         remote_user: ${{ secrets.REMOTE_USERNAME }}
         remote_key: ${{ secrets.REMOTE_KEY }}
         remote_key_pass: ${{ secrets.REMOTE_SSH_PASSPHRASE }}
->>>>>>> Stashed changes
 
     - uses: Burnett01/rsync-deployments@5.0
       name: Add docker-compose.prod.yml to remote 
