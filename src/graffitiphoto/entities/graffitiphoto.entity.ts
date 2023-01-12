@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Graffiti, GraffitiPhoto, Likes } from '@prisma/client';
+import { GraffitiPhoto, Likes } from '@prisma/client';
 
 export class GraffitiPhotoEntity implements GraffitiPhoto {
 	@ApiProperty()

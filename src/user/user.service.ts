@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import moment from 'moment';
-import { userInfo } from 'os';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
 import { LikesEntry } from './dto/request/likesEntry.dto';
@@ -48,6 +47,7 @@ export class UserService {
 			where: {
 				id: id,
 			},
+
 			data: {
 				name: updateUserDto.name,
 				lastname: updateUserDto.lastname,
@@ -55,9 +55,12 @@ export class UserService {
 				email: updateUserDto.email,
 				password: updateUserDto.password,
 				likes: {
-					create: updateUserDto.graffitiPhotoIds.map((graffitiPhotoId) => ({
-						graffitiPhotoId: graffitiPhotoId,
-					})),
+					deleteMany: {},
+					createMany: {
+						data: updateUserDto.graffitiPhotoIds.map((graffitiPhotoId) => ({
+							graffitiPhotoId: graffitiPhotoId,
+						})),
+					},
 				},
 			},
 		});
@@ -87,8 +90,8 @@ export class UserService {
 			},
 			data: {
 				likes: {
-					delete: request.graffitiPhotoId.map((graffitiPhotoId) => ({
-						id: graffitiPhotoId,
+					deleteMany: request.graffitiPhotoId.map((graffitiPhotoId) => ({
+						graffitiPhotoId: graffitiPhotoId,
 					})),
 				},
 			},

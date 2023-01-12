@@ -9,7 +9,9 @@ import {
 	GraffitiPhoto,
 	Comment,
 } from '@prisma/client';
+import { Category, CategoryToGraffiti, Graffiti, User } from '@prisma/client';
 import argon2 from 'argon2';
+import { CreateGraffitiDto } from '../../../src/graffiti/dto/request/create-graffiti.dto';
 
 export class TestDataFactory {
 	private static instance: TestDataFactory;
@@ -142,10 +144,9 @@ export class TestDataFactory {
 		return newGraffiti;
 	}
 
-	public getListOfGraffitis(): Graffiti[] {
-		let graffitiList: Graffiti[] = [
+	public getListOfGraffitis(): CreateGraffitiDto[] {
+		let graffitiList: CreateGraffitiDto[] = [
 			{
-				id: 1,
 				name: 'Graffiti name 1',
 				description: 'Graffiti description 1',
 				authorId: 1,
@@ -154,7 +155,6 @@ export class TestDataFactory {
 				longitude: '25.279855',
 			},
 			{
-				id: 2,
 				name: 'Graffiti name 2',
 				description: 'Graffiti description 2',
 				authorId: 1,
@@ -163,7 +163,6 @@ export class TestDataFactory {
 				longitude: '25.279901',
 			},
 			{
-				id: 3,
 				name: 'Graffiti name 3',
 				description: 'Graffiti description 3',
 				authorId: 1,
@@ -172,7 +171,6 @@ export class TestDataFactory {
 				longitude: '25.267214',
 			},
 			{
-				id: 4,
 				name: 'Graffiti name 4',
 				description: 'Graffiti description 4',
 				authorId: 1,

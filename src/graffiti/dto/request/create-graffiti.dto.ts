@@ -51,4 +51,10 @@ export class CreateGraffitiDto {
 		description: 'Artists is an array of artist ids',
 	})
 	artistIds: number[];
+
+	@ApiProperty({
+		type: Array<String>,
+		description: 'Photos is an array of photo urls',
+	})
+	photoIds?: number[];
 }

@@ -13,5 +13,25 @@
 	"css.lint.float": "warning",
 	"[prisma]": {
 		"editor.defaultFormatter": "Prisma.prisma"
-	}
+	},
+	"[dockerfile]": {
+		"editor.defaultFormatter": "ms-azuretools.vscode-docker"
+	},
+	"atlascode.bitbucket.enabled": false,
+	"atlascode.bitbucket.explorer.enabled": false,
+	"atlascode.bitbucket.explorer.nestFilesEnabled": false,
+	"atlascode.bitbucket.explorer.notifications.pullRequestCreated": false,
+	"atlascode.bitbucket.explorer.relatedJiraIssues.enabled": false,
+	"atlascode.bitbucket.explorer.showReviewedPullRequests": false,
+	"atlascode.bitbucket.explorer.relatedBitbucketIssues.enabled": false,
+	"atlascode.bitbucket.issues.explorerEnabled": false,
+	"atlascode.bitbucket.issues.monitorEnabled": false,
+	"atlascode.bitbucket.pipelines.explorerEnabled": false,
+	"atlascode.bitbucket.pipelines.hideEmpty": false,
+	"atlascode.bitbucket.pipelines.monitorEnabled": false,
+	"atlascode.bitbucket.statusbar.showLogin": false,
+	"atlascode.bitbucket.statusbar.enabled": false,
+	"atlascode.bitbucket.statusbar.showUser": false,
+	"atlascode.bitbucket.statusbar.showProduct": false,
+	"atlascode.helpExplorerEnabled": true
 }
