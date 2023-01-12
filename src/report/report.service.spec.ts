@@ -27,7 +27,6 @@ describe('ReportService', () => {
 	// };
 
 	it('should return all reports', async () => {
-
 		const reports = await service.findAll();
 
 		expect(reports).toEqual([]);

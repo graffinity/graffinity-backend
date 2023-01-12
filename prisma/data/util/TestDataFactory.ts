@@ -42,7 +42,6 @@ export class TestDataFactory {
 		let hashedPassword = await argon2.hash('password');
 
 		let newUser: User = {
-
 			id: 4,
 			name: 'Mary',
 			lastname: 'Doe',
@@ -57,14 +56,14 @@ export class TestDataFactory {
 
 	public async getListofUsersWithHashedPassword(): Promise<User[]> {
 		let hashedPassword = await argon2.hash('password');
-		
+
 		let userList: User[] = [
 			{
 				id: 1,
 				name: 'Bob',
 				lastname: 'Rob',
 				username: 'graffinity_bot',
-				email: "graffinity.bot@gmail.com",
+				email: 'graffinity.bot@gmail.com',
 				password: hashedPassword,
 				refreshToken: 'some-refresh',
 			},
@@ -162,7 +161,6 @@ export class TestDataFactory {
 				createdAt: new Date(),
 				latitude: '54.672498',
 				longitude: '25.279901',
-				
 			},
 			{
 				id: 3,
@@ -390,7 +388,6 @@ export class TestDataFactory {
 	}
 
 	public getValidArtistList(): Artist[] {
-	
 		let ArtistList: Artist[] = [
 			{
 				id: 1,
@@ -409,7 +406,7 @@ export class TestDataFactory {
 	// --------------------------------
 	// Artist-to-Graffiti test data
 	public getListOfArtistToGraffiti(): ArtistToGraffiti[] {
-		let ArtistToGraffitiList: ArtistToGraffiti[] = [ 
+		let ArtistToGraffitiList: ArtistToGraffiti[] = [
 			{
 				id: 1,
 				artistId: 1,
@@ -545,13 +542,11 @@ export class TestDataFactory {
 		return ArtistToGraffitiList;
 	}
 
-	
 	public getListOfGraffitiPhotos(): GraffitiPhoto[] {
-	
 		let GraffitiPhotoList: GraffitiPhoto[] = [
 			{
 				id: 1,
-				graffitiId: 1, 
+				graffitiId: 1,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -559,7 +554,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 2,
-				graffitiId: 1, 
+				graffitiId: 1,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9494.HEIC',
 				addedAt: new Date(),
 				userId: 2,
@@ -567,7 +562,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 3,
-				graffitiId: 2, 
+				graffitiId: 2,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9496.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -575,7 +570,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 4,
-				graffitiId: 2, 
+				graffitiId: 2,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9495.HEIC',
 				addedAt: new Date(),
 				userId: 2,
@@ -583,7 +578,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 5,
-				graffitiId: 3, 
+				graffitiId: 3,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9503.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -591,7 +586,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 6,
-				graffitiId: 4, 
+				graffitiId: 4,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9505.JPG',
 				addedAt: new Date(),
 				userId: 1,
@@ -599,7 +594,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 7,
-				graffitiId: 4, 
+				graffitiId: 4,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9504.JPG',
 				addedAt: new Date(),
 				userId: 2,
@@ -607,7 +602,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 8,
-				graffitiId: 5, 
+				graffitiId: 5,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9507.JPG',
 				addedAt: new Date(),
 				userId: 1,
@@ -615,7 +610,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 9,
-				graffitiId: 5, 
+				graffitiId: 5,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9506.JPG',
 				addedAt: new Date(),
 				userId: 2,
@@ -623,7 +618,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 10,
-				graffitiId: 6, 
+				graffitiId: 6,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9182.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -631,7 +626,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 11,
-				graffitiId: 6, 
+				graffitiId: 6,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9183.HEIC',
 				addedAt: new Date(),
 				userId: 2,
@@ -639,7 +634,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 12,
-				graffitiId: 7, 
+				graffitiId: 7,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9192.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -647,7 +642,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 13,
-				graffitiId: 8, 
+				graffitiId: 8,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9206.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -655,7 +650,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 14,
-				graffitiId: 9, 
+				graffitiId: 9,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9208.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -663,7 +658,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 15,
-				graffitiId: 9, 
+				graffitiId: 9,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9210.HEIC',
 				addedAt: new Date(),
 				userId: 2,
@@ -671,7 +666,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 16,
-				graffitiId: 10, 
+				graffitiId: 10,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9213.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -679,7 +674,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 17,
-				graffitiId: 11, 
+				graffitiId: 11,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9211.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -687,7 +682,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 18,
-				graffitiId: 12, 
+				graffitiId: 12,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9214.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -695,7 +690,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 19,
-				graffitiId: 13, 
+				graffitiId: 13,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9215.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -703,7 +698,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 20,
-				graffitiId: 14, 
+				graffitiId: 14,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9216.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -711,7 +706,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 21,
-				graffitiId: 15, 
+				graffitiId: 15,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9219.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -719,7 +714,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 22,
-				graffitiId: 16, 
+				graffitiId: 16,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9223.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -727,7 +722,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 23,
-				graffitiId: 17, 
+				graffitiId: 17,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9224.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -735,7 +730,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 24,
-				graffitiId: 18, 
+				graffitiId: 18,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9226.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -743,7 +738,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 25,
-				graffitiId: 19, 
+				graffitiId: 19,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9227.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -751,7 +746,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 26,
-				graffitiId: 20, 
+				graffitiId: 20,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9229.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -759,7 +754,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 27,
-				graffitiId: 21, 
+				graffitiId: 21,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9230.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -767,7 +762,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 28,
-				graffitiId: 22, 
+				graffitiId: 22,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9232.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -775,7 +770,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 29,
-				graffitiId: 23, 
+				graffitiId: 23,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9228.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -783,7 +778,7 @@ export class TestDataFactory {
 			},
 			{
 				id: 30,
-				graffitiId: 24, 
+				graffitiId: 24,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9207.HEIC',
 				addedAt: new Date(),
 				userId: 1,
@@ -791,13 +786,12 @@ export class TestDataFactory {
 			},
 			{
 				id: 31,
-				graffitiId: 25, 
+				graffitiId: 25,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9203.HEIC',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
 			},
-
 		];
 		return GraffitiPhotoList;
 	}

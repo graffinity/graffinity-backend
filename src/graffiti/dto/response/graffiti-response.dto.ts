@@ -19,23 +19,19 @@ export class GraffitiResponseDto {
 	})
 	description: string;
 
-
 	@ApiProperty({
 		type: String,
-		description:
-			'The latitude of a graffiti',
-			example: '52.520008',
+		description: 'The latitude of a graffiti',
+		example: '52.520008',
 	})
 	latitude: string;
 
 	@ApiProperty({
 		type: String,
-		description:
-			'The longitude of a graffiti',
-			example: '13.404954',
+		description: 'The longitude of a graffiti',
+		example: '13.404954',
 	})
 	longitude: string;
-
 
 	@ApiProperty({
 		description: 'The author id of the graffiti post',

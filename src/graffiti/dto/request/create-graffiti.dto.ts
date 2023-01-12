@@ -16,15 +16,13 @@ export class CreateGraffitiDto {
 
 	@ApiProperty({
 		type: String,
-		description:
-			'The latitude of a graffiti',
+		description: 'The latitude of a graffiti',
 	})
 	latitude: string;
 
 	@ApiProperty({
 		type: String,
-		description:
-			'The longitude of a graffiti',
+		description: 'The longitude of a graffiti',
 	})
 	longitude: string;
 

@@ -20,7 +20,6 @@ describe('ReportController', () => {
 	});
 
 	it('should return all reports', async () => {
-
 		const reports = await controller.findAll();
 
 		expect(reports).toEqual([]);

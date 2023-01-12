@@ -22,18 +22,15 @@ export class UpdateGraffitiDto extends PartialType(CreateGraffitiDto) {
 	})
 	description: string;
 
-
 	@ApiProperty({
 		type: String,
-		description:
-			'The latitude of a graffiti is a required value',
+		description: 'The latitude of a graffiti is a required value',
 	})
 	latitude: string;
 
 	@ApiProperty({
 		type: String,
-		description:
-			'The longitude of a graffiti is a required value',
+		description: 'The longitude of a graffiti is a required value',
 	})
 	longitude: string;
 
