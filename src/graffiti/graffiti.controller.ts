@@ -41,6 +41,19 @@ export class GraffitiController {
 		let entities = await this.graffitiService.findAll();
 		return GraffitiMapper.toResponses(entities);
 	}
+	@Get()
+	@ApiOperation({
+		summary: 'Find nearest graffiti posts',
+	})
+	async findnearest(@Param() latitude: string, @Param() longitude: string) {
+		let graffitis = await this.graffitiService.findAll();
+		let entities = await this.graffitiService.findNearestNeighbor(
+			graffitis,
+			latitude,
+			longitude,
+		);
+		return GraffitiMapper.toResponses(entities);
+	}
 
 	@Get('/filtered')
 	@ApiOperation({

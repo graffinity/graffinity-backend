@@ -11,7 +11,8 @@ model Graffiti {
   id          Int                  @id @default(autoincrement())
   name        String               @unique
   description String
-  location    String
+  latitude    String
+  longitude   String
   createdAt   DateTime             @default(now())
   categories  CategoryToGraffiti[]
   comment     Comment[]
