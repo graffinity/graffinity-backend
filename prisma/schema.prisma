@@ -7,20 +7,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum GraffitiStatus {
+  SUBMITTED
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Graffiti {
   id          Int                  @id @default(autoincrement())
   name        String               @unique
   description String
-  location    String
+  latitude    String
+  longitude   String
+  status      GraffitiStatus       @default(SUBMITTED)
   createdAt   DateTime             @default(now())
+  authorId    Int
+  artists     ArtistToGraffiti[]
   categories  CategoryToGraffiti[]
   comment     Comment[]
-  tags        TagToGraffiti[]
+  author      User                 @relation(fields: [authorId], references: [id])
   photos      GraffitiPhoto[]
   reports     Report[]
-  authorId    Int
-  author      User                 @relation(fields: [authorId], references: [id])
-  artists     ArtistToGraffiti[]
+  tags        TagToGraffiti[]
 }
 
 model Category {
@@ -30,21 +39,22 @@ model Category {
 }
 
 model CategoryToGraffiti {
-  id         Int      @id @default(autoincrement())
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  graffitiId Int
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  graffitiId Int
+
+  @@id([graffitiId, categoryId])
 }
 
 model Comment {
   id         Int      @id @default(autoincrement())
   body       String
   createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
   userId     Int
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId Int
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
 }
 
 model Email {
@@ -70,22 +80,23 @@ model Tag {
 }
 
 model TagToGraffiti {
-  id         Int      @id @default(autoincrement())
   graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId Int
   tag        Tag      @relation(fields: [tagId], references: [id])
   tagId      Int
+
+  @@id([graffitiId, tagId])
 }
 
 model GraffitiPhoto {
   id           Int      @id @default(autoincrement())
-  graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId   Int
+  graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
   url          String   @unique
   addedAt      DateTime @default(now())
   userId       Int
-  user         User     @relation(fields: [userId], references: [id])
   pictureScore Int?
+  user         User     @relation(fields: [userId], references: [id])
   likes        Likes[]
 }
 
@@ -96,12 +107,13 @@ model User {
   name           String
   lastname       String
   username       String          @unique
-  posts          Graffiti[]
-  reports        Report[]
-  comment        Comment[]
-  graffitiPhotos GraffitiPhoto[]
   refreshToken   String?
+  comment        Comment[]
+  posts          Graffiti[]
+  graffitiPhotos GraffitiPhoto[]
+  reports        Report[]
   likes          Likes[]
+  // roles          RoleToUser[]
 }
 
 model Artist {
@@ -112,30 +124,51 @@ model Artist {
 }
 
 model ArtistToGraffiti {
-  id         Int      @id @default(autoincrement())
   graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
   graffitiId Int
   artist     Artist   @relation(fields: [artistId], references: [id])
   artistId   Int
+
+  @@id([graffitiId, artistId])
 }
 
 model Report {
-  id         Int      @id @default(autoincrement())
-  graffitiId Int
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id])
-
+  id           Int      @id @default(autoincrement())
+  graffitiId   Int
+  userId       Int
   createdAt    DateTime @default(now())
   reportReason String
   status       String
-  comment      String? //optional field?
+  comment      String?
+  graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
+  user         User     @relation(fields: [userId], references: [id])
 }
 
 model Likes {
-  id              Int           @id @default(autoincrement())
   user            User          @relation(fields: [userId], references: [id])
   userId          Int
   graffitiPhoto   GraffitiPhoto @relation(fields: [graffitiPhotoId], references: [id])
   graffitiPhotoId Int
+
+  @@id([userId, graffitiPhotoId])
 }
+
+// enum RoleEnum {
+//   ADMIN
+//   USER
+// }
+
+// model Role {
+//   id    Int          @id @default(autoincrement())
+//   name  RoleEnum     @unique
+//   users RoleToUser[]
+// }
+
+// model RoleToUser {
+//   user   User @relation(fields: [userId], references: [id])
+//   userId Int
+//   role   Role @relation(fields: [roleId], references: [id])
+//   roleId Int
+
+//   @@id([userId, roleId])
+// }

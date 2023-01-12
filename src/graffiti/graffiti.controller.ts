@@ -6,20 +6,14 @@ import {
 	Param,
 	Post,
 	Put,
-	Req,
-	UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CategoryEntry } from './dto/request/category-entry.dto';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
+import { CategoryEntry } from './dto/request/category-entry.dto';
 import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
 import { GraffitiService } from './graffiti.service';
 import GraffitiMapper from './mapper/GraffitiMapper';
-import { AccessTokenStrategy } from '../auth/strategies/access-token.strategy';
-import { Request } from 'express';
-import Public from '../auth/decorators/public.decorator';
-import AtGuard from '../auth/guards/access-token.guard';
 
 @ApiTags('graffiti')
 @Controller('api/v1/graffiti')
@@ -30,6 +24,7 @@ export class GraffitiController {
 	@ApiOperation({ summary: 'Create a graffiti post' })
 	async create(@Body() createGraffitiDto: CreateGraffitiDto) {
 		let entity = await this.graffitiService.create(createGraffitiDto);
+
 		return GraffitiMapper.toResponse(entity);
 	}
 
@@ -39,6 +34,20 @@ export class GraffitiController {
 	})
 	async findAll() {
 		let entities = await this.graffitiService.findAll();
+		return GraffitiMapper.toResponses(entities);
+	}
+	@Get()
+	@ApiOperation({
+		summary: 'Find nearest graffiti posts',
+	})
+	async findnearest(@Param() latitude: string, @Param() longitude: string) {
+		let graffitis = await this.graffitiService.findAll();
+		let entities = await this.graffitiService.findNearestNeighbor(
+			graffitis,
+			latitude,
+			longitude,
+		);
+
 		return GraffitiMapper.toResponses(entities);
 	}
 

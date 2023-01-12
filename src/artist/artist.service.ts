@@ -59,7 +59,9 @@ export class ArtistService {
 			},
 			data: {
 				graffitis: {
-					delete: request.graffitiIds.map((graffitiId) => ({ id: graffitiId })),
+					deleteMany: request.graffitiIds.map((graffitiId) => ({
+						graffitiId: graffitiId,
+					})),
 				},
 			},
 		});
@@ -80,6 +82,13 @@ export class ArtistService {
 		return await this.prisma.artist.delete({
 			where: {
 				id: id,
+			},
+
+			select: {
+				id: true,
+				name: true,
+				surname: true,
+				graffitis: true,
 			},
 		});
 	}

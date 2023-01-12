@@ -16,10 +16,15 @@ export class CreateGraffitiDto {
 
 	@ApiProperty({
 		type: String,
-		description:
-			'The location of a graffiti can be described like: geo: Latitude, Longitude and is required',
+		description: 'The latitude of a graffiti',
 	})
-	location: string;
+	latitude: string;
+
+	@ApiProperty({
+		type: String,
+		description: 'The longitude of a graffiti',
+	})
+	longitude: string;
 
 	@ApiProperty({
 		type: Date,
@@ -46,4 +51,10 @@ export class CreateGraffitiDto {
 		description: 'Artists is an array of artist ids',
 	})
 	artistIds: number[];
+
+	@ApiProperty({
+		type: Array<String>,
+		description: 'Photos is an array of photo urls',
+	})
+	photoIds?: number[];
 }

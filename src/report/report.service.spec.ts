@@ -16,4 +16,19 @@ describe('ReportService', () => {
 	it('should be defined', () => {
 		expect(service).toBeDefined();
 	});
+
+	// let report1 = {
+	// 	id: 1,
+	// 	userId: 1,
+	// 	graffitiId: 1,
+	// 	description: 'This is a test report',
+	// 	createdAt: new Date(),
+	// 	updatedAt: new Date(),
+	// };
+
+	it('should return all reports', async () => {
+		const reports = await service.findAll();
+
+		expect(reports).toEqual([]);
+	});
 });

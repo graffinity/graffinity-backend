@@ -1,7 +1,5 @@
-import * as dotenv from 'dotenv';
-import * as faker from '@faker-js/faker';
+import { PrismaClient } from '@prisma/client';
 import { CreateGraffitiDto } from '../src/graffiti/dto/request/create-graffiti.dto';
-import { Graffiti, GraffitiPhoto, PrismaClient } from '@prisma/client';
 import { TestDataFactory } from './data/util/TestDataFactory';
 
 export const prisma = new PrismaClient();
@@ -50,12 +48,29 @@ async function main() {
 
 	// GraffitiPost test data
 
-	let graffitis: Graffiti[] = testDataFactory.getListOfGraffitis();
-	graffitis.forEach(async (graffiti) => {
-		await prisma.graffiti.upsert({
-			where: { id: graffiti.id },
-			update: {},
-			create: graffiti,
+	let graffitis: CreateGraffitiDto[] = testDataFactory.getListOfGraffitis();
+	graffitis.forEach(async (graffiti: CreateGraffitiDto) => {
+		await prisma.graffiti.create({
+			data: {
+				name: graffiti.name,
+				description: graffiti.description,
+				location: graffiti.location,
+				author: {
+					connect: {
+						id: graffiti.authorId,
+					},
+				},
+				categories: {
+					create: graffiti.categoryIds.map((id) => ({
+						categoryId: id,
+					})),
+				},
+				artists: {
+					create: graffiti.artistIds.map((id) => ({
+						artistId: id,
+					})),
+				},
+			},
 		});
 	});
 
