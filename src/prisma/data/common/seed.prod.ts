@@ -53,8 +53,10 @@ async function main() {
 		await prisma.graffiti.create({
 			data: {
 				name: graffiti.name,
+				latitude: graffiti.latitude,
+				longitude: graffiti.longitude,
 				description: graffiti.description,
-				location: graffiti.location,
+
 				author: {
 					connect: {
 						id: graffiti.authorId,

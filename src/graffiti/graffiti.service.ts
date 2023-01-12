@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Graffiti } from '@prisma/client';
+import { Graffiti, GraffitiPhoto } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
 import { CategoryEntry } from './dto/request/category-entry.dto';
@@ -22,7 +22,8 @@ export class GraffitiService {
 						id: +createGraffitiDto.authorId,
 					},
 				},
-				location: createGraffitiDto.location,
+				latitude: createGraffitiDto.latitude,
+				longitude: createGraffitiDto.longitude,
 			},
 			include: {
 				photos: true,
@@ -211,12 +212,16 @@ export class GraffitiService {
 
 	// Find the nearest neighbor graffiti to the given coordinates
 	async findNearestNeighbor(
-		graffitiList: Graffiti[],
+		graffitiList: (Graffiti & {
+			photos: GraffitiPhoto[];
+		})[],
 		lat: string,
 		lon: string,
 	) {
 		// Initialize the nearest neighbors array with the first graffiti in the list
-		let nearestNeighbors: Graffiti[] = [graffitiList[0]];
+		let nearestNeighbors: (Graffiti & {
+			photos: GraffitiPhoto[];
+		})[] = [graffitiList[0]];
 
 		// Loop through the rest of the graffiti list and compare distances
 		for (let i = 1; i < graffitiList.length; i++) {

@@ -82,16 +82,12 @@ export class TestDataFactory {
 		let newGraffiti = {
 			id: 1,
 			name: 'Graffiti name 1',
-
 			description: 'Graffiti description 1',
 			authorId: 1,
-
 			createdAt: new Date(),
-			location: '54.687000,25.279000',
+			latitude: '54.687000',
+			longitude: '25.279000',
 			status: GraffitiStatus.SUBMITTED,
-			// Change location from string to LatLng
-			// latitude: 54.687157,
-			// longitude: 25.279652,
 		};
 		return newGraffiti;
 	}
@@ -104,7 +100,8 @@ export class TestDataFactory {
 			status: GraffitiStatus.PENDING,
 			authorId: 1,
 			createdAt: new Date(),
-			location: '54.687000,25.279000',
+			latitude: '54.687000',
+			longitude: '25.279000',
 		};
 
 		return newGraffiti;
@@ -117,7 +114,8 @@ export class TestDataFactory {
 				description: 'Graffiti description 1',
 				authorId: 1,
 				createdAt: new Date(),
-				location: '54.660000,25.250000',
+				latitude: '54.660000',
+				longitude: '25.250000',
 				categoryIds: [],
 				artistIds: [],
 			},
@@ -126,7 +124,8 @@ export class TestDataFactory {
 				description: 'Graffiti description 2',
 				authorId: 1,
 				createdAt: new Date(),
-				location: '54.670000,25.260000',
+				latitude: '54.670000',
+				longitude: '25.260000',
 				categoryIds: [],
 				artistIds: [],
 			},
@@ -135,7 +134,9 @@ export class TestDataFactory {
 				description: 'Graffiti description 3',
 				authorId: 2,
 				createdAt: new Date(),
-				location: '54.680000,25.270000',
+				latitude: '54.680000',
+				longitude: '25.270000',
+
 				categoryIds: [],
 				artistIds: [],
 			},
@@ -144,7 +145,8 @@ export class TestDataFactory {
 				description: 'Graffiti description 4',
 				authorId: 2,
 				createdAt: new Date(),
-				location: '54.690000,25.280000',
+				latitude: '54.690000',
+				longitude: '25.280000',
 				categoryIds: [],
 				artistIds: [],
 			},

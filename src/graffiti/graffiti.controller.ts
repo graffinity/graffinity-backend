@@ -47,6 +47,7 @@ export class GraffitiController {
 			latitude,
 			longitude,
 		);
+
 		return GraffitiMapper.toResponses(entities);
 	}
 
