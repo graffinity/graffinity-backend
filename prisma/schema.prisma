@@ -18,7 +18,8 @@ model Graffiti {
   id          Int                  @id @default(autoincrement())
   name        String               @unique
   description String
-  location    String
+  latitude    String
+  longitude   String
   status      GraffitiStatus       @default(SUBMITTED)
   createdAt   DateTime             @default(now())
   authorId    Int

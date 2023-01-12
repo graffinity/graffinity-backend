@@ -14,7 +14,10 @@ export class GraffitiEntity implements Graffiti {
 	description: string;
 
 	@ApiProperty()
-	location: string;
+	latitude: string;
+
+	@ApiProperty()
+	longitude: string;
 
 	@ApiProperty()
 	status: GraffitiStatus;

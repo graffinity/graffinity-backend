@@ -24,10 +24,15 @@ export class UpdateGraffitiDto extends PartialType(CreateGraffitiDto) {
 
 	@ApiProperty({
 		type: String,
-		description:
-			'The location of a graffiti can be described like: geo: Latitude, Longitude and is required',
+		description: 'The latitude of a graffiti is a required value',
 	})
-	location: string;
+	latitude: string;
+
+	@ApiProperty({
+		type: String,
+		description: 'The longitude of a graffiti is a required value',
+	})
+	longitude: string;
 
 	@ApiProperty({
 		type: Date,
