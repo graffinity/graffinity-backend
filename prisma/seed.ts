@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { GraffitiPhoto, PrismaClient } from '@prisma/client';
 import { CreateGraffitiDto } from '../src/graffiti/dto/request/create-graffiti.dto';
 import { TestDataFactory } from './data/util/TestDataFactory';
 
@@ -75,6 +75,30 @@ async function main() {
 	});
 
 	console.log('Graffiti data seed success!');
+
+	let photos: GraffitiPhoto[] = testDataFactory.getListOfGraffitiPhotos();
+
+	photos.forEach(async (photo) => {
+		await prisma.graffitiPhoto.upsert({
+			where: { id: photo.id },
+			update: {},
+			create: {
+				url: photo.url,
+				user: {
+					connect: {
+						id: photo.userId,
+					},
+				},
+				graffiti: {
+					connect: {
+						id: photo.graffitiId,
+					},
+				},
+			},
+		});
+	});
+
+	console.log('Graffiti photo data seed success!');
 
 	setTimeout(() => {
 		console.log('Finished...');
