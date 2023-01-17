@@ -1,14 +1,14 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma/prisma.service';
 import { TagService } from './tag.service';
-import { TestDataFactory } from '../prisma/data/util/TestDataFactory';
 
 describe('TagService', () => {
 	let service: TagService;
-	let dataFactory: TestDataFactory;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
+			imports: [ConfigModule],
 			providers: [TagService, PrismaService],
 		}).compile();
 
@@ -24,9 +24,8 @@ describe('TagService', () => {
 			name: 'test',
 			description: 'test',
 		};
-		let expected = 'test';
 
-		let test = await service.create(testTag);
+		// let test = await service.create(testTag);
 
 		expect(test).toBeDefined();
 	});

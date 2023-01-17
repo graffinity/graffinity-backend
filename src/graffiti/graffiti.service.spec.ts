@@ -1,62 +1,37 @@
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaClient } from '@prisma/client';
-import { mockDeep } from 'jest-mock-extended';
-import { Context, MockContext, createMockContext } from '../prisma/context';
+import { Graffiti, GraffitiStatus, PrismaClient } from '@prisma/client';
+import { DeepMockProxy, mockDeep, mockReset } from 'jest-mock-extended';
+import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { GraffitiService } from './graffiti.service';
+import { GraffitiResponseDto } from './dto/response/graffiti-response.dto';
 
 describe('GraffitiService', () => {
 	let service: GraffitiService;
-	let mockContext: MockContext;
-	let context: Context;
-	let prisma: PrismaClient;
+	let prismaService: DeepMockProxy<PrismaClient>;
 
 	beforeEach(async () => {
-		mockContext = createMockContext();
-		context = mockContext as unknown as Context;
-
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [
-				{
-					provide: GraffitiService,
-					useValue: {
-						create: jest.fn().mockImplementation((dto: CreateGraffitiDto) => {
-							return {
-								id: 1,
-								name: dto.name,
-								description: dto.description,
-								location: dto.location,
-								createdAt: dto.createdAt,
-								authorId: dto.authorId,
-							};
-						}),
-						findAll: jest.fn().mockImplementation(() => {
-							return [
-								{
-									id: 1,
-									name: 'test',
-									description: 'test',
-									location: 'test',
-									createdAt: new Date(),
-									authorId: 1,
-								},
-							];
-						}),
-					},
-				},
-			],
+			imports: [ConfigModule, PrismaModule],
+			providers: [GraffitiService, ConfigService, PrismaService],
 		})
 			.overrideProvider(PrismaService)
 			.useValue(mockDeep<PrismaClient>())
 			.compile();
 
 		service = module.get<GraffitiService>(GraffitiService);
-		// prisma = module.get<PrismaService>(PrismaService);
+		prismaService = module.get(PrismaService);
+	});
+
+	beforeEach(() => {
+		mockReset(prismaService);
 	});
 
 	it('should be defined', () => {
 		expect(service).toBeDefined();
+		expect(prismaService).toBeDefined();
 	});
 
 	// it('should return successfuly create a graffiti', async () => {
@@ -76,9 +51,10 @@ describe('GraffitiService', () => {
 	// });
 	it('should create a graffiti', async () => {
 		let testGraffiti: CreateGraffitiDto = {
-			name: 'test',
+			name: 'test123',
 			description: 'test',
-			location: 'test',
+			longitude: 'test',
+			latitude: 'test',
 			createdAt: new Date(),
 			authorId: 1,
 			categoryIds: [],
@@ -86,17 +62,37 @@ describe('GraffitiService', () => {
 		};
 
 		let graffiti = await service.create(testGraffiti);
-		let graffiti1 = await service.create(testGraffiti);
-		let graffiti2 = await service.create(testGraffiti);
+		console.log('created: ', graffiti);
+		prismaService.graffiti.create.mockResolvedValueOnce(graffiti);
+		let graffiti2 = await prismaService.graffiti.create({
+			data: testGraffiti,
+		});
+
+		console.log('created2: ', graffiti2);
+		// let graffiti1 = await service.create(testGraffiti);
+		// console.log('created: ', graffiti1);
+		// let graffiti2 = await service.create(testGraffiti);
+		// console.log('created: ', graffiti2);
 	});
 
 	it('should return all graffiti', async () => {
-		let graffitis = await context.prisma.graffiti.findMany();
+		let data: Graffiti[] = [
+			{
+				id: 1,
+				name: 'test',
+				description: 'test',
+				longitude: 'test',
+				latitude: 'test',
+				status: GraffitiStatus.PENDING,
+				authorId: 1,
+				createdAt: new Date(),
+			},
+		];
+		prismaService.graffiti.findMany.mockResolvedValueOnce(data);
+		const response = await service.findAll();
 
-		const graffiti = await service.findAll();
-
-		console.log('graffitis from context: ', graffitis);
-		console.log('graffitis real?: ', graffiti);
+		expect(response).toBeDefined();
+		expect(response).toBe(data);
 	});
 });
 

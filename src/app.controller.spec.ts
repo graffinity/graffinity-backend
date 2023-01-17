@@ -1,52 +1,40 @@
-import { JwtService } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { DeepMockProxy } from 'jest-mock-extended';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthService } from './auth/auth.service';
+import { MockContext, createMockContext } from './prisma/context';
 import { PrismaService } from './prisma/prisma.service';
-import { UserService } from './user/user.service';
-import { MetadataServiceJS } from './metadata/metadata.servicejs';
-import { MetadataService } from './metadata/metadata.service';
-
-const appServiceMock = {
-	getHello: jest.fn().mockImplementation(() => 'Hello World!'),
-};
 
 describe('AppController', () => {
 	let appController: AppController;
-	let appService: AppService;
+	let appService: DeepMockProxy<AppService>;
+	let mockContext: MockContext;
 
 	beforeEach(async () => {
-		const moduleRef: TestingModule = await Test.createTestingModule({
-			controllers: [AppController],
-			providers: [
-				{
-					provide: AppService,
-					useValue: appServiceMock,
-				},
-				AuthService,
-				JwtService,
-				UserService,
-				PrismaService,
-				MetadataServiceJS,
-				MetadataService,
-			],
-		}).compile();
+		jest.resetAllMocks();
+		mockContext = createMockContext();
 
-		appService = moduleRef.get<AppService>(AppService);
+		const moduleRef: TestingModule = await Test.createTestingModule({
+			imports: [ConfigModule],
+			controllers: [AppController],
+			providers: [AppService, PrismaService],
+		})
+			.overrideProvider(AppService)
+			.useValue(mockContext.appService)
+			.overrideProvider(PrismaService)
+			.useValue(mockContext.prisma)
+			.compile();
+
+		appService = moduleRef.get<DeepMockProxy<AppService>>(AppService);
 		appController = moduleRef.get<AppController>(AppController);
 	});
 
 	describe('root', () => {
 		it('should return "Hello World!"', () => {
+			appService.getHello.mockReturnValue('Hello World!');
 			expect(appController.getHello()).toBe('Hello World!');
 			expect(appService.getHello).toHaveBeenCalled();
 		});
 	});
-
-	// describe('root', () => {
-	// 	it('should return "Hello World!"', () => {
-	// 		expect(appController.getHello()).toBe('Hello World!');
-	// 	});
-	// });
 });
