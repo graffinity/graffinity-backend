@@ -1,12 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { MetadataService } from '../metadata/metadata.service';
+import sharp from 'sharp';
 import { MetadataServiceJS } from '../metadata/metadata.servicejs';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
+import { LikesEntry } from './dto/request/LikesEntry';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
-import { LikesEntry } from './dto/request/LikesEntry';
-import sharp from 'sharp';
+import { Multer } from 'multer';
+
+type File = Express.Multer.File;
 
 @Injectable()
 export class GraffitiPhotoService {
@@ -15,15 +17,11 @@ export class GraffitiPhotoService {
 		@Inject(S3Service)
 		private S3Service: S3Service,
 
-		@Inject(MetadataService)
-		private metadataService: MetadataService,
+		@Inject(MetadataServiceJS)
 		private MetadataService: MetadataServiceJS,
 	) {}
 
-	async create(
-		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
-		file: Express.Multer.File,
-	) {
+	async create(createGraffitiPhotoDto: CreateGraffitiPhotoDto, file: File) {
 		file.buffer = await this.MetadataService.removeMetadata(file);
 		let md = await sharp(file.buffer).metadata();
 		console.log('metadata111:', md);

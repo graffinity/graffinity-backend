@@ -6,11 +6,14 @@ import 'dotenv/config';
 import session from 'express-session';
 import passport from 'passport';
 import { AppModule } from './app.module';
+import { PrismaService } from './prisma/prisma.service';
 
 async function bootstrap() {
 	const app: INestApplication = await NestFactory.create(AppModule);
 	app.useGlobalPipes(new ValidationPipe());
-	dotenv.config();
+	dotenv.config(
+		process.env.NODE_ENV === 'test' ? { path: '.env.test' } : { path: '.env' },
+	);
 
 	const config = new DocumentBuilder()
 		.setTitle('Graffinity')
@@ -35,6 +38,12 @@ async function bootstrap() {
 	);
 	app.use(passport.initialize());
 	app.use(passport.session());
+
+	// Add Interceptor to map response to DTO ??
+	// Add Interceptor to handle errors ??
+
+	const prismaService = app.get(PrismaService);
+	await prismaService.enableShutdownHooks(app);
 
 	await app.listen(8080);
 	console.log(

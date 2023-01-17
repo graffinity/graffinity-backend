@@ -6,11 +6,7 @@ import { UserService } from './user/user.service';
 
 @Controller()
 export class AppController {
-	constructor(
-		private readonly appService: AppService,
-		private authService: AuthService,
-		private userService: UserService,
-	) {}
+	constructor(private readonly appService: AppService) {}
 
 	@Get()
 	getHello(): string {

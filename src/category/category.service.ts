@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { GraffitiService } from '../graffiti/graffiti.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';

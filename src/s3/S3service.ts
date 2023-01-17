@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import { S3 } from 'aws-sdk';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class S3Service {
@@ -35,7 +36,7 @@ export class S3Service {
 		try {
 			const params: S3.Types.PutObjectRequest = {
 				Bucket: bucket,
-				Key: fileName,
+				Key: `${fileName}_${uuidv4()}`,
 				Body: dataBuffer,
 				ACL: 'public-read',
 				ContentType: mimetype,
