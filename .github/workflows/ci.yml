@@ -122,7 +122,7 @@ jobs:
       run: |
         sh publish.sh
 
-    - uses: Burnett01/rsync-deployments@5.0
+    - uses: Burnett01/rsync-deployments@5.2
       name: Add config/ folder to remote
       with:
         switches: -av --progress -e 'ssh -i graffinity.pem'
@@ -136,7 +136,7 @@ jobs:
     # - name: Copy file to remote via ssh
     #   uses: appleboy/scp-action@v0.0.1
 
-    # - uses: Burnett01/rsync-deployments@5.0
+    # - uses: Burnett01/rsync-deployments@5.2
     #   name: Add start.sh script to remote
     #   with:
     #     switches: -a
@@ -148,7 +148,7 @@ jobs:
         # remote_key_pass: ${{env.REMOTE_PASSPHRASE}}
       
 
-    - uses: Burnett01/rsync-deployments@5.0
+    - uses: Burnett01/rsync-deployments@5.2
       name: Add start.sh script to remote
       with:
         switches: -a
@@ -159,7 +159,7 @@ jobs:
         remote_key: ${{ secrets.REMOTE_KEY }}
         remote_key_pass: ${{ secrets.REMOTE_SSH_PASSPHRASE }}
 
-    - uses: Burnett01/rsync-deployments@5.0
+    - uses: Burnett01/rsync-deployments@5.2
       name: Add docker-compose.prod.yml to remote 
       with:
         switches: -a
