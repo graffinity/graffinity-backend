@@ -4,13 +4,6 @@ permissions:
   id-token: write
   contents: read
 
-on:
-    push:
-        branches: [master]
-    pull_request:
-        branches: [master]
-    workflow_dispatch:
-      
 env:
   # REMOTE_KEY: ${{ secrets.KEY }}
   AWS_USERNAME: ${{ secrets.AWS_USERNAME }}
@@ -28,6 +21,12 @@ env:
   DATABASE_PORT: ${{ secrets.REMOTE_DATABASE_PORT }}
   REMOTE_PORT: 22
 
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+    workflow_dispatch:
       
 jobs:
   build:
