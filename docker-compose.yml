@@ -1,0 +1,45 @@
+version: '3'
+
+
+services:
+  graffinity-db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: graffinity
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+    # ports:
+    #   - "5432:5432"
+
+  graffinity-backend:
+    image: 445007777844.dkr.ecr.eu-central-1.amazonaws.com/graffinity-backend:amd64
+    depends_on:
+      - graffinity-db
+    # ports:
+    #   - "8080:8080"
+    env_file:
+      - ./prod.env
+    labels:
+      decode_log_event_to_json_object: "true"
+
+  graffinity-frontend:
+    image: 445007777844.dkr.ecr.eu-central-1.amazonaws.com/graffinity-frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - graffinity-backend
+    volumes:
+      - /etc/ssl/:/etc/ssl/
+    env_file:
+      - ./prod.env
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
