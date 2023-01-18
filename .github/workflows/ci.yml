@@ -131,7 +131,7 @@ jobs:
       name: Add docker-compose.yml to remote 
       with:
         switches: -av --progress
-        path: docker-compose.prod.yml
+        path: docker-compose.yml
         remote_path: ~/docker-compose.yml
         remote_host: ${{env.REMOTE_HOST}}
         remote_user: ${{env.REMOTE_USERNAME}}
