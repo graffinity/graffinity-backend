@@ -26,7 +26,7 @@ env:
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   DATABASE_PORT: ${{ secrets.REMOTE_DATABASE_PORT }}
-  # DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/graffinity"
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/graffinity"
   REMOTE_PORT: 22
 
       
@@ -65,13 +65,13 @@ jobs:
       - name: Run build
         run: npm run build --if-present
 
-        # env:
-        #   DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/graffinity"
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/graffinity"
       - name: Clean and migrate the db
         run: npx prisma migrate reset --force
 
-        # env:
-        #   DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/graffinity"
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/graffinity"
       - name: Populate the database w/ test data
         run: npm run seed
 
