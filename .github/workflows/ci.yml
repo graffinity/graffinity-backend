@@ -15,10 +15,11 @@ env:
   REMOTE_USERNAME: ${{ secrets.REMOTE_USERNAME }}
   PRIVATE_SSH_KEY: ${{ secrets.PERSONAL_SSH_PRIVATE_KEY }}
   AWS_REMOTE_SSH_KEY: ${{ secrets.AWS_KEY_PAIR_SSH_KEY }}
-  DATABASE_URL: ${{ secrets.REMOTE_DATABASE_URL }}
+  # DATABASE_URL: ${{ secrets.REMOTE_DATABASE_URL }}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   DATABASE_PORT: ${{ secrets.REMOTE_DATABASE_PORT }}
+  DATABASE_URL: "postgresql://postgres:postgres@test-db:5432/graffinity"
   REMOTE_PORT: 22
 
 on:
@@ -31,19 +32,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # services:
-    #   postgres-db:
-    #     image: postgres
-    #     env:
-    #       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-    #       POSTGRES_PASSWORD:  ${{ secrets.POSTGRES_PASSWORD }}
-    #     options: >-
-    #       --health-cmd pg_isready
-    #       --health-interval 10s
-    #       --health-timeout 5s
-    #       --health-retries 5
-    #     ports:
-    #       - ${{ secrets.DATABASE_PORT }}:5432
+    services:
+      test-db:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD:  postgres
+          POSTGRES_DB: graffinity
+        ports:
+          - 5432:5432
 
     steps:
       - name: Check out source code
@@ -64,13 +61,15 @@ jobs:
       # - name: Migrate the production database
       #   run: npm run prisma:deploy
 
-      #   env:
-      #     DATABASE_URL: ""
-      # - name: Populate the database w/ test data
-      #   run: npm run seed
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@test-db:5432/graffinity"
+      - name: Populate the database w/ test data
+        run: npm run seed
 
       - name: Run tests w/ Jest
         run: npm run test
+
+            
 
   
       - name: Run build
