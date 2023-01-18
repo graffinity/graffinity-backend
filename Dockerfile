@@ -24,7 +24,7 @@ RUN npm ci
 # Bundle app source
 COPY --chown=node:node . .
 
-# Use the node user frrom the image (instead of the root user)
+# Use the node user from the image (instead of the root user)
 USER node
 
 ###################
@@ -44,14 +44,15 @@ COPY --chown=node:node prisma ./prisma/
 
 COPY --chown=node:node . .
 
+ENV DATABASE_URL ""
+# Generate PrismaClient artifact
+# RUN npx prisma generate
+
 # Run the build command which creates the production bundle
 RUN npm run build
 
 # Set NODE_ENV environment variable
 ENV NODE_ENV production
-
-# Generate PrismaClient artifact
-# RUN npx prisma generate
 
 # Create the database in production/staging
 # RUN npx prisma db push
