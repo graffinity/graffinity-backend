@@ -61,8 +61,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Migrate the production database
-        run: npm run prisma:deploy
+      # - name: Migrate the production database
+      #   run: npm run prisma:deploy
 
       - name: Run build
         run: npm run build --if-present
@@ -100,9 +100,9 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET }}
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-access-key-id: ${{env.AWS_ACCESS_KEY_ID}}
+        aws-secret-access-key: ${{env.AWS_SECRET_ACCESS_KEY}}
+        aws-region: ${{env.AWS_REGION}}
 
     - name: Login to Amazon ECR
       id: login-ecr
@@ -111,7 +111,7 @@ jobs:
     - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
       with:
-        key: ${{ secrets.AWS_KEY_PAIR_SSH_KEY }}
+        key: ${{env.AWS_REMOTE_SSH_KEY}}
         known_hosts: 'just-a-placeholder-so-we-dont-get-errors' 
 
 
@@ -125,13 +125,14 @@ jobs:
     - uses: Burnett01/rsync-deployments@5.2
       name: Add config/ folder to remote
       with:
-        switches: -av --progress -e 'ssh -i graffinity.pem'
+        # switches: -av --progress -e 'ssh -i graffinity.pem'
+        switches: -av --progress
         path: config/
         remote_path: ~/config
         remote_host: ${{env.REMOTE_HOST}}
         remote_user: ${{env.REMOTE_USERNAME}}
-        remote_key: ${{env.REMOTE_KEY}}
-        # remote_key_pass: ${{env.REMOTE_PASSPHRASE}}
+        remote_key: ${{env.PRIVATE_SSH_KEY}}
+        remote_key_pass: ${{ secrets.PERSONAL_SSH_KEY_PASSPHRASE }}
 
     # - name: Copy file to remote via ssh
     #   uses: appleboy/scp-action@v0.0.1
@@ -154,10 +155,10 @@ jobs:
         switches: -a
         path: start.sh
         remote_path: ~/start.sh
-        remote_host: ${{ secrets.REMOTE_HOST }}
-        remote_user: ${{ secrets.REMOTE_USERNAME }}
-        remote_key: ${{ secrets.REMOTE_KEY }}
-        remote_key_pass: ${{ secrets.REMOTE_SSH_PASSPHRASE }}
+        remote_host: ${{env.REMOTE_HOST}}
+        remote_user: ${{env.REMOTE_USERNAME}}
+        remote_key: ${{ secrets.PERSONAL_SSH_PRIVATE_KEY }}
+        remote_key_pass: ${{ secrets.PERSONAL_SSH_KEY_PASSPHRASE }}
 
     - uses: Burnett01/rsync-deployments@5.2
       name: Add docker-compose.prod.yml to remote 
@@ -167,17 +168,17 @@ jobs:
         remote_path: ~/docker-compose.yml
         remote_host: ${{env.REMOTE_HOST}}
         remote_user: ${{env.REMOTE_USERNAME}}
-        remote_key: ${{env.REMOTE_KEY}}
-        # remote_key_pass: ${{env.REMOTE_PASSPHRASE}}
+        remote_key: ${{env.PRIVATE_SSH_KEY}}
+        remote_key_pass: ${{ secrets.PERSONAL_SSH_KEY_PASSPHRASE }}
 
     - name: Rebuild and start docker containers 
       uses: appleboy/ssh-action@master
       with:
         host: ${{env.REMOTE_HOST}}
         username: ${{env.REMOTE_USERNAME}}
-        key: ${{env.REMOTE_KEY}}
         port: ${{env.REMOTE_PORT}}
-        # passphrase: ${{env.REMOTE_PASSPHRASE}}
+        key: ${{env.PRIVATE_SSH_KEY}}
+        passphrase: ${{ secrets.PERSONAL_SSH_KEY_PASSPHRASE }}
         script_stop: true
         script: |
           sh start.sh
