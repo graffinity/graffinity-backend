@@ -128,9 +128,9 @@ jobs:
         # remote_key_pass: ${{ secrets.PERSONAL_SSH_KEY_PASSPHRASE }}
 
     - uses: Burnett01/rsync-deployments@5.2
-      name: Add docker-compose.prod.yml to remote 
+      name: Add docker-compose.yml to remote 
       with:
-        switches: -a
+        switches: -av --progress
         path: docker-compose.prod.yml
         remote_path: ~/docker-compose.yml
         remote_host: ${{env.REMOTE_HOST}}
