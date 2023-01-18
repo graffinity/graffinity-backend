@@ -43,9 +43,6 @@ describe('GraffitiController', () => {
 
 		const actual = await controller.findAll();
 
-		console.log('actual: ', actual);
-		console.log('expected: ', expected);
-
 		expect(actual).toBeDefined();
 		expect(actual).toEqual(expected);
 	});

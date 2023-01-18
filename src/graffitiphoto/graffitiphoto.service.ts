@@ -107,7 +107,6 @@ export class GraffitiPhotoService {
 				},
 			},
 		});
-		console.log(entity);
 		return entity;
 	}
 
@@ -124,7 +123,6 @@ export class GraffitiPhotoService {
 				},
 			},
 		});
-		console.log(entity);
 		return entity;
 	}
 

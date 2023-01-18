@@ -119,14 +119,29 @@ export class DataFactory {
 	public getValidGraffiti(): Graffiti {
 		let newGraffiti: Graffiti = {
 			id: 26,
-			name: '',
-			description: '',
+			name: 'Graffiti name 26',
+			description: 'Graffiti description 26',
 			authorId: 1,
 			createdAt: new Date(),
 			status: GraffitiStatus.SUBMITTED,
 			latitude: '',
 			longitude: '',
 		};
+		return newGraffiti;
+	}
+
+	public getValidCreateGraffitiRequest(): CreateGraffitiDto {
+		let newGraffiti: CreateGraffitiDto = {
+			name: 'Graffiti name 26',
+			description: 'Graffiti description 26',
+			authorId: 1,
+			createdAt: new Date(),
+			categoryIds: [],
+			artistIds: [],
+			latitude: '',
+			longitude: '',
+		};
+
 		return newGraffiti;
 	}
 

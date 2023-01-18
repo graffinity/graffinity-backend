@@ -42,12 +42,6 @@ describe('CategoryService', () => {
 
 		let testCreate = service.create(category1);
 
-		console.log('categories1', categories1);
-
-		console.log('categories', categories);
-		// console.log('expected', category1);
-		// console.log('actual', categories[0]);
-
 		// expect(categories[0]).toMatchObject(category1);
 		await expect(testCreate).resolves.toMatchObject(category1);
 		// expect(categories).toBeDefined();
