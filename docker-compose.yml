@@ -15,27 +15,24 @@ services:
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
 
   graffinity-backend:
-    image: 445007777844.dkr.ecr.eu-central-1.amazonaws.com/graffinity-backend:latest
+    image: 445007777844.dkr.ecr.eu-central-1.amazonaws.com/graffinity-backend
     depends_on:
       - graffinity-db
     env_file:
       - ./.env
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
     ports:
       - "8080:8080"
     labels:
       decode_log_event_to_json_object: "true"
 
   graffinity-frontend:
-    image: 445007777844.dkr.ecr.eu-central-1.amazonaws.com/graffinity-frontend:latest
+    image: 445007777844.dkr.ecr.eu-central-1.amazonaws.com/graffinity-frontend
     depends_on:
       - graffinity-backend
     env_file:
       - ./.env
     volumes:
-      - /etc/ssl/:/etc/ssl/
+      - /etc/ssl/live/:/etc/ssl/live/
     ports:
       - "80:80"
       - "443:443"
