@@ -60,6 +60,14 @@ jobs:
 
       # - name: Migrate the production database
       #   run: npm run prisma:deploy
+      
+      - name: Run build
+        run: npm run build --if-present
+
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@test-db:5432/graffinity"
+      - name: Clean and migrate the db
+        run: npx prisma migrate reset
 
         env:
           DATABASE_URL: "postgresql://postgres:postgres@test-db:5432/graffinity"
@@ -68,24 +76,7 @@ jobs:
 
       - name: Run tests w/ Jest
         run: npm run test
-
-            
-
-  
-      - name: Run build
-        run: npm run build --if-present
-
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ${{env.AWS_ACCESS_KEY_ID}}
-      #     aws-secret-access-key: ${{env.AWS_SECRET_ACCESS_KEY}}
-      #     aws-region: ${{env.AWS_REGION}}
-
-      # - name: Login to Amazon ECR
-      #   id: login-ecr
-      #   uses: aws-actions/amazon-ecr-login@v1
-
+        
       - name: Try to build docker image
         run: |
           sh build.sh
