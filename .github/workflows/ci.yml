@@ -19,7 +19,7 @@ env:
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   DATABASE_PORT: ${{ secrets.REMOTE_DATABASE_PORT }}
-  DATABASE_URL: "postgresql://postgres:postgres@test-db:5432/graffinity"
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/graffinity"
   REMOTE_PORT: 22
 
 on:
