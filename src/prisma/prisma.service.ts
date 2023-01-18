@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 
 import { clear } from './prisma-utils';
+import { env } from 'process';
 
 @Injectable()
 export class PrismaService
@@ -16,17 +17,6 @@ export class PrismaService
 {
 	constructor(config?: ConfigService) {
 		super({
-			datasources: {
-				db: {
-					url: config
-						? config?.get<string>('NODE_ENV') === 'test'
-							? config.get<string>('TEST_DATABASE_URL')
-							: config?.get<string>('DATABASE_URL')
-						: process.env.NODE_ENV === 'test'
-						? process.env.TEST_DATABASE_URL
-						: process.env.DATABASE_URL,
-				},
-			},
 			log: ['error', 'info'],
 		});
 	}
