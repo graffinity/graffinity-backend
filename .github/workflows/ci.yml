@@ -115,22 +115,7 @@ jobs:
         remote_user: ${{env.REMOTE_USERNAME}}
         remote_key: ${{env.AWS_REMOTE_SSH_KEY}}
         # remote_key_pass: ${{ secrets.PERSONAL_SSH_KEY_PASSPHRASE }}
-
-    - name: Copy file to remote via ssh
-      uses: appleboy/scp-action@v0.0.1
-
-    - uses: Burnett01/rsync-deployments@5.2
-      name: Add start.sh script to remote
-      with:
-        switches: -av --progress
-        path: start.sh
-        remote_path: ~/start.sh
-        remote_host: ${{env.REMOTE_HOST}}
-        remote_user: ${{env.REMOTE_USERNAME}}
-        remote_key: ${{env.AWS_REMOTE_SSH_KEY}}
-        # remote_key_pass: ${{env. }}
       
-
     - uses: Burnett01/rsync-deployments@5.2
       name: Add start.sh script to remote
       with:
