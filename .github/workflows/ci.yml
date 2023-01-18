@@ -113,8 +113,8 @@ jobs:
         remote_path: ~/config
         remote_host: ${{env.REMOTE_HOST}}
         remote_user: ${{env.REMOTE_USERNAME}}
-        remote_key: ${{env.PRIVATE_SSH_KEY}}
-        remote_key_pass: ${{ secrets.PERSONAL_SSH_KEY_PASSPHRASE }}
+        remote_key: ${{env.AWS_REMOTE_SSH_KEY}}
+        # remote_key_pass: ${{ secrets.PERSONAL_SSH_KEY_PASSPHRASE }}
 
     - name: Copy file to remote via ssh
       uses: appleboy/scp-action@v0.0.1
