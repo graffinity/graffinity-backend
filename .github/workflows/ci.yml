@@ -65,18 +65,18 @@ jobs:
         run: npm run build --if-present
 
         env:
-          DATABASE_URL: "postgresql://postgres:postgres@test-db:5432/graffinity"
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/graffinity"
       - name: Clean and migrate the db
         run: npx prisma migrate reset
 
         env:
-          DATABASE_URL: "postgresql://postgres:postgres@test-db:5432/graffinity"
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/graffinity"
       - name: Populate the database w/ test data
         run: npm run seed
 
       - name: Run tests w/ Jest
         run: npm run test
-        
+
       - name: Try to build docker image
         run: |
           sh build.sh
