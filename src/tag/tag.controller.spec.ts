@@ -1,13 +1,15 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../prisma/prisma.service';
 import { TagController } from './tag.controller';
 import { TagService } from './tag.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 describe('TagController', () => {
 	let controller: TagController;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
+			imports: [ConfigModule],
 			controllers: [TagController],
 			providers: [TagService, PrismaService],
 		}).compile();

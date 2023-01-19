@@ -2,7 +2,6 @@
 /dist
 /node_modules
 .db
-postgres-data
 
 # Logs
 logs
@@ -38,3 +37,4 @@ lerna-debug.log*
 
 # Environment variables
 .env*
+.secrets*

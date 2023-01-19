@@ -1,9 +1,9 @@
 import { GraffitiPhoto, PrismaClient } from '@prisma/client';
 import { CreateGraffitiDto } from '../src/graffiti/dto/request/create-graffiti.dto';
-import { TestDataFactory } from './data/util/TestDataFactory';
+import { DataFactory } from './data/util/DataFactory';
 
 export const prisma = new PrismaClient();
-let testDataFactory: TestDataFactory = TestDataFactory.getInstance();
+let testDataFactory: DataFactory = DataFactory.getInstance();
 
 async function main() {
 	console.log('Seeding...');
@@ -11,18 +11,31 @@ async function main() {
 	// ----------------------------
 
 	// User test data
+	let users = await testDataFactory.getListofUsersWithHashedPassword();
+	users.forEach(async (user) => {
+		await prisma?.user.upsert({
+			where: {
+				username: user.username,
+			},
+			update: {},
+			create: user,
+		});
+	});
+
 	let user = testDataFactory.getValidUser();
 	await prisma.user.upsert({
-		where: { email: user.email },
-		update: {},
+		where: { username: user.username },
+		update: {
+			username: user.username,
+			email: user.email,
+		},
 		create: user,
 	});
 
 	let userWithHashedPassword =
 		await testDataFactory.getValidUserWithHashedPassword();
-
 	await prisma.user.upsert({
-		where: { email: userWithHashedPassword.email },
+		where: { username: userWithHashedPassword.username },
 		update: {},
 		create: userWithHashedPassword,
 	});
@@ -48,27 +61,37 @@ async function main() {
 
 	// GraffitiPost test data
 
-	let graffitis: CreateGraffitiDto[] = testDataFactory.getListOfGraffitis();
+	let graffitis: CreateGraffitiDto[] =
+		testDataFactory.getListOfGraffitiCreateRequests();
 	graffitis.forEach(async (graffiti: CreateGraffitiDto) => {
-		await prisma.graffiti.create({
-			data: {
+		await prisma.graffiti.upsert({
+			where: {
+				name: graffiti.name,
+			},
+			update: {},
+			create: {
 				name: graffiti.name,
 				description: graffiti.description,
-				location: graffiti.location,
+				latitude: graffiti.latitude,
+				longitude: graffiti.longitude,
+				artists: {
+					createMany: {
+						data: graffiti.artistIds.map((id) => ({
+							artistId: id,
+						})),
+					},
+				},
+				categories: {
+					createMany: {
+						data: graffiti.categoryIds.map((id) => ({
+							categoryId: id,
+						})),
+					},
+				},
 				author: {
 					connect: {
 						id: graffiti.authorId,
 					},
-				},
-				categories: {
-					create: graffiti.categoryIds.map((id) => ({
-						categoryId: id,
-					})),
-				},
-				artists: {
-					create: graffiti.artistIds.map((id) => ({
-						artistId: id,
-					})),
 				},
 			},
 		});
@@ -80,7 +103,7 @@ async function main() {
 
 	photos.forEach(async (photo) => {
 		await prisma.graffitiPhoto.upsert({
-			where: { id: photo.id },
+			where: { url: photo.url },
 			update: {},
 			create: {
 				url: photo.url,
@@ -100,9 +123,7 @@ async function main() {
 
 	console.log('Graffiti photo data seed success!');
 
-	setTimeout(() => {
-		console.log('Finished...');
-	}, 300);
+	console.log('Finished...');
 }
 // ----------------------------
 // Done...
@@ -110,8 +131,8 @@ async function main() {
 main()
 	.catch((e) => {
 		console.error(e);
+		process.exit(1);
 	})
 	.finally(async () => {
 		await prisma.$disconnect();
-		process.exit(0);
 	});

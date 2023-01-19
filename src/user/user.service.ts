@@ -79,7 +79,6 @@ export class UserService {
 				},
 			},
 		});
-		console.log(entity);
 		return entity;
 	}
 
@@ -96,7 +95,6 @@ export class UserService {
 				},
 			},
 		});
-		console.log(entity);
 		return entity;
 	}
 

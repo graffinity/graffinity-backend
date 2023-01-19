@@ -3,19 +3,22 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 import 'dotenv/config';
-import session from 'express-session';
+import session from 'cookie-session';
 import passport from 'passport';
 import { AppModule } from './app.module';
+import { PrismaService } from './prisma/prisma.service';
 
 async function bootstrap() {
 	const app: INestApplication = await NestFactory.create(AppModule);
 	app.useGlobalPipes(new ValidationPipe());
-	dotenv.config();
+	dotenv.config(
+		process.env.NODE_ENV === 'test' ? { path: '.env.test' } : { path: '.env' },
+	);
 
 	const config = new DocumentBuilder()
 		.setTitle('Graffinity')
 		.setDescription('Graffinity backend')
-		.setVersion('0.5.0')
+		.setVersion('1.0.0')
 		.addTag('graffiti')
 		.build();
 
@@ -27,14 +30,19 @@ async function bootstrap() {
 
 	app.use(
 		session({
+			name: 'session',
 			secret: 'keyboard',
-			resave: false,
-			saveUninitialized: false,
-			cookie: { secure: true },
+			maxAge: 24 * 60 * 60 * 1000, // 24 hours
 		}),
 	);
 	app.use(passport.initialize());
 	app.use(passport.session());
+
+	// Add Interceptor to map response to DTO ??
+	// Add Interceptor to handle errors ??
+
+	const prismaService = app.get(PrismaService);
+	await prismaService.enableShutdownHooks(app);
 
 	await app.listen(8080);
 	console.log(

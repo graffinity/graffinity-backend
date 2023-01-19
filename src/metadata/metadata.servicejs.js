@@ -19,8 +19,10 @@ export class MetadataServiceJS {
 				return metadata.orientation;
 			});
 
-		await sharp(file.buffer).toFile('temp.jpg');
+		await sharp(file.buffer).toFile('src/metadata/temp.jpg');
 
+		// let fd = fs.openSync('temp.jpg', 'w');
+		fs.linkSync('src/metadata/temp.jpg', 'temp.jpg');
 		const imageData = getBase64DataFromJpegFile('temp.jpg');
 		const scrubbedData = piexif.remove(imageData);
 		let tempBuffer = Buffer.from(scrubbedData, 'binary');
@@ -34,6 +36,10 @@ export class MetadataServiceJS {
 
 		if (fs.existsSync('temp.jpg')) {
 			fs.unlinkSync('temp.jpg');
+			fs.unlink('src/metadata/temp.jpg', (err) => {
+				if (err) throw err;
+				console.log('temp/jpg deleted');
+			});
 		}
 
 		return fileBuffer;

@@ -5,12 +5,14 @@ import { GraffitiPhotoController } from './graffitiphoto.controller';
 import { GraffitiPhotoService } from './graffitiphoto.service';
 import { MetadataService } from '../metadata/metadata.service';
 import { MetadataServiceJS } from '../metadata/metadata.servicejs';
+import { ConfigModule } from '@nestjs/config';
 
 describe('GraffitiPhotoController', () => {
 	let controller: GraffitiPhotoController;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
+			imports: [ConfigModule],
 			controllers: [GraffitiPhotoController],
 			providers: [
 				S3Service,
