@@ -3,6 +3,4 @@ Dockerfile
 .vscode/
 node_modules/
 npm-debug.log
-postgres-data/
 graphql/
-test/
