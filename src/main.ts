@@ -10,6 +10,20 @@ import { PrismaService } from './prisma/prisma.service';
 
 async function bootstrap() {
 	const app: INestApplication = await NestFactory.create(AppModule);
+	app.enableCors({
+		origin: 'http://localhost:3000',
+		credentials: true,
+		exposedHeaders: ['Set-Cookie'],
+		allowedHeaders: [
+			'Content-Type',
+			'Authorization',
+			'Access-Control-Allow-Origin',
+			'Access-Control-Allow-Headers',
+			'Access-Control-Allow-Methods',
+			'Access-Control-Allow-Credentials',
+		],
+		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	});
 	app.useGlobalPipes(new ValidationPipe());
 	dotenv.config(
 		process.env.NODE_ENV === 'test' ? { path: '.env.test' } : { path: '.env' },
