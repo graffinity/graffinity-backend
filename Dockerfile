@@ -2,7 +2,7 @@
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
 
-FROM node:16-alpine As development
+FROM node:18-alpine As development
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -26,7 +26,7 @@ USER node
 # BUILD FOR PRODUCTION
 ###################
 
-FROM node:16-alpine As build
+FROM node:18-alpine As build
 
 WORKDIR /usr/src/app
 
@@ -56,22 +56,19 @@ USER node
 # PRODUCTION
 ###################
 
-FROM node:16-alpine as production
+FROM node:18-alpine as production
 
 # Copy the bundled code from the build stage to the production image
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/package*.json ./
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 
 # Generate the prisma client
 RUN npx prisma generate
 
-RUN ls -la .
-
-# Expose port 8080
-EXPOSE 8080
-
 # Run the app
 CMD [ "npm", "run", "start:prod" ]
 
+# Expose port 8080
+EXPOSE 8080
