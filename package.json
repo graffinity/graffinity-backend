@@ -15,8 +15,9 @@
 		"prisma:deploy": "npx prisma migrate deploy",
 		"prisma:studio": "npx prisma studio",
 		"prisma:seed": "ts-node prisma/seed",
-		"seed": "ts-node prisma/seed.ts",
+		"seed": "node dist/prisma/seed",
 		"seed:prod": "node dist/src/seed",
+		"seed:dev": "ts-node prisma/seed.ts",
 		"start": "nest start",
 		"start:dev": "nest start --watch",
 		"start:debug": "nest start --debug --watch",
@@ -35,8 +36,8 @@
 		"schema": "prisma/schema.prisma",
 		"introspect": true,
 		"generate": true,
-		"seed": "ts-node prisma/seed.ts",
-		"seed:prod": "node dist/src/seed",
+		"seed": "node dist/prisma/seed",
+		"seed:prod": "node dist/prisma/seed",
 		"seed:dev": "ts-node prisma/seed.ts"
 	},
 	"dependencies": {

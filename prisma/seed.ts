@@ -5,7 +5,7 @@ import { DataFactory } from './data/util/DataFactory';
 export const prisma = new PrismaClient();
 let testDataFactory: DataFactory = DataFactory.getInstance();
 
-async function main() {
+export async function main() {
 	console.log('Seeding...');
 
 	// ----------------------------
