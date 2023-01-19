@@ -47,6 +47,9 @@ RUN npm run build
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
+# Install production dependencies
+# RUN npm ci --only=production && npm cache clean --force
+
 USER node
 
 ###################
@@ -67,13 +70,9 @@ RUN ls -la /usr/src/app/dist
 RUN ls -la /usr/src/app/prisma
 
 
-# Set the working directory
-WORKDIR /usr/src/app
-
+# Generate the prisma client
 RUN npx prisma generate
 
-# Install production dependencies
-# RUN npm ci --only=production && npm cache clean --force
 
 # Expose port 8080
 EXPOSE 8080
