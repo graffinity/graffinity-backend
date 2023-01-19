@@ -71,7 +71,7 @@ jobs:
 
 
   deploy:
-    # if: ${{ github.event_name != 'pull_request' }}
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     needs: [ build ]
 
@@ -128,6 +128,6 @@ jobs:
         username: ${{env.REMOTE_USERNAME}}
         port: ${{env.REMOTE_PORT}}
         key: ${{env.AWS_REMOTE_SSH_KEY}}
-        # script_stop: true
+        script_stop: true
         script: |
           sh start.sh
