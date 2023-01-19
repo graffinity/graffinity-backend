@@ -7,7 +7,7 @@ FROM node:16-alpine as development
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY --chown=node:node ./prisma/ /usr/src/app/prisma/
+COPY --chown=node:node prisma /usr/src/app/prisma
 
 # COPY tsconfig.json file
 COPY tsconfig.json /usr/src/app/
@@ -19,7 +19,7 @@ COPY --chown=node:node package*.json ./
 RUN npm ci
 
 # Bundle app source
-COPY --chown=node:node ./ /usr/src/app/
+COPY --chown=node:node . /usr/src/app
 
 # Use the node user from the image (instead of the root user)
 USER node
@@ -36,10 +36,8 @@ COPY --chown=node:node package*.json ./
 
 # Copy over the node_modules in order to gain access to the Nest CLI.
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
-
-COPY --chown=node:node ./prisma/ /usr/src/app/prisma/
-
-COPY --chown=node:node ./ /usr/src/app/
+COPY --chown=node:node prisma /usr/src/app/prisma
+COPY --chown=node:node . /usr/src/app
 
 # Generate the prisma client
 RUN npx prisma generate
@@ -48,8 +46,8 @@ RUN npx prisma generate
 RUN npm run build
 
 # Set NODE_ENV environment variable
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+# ARG NODE_ENV=production
+# ENV NODE_ENV=${NODE_ENV}
 
 USER node
 
@@ -62,8 +60,8 @@ FROM node:16-alpine as production
 # Copy the bundled code from the build stage to the production image
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/package*.json ./
-COPY --chown=node:node --from=build /usr/src/app/dist/ ./dist/
-COPY --chown=node:node --from=build /usr/src/app/prisma/ ./prisma/
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 
 # Set NODE_ENV environment variable
 ARG NODE_ENV=production
@@ -73,7 +71,6 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /usr/src/app
 
 RUN npx prisma generate
-RUN npx prisma migrate deploy
 
 # Install production dependencies
 # RUN npm ci --only=production && npm cache clean --force
@@ -82,5 +79,5 @@ RUN npx prisma migrate deploy
 EXPOSE 8080
 
 # Run the app
-CMD [ "node", "dist/main" ]
+CMD [ "node", "dist/main.js", "&&", "npx", "prisma", "migrate", "deploy", ]
 
