@@ -603,7 +603,7 @@ export class DataFactory {
 			{
 				id: 1,
 				graffitiId: 1,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 10,
@@ -611,7 +611,7 @@ export class DataFactory {
 			{
 				id: 2,
 				graffitiId: 1,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9494.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9494.jpg',
 				addedAt: new Date(),
 				userId: 2,
 				pictureScore: 20,
@@ -619,7 +619,7 @@ export class DataFactory {
 			{
 				id: 3,
 				graffitiId: 2,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9496.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9496.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 30,
@@ -627,7 +627,7 @@ export class DataFactory {
 			{
 				id: 4,
 				graffitiId: 2,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9495.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9495.jpg',
 				addedAt: new Date(),
 				userId: 2,
 				pictureScore: 40,
@@ -635,7 +635,7 @@ export class DataFactory {
 			{
 				id: 5,
 				graffitiId: 3,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9503.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9503.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 50,
@@ -643,7 +643,7 @@ export class DataFactory {
 			{
 				id: 6,
 				graffitiId: 4,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9505.JPG',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9505.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 60,
@@ -651,7 +651,7 @@ export class DataFactory {
 			{
 				id: 7,
 				graffitiId: 4,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9504.JPG',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9504.jpg',
 				addedAt: new Date(),
 				userId: 2,
 				pictureScore: 70,
@@ -659,7 +659,7 @@ export class DataFactory {
 			{
 				id: 8,
 				graffitiId: 5,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9507.JPG',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9507.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 80,
@@ -667,7 +667,7 @@ export class DataFactory {
 			{
 				id: 9,
 				graffitiId: 5,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9506.JPG',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9506.jpg',
 				addedAt: new Date(),
 				userId: 2,
 				pictureScore: 90,
@@ -675,7 +675,7 @@ export class DataFactory {
 			{
 				id: 10,
 				graffitiId: 6,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9182.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9182.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 100,
@@ -683,7 +683,7 @@ export class DataFactory {
 			{
 				id: 11,
 				graffitiId: 6,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9183.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9183.jpg',
 				addedAt: new Date(),
 				userId: 2,
 				pictureScore: 110,
@@ -691,7 +691,7 @@ export class DataFactory {
 			{
 				id: 12,
 				graffitiId: 7,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9192.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9192.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 120,
@@ -699,7 +699,7 @@ export class DataFactory {
 			{
 				id: 13,
 				graffitiId: 8,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9206.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9206.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 130,
@@ -707,7 +707,7 @@ export class DataFactory {
 			{
 				id: 14,
 				graffitiId: 9,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9208.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9208.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 140,
@@ -715,7 +715,7 @@ export class DataFactory {
 			{
 				id: 15,
 				graffitiId: 9,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9210.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9210.jpg',
 				addedAt: new Date(),
 				userId: 2,
 				pictureScore: 0,
@@ -723,7 +723,7 @@ export class DataFactory {
 			{
 				id: 16,
 				graffitiId: 10,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9213.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9213.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -731,7 +731,7 @@ export class DataFactory {
 			{
 				id: 17,
 				graffitiId: 11,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9211.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9211.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -739,7 +739,7 @@ export class DataFactory {
 			{
 				id: 18,
 				graffitiId: 12,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9214.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9214.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -747,7 +747,7 @@ export class DataFactory {
 			{
 				id: 19,
 				graffitiId: 13,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9215.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9215.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -755,7 +755,7 @@ export class DataFactory {
 			{
 				id: 20,
 				graffitiId: 14,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9216.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9216.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -763,7 +763,7 @@ export class DataFactory {
 			{
 				id: 21,
 				graffitiId: 15,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9219.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9219.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -771,7 +771,7 @@ export class DataFactory {
 			{
 				id: 22,
 				graffitiId: 16,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9223.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9223.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -779,7 +779,7 @@ export class DataFactory {
 			{
 				id: 23,
 				graffitiId: 17,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9224.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9224.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -787,7 +787,7 @@ export class DataFactory {
 			{
 				id: 24,
 				graffitiId: 18,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9226.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9226.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -795,7 +795,7 @@ export class DataFactory {
 			{
 				id: 25,
 				graffitiId: 19,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9227.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9227.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -803,7 +803,7 @@ export class DataFactory {
 			{
 				id: 26,
 				graffitiId: 20,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9229.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9229.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -811,7 +811,7 @@ export class DataFactory {
 			{
 				id: 27,
 				graffitiId: 21,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9230.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9230.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -819,7 +819,7 @@ export class DataFactory {
 			{
 				id: 28,
 				graffitiId: 22,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9232.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9232.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -827,7 +827,7 @@ export class DataFactory {
 			{
 				id: 29,
 				graffitiId: 23,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9228.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9228.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -835,7 +835,7 @@ export class DataFactory {
 			{
 				id: 30,
 				graffitiId: 24,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9207.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9207.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -843,7 +843,7 @@ export class DataFactory {
 			{
 				id: 31,
 				graffitiId: 25,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9203.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9203.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
