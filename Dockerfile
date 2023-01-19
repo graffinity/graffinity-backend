@@ -64,12 +64,6 @@ COPY --chown=node:node --from=build /usr/src/app/package*.json ./
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 
-
-RUN ls -la /usr/src/app
-RUN ls -la /usr/src/app/dist
-RUN ls -la /usr/src/app/prisma
-
-
 # Generate the prisma client
 RUN npx prisma generate
 
