@@ -12,7 +12,7 @@ import { PrismaService } from './prisma/prisma.service';
 async function bootstrap() {
 	const app: INestApplication = await NestFactory.create(AppModule);
 
-	app.enableCors(); // Enable CORS for all routes
+	// app.enableCors(); // Enable CORS for all routes
 
 	// app.enableCors({
 	// 	origin: [
