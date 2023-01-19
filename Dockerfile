@@ -2,12 +2,10 @@
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
 
-FROM node:16-alpine as development
+FROM node:16-alpine As development
 
 # Create app directory
 WORKDIR /usr/src/app
-
-COPY --chown=node:node prisma /usr/src/app/prisma
 
 # COPY tsconfig.json file
 COPY tsconfig.json /usr/src/app/
@@ -19,7 +17,7 @@ COPY --chown=node:node package*.json ./
 RUN npm ci
 
 # Bundle app source
-COPY --chown=node:node . /usr/src/app
+COPY --chown=node:node . .
 
 # Use the node user from the image (instead of the root user)
 USER node
@@ -28,7 +26,7 @@ USER node
 # BUILD FOR PRODUCTION
 ###################
 
-FROM node:16-alpine as build
+FROM node:16-alpine As build
 
 WORKDIR /usr/src/app
 
@@ -36,8 +34,8 @@ COPY --chown=node:node package*.json ./
 
 # Copy over the node_modules in order to gain access to the Nest CLI.
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node prisma /usr/src/app/prisma
-COPY --chown=node:node . /usr/src/app
+
+COPY --chown=node:node . .
 
 # Generate the prisma client
 RUN npx prisma generate
@@ -46,8 +44,8 @@ RUN npx prisma generate
 RUN npm run build
 
 # Set NODE_ENV environment variable
-# ARG NODE_ENV=production
-# ENV NODE_ENV=${NODE_ENV}
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
 USER node
 
@@ -63,9 +61,11 @@ COPY --chown=node:node --from=build /usr/src/app/package*.json ./
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 
-# Set NODE_ENV environment variable
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+
+RUN ls -la /usr/src/app
+RUN ls -la /usr/src/app/dist
+RUN ls -la /usr/src/app/prisma
+
 
 # Set the working directory
 WORKDIR /usr/src/app
