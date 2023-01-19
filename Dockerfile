@@ -67,8 +67,9 @@ COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 # Generate the prisma client
 RUN npx prisma generate
 
+# Expose port 8080
+EXPOSE 8080
+
 # Run the app
 CMD [ "npm", "run", "start:prod" ]
 
-# Expose port 8080
-EXPOSE 8080
