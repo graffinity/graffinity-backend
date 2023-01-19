@@ -67,10 +67,11 @@ COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 # Generate the prisma client
 RUN npx prisma generate
 
+RUN ls -la .
 
 # Expose port 8080
 EXPOSE 8080
 
 # Run the app
-CMD [ "node", "dist/main.js", "&&", "npx", "prisma", "migrate", "deploy"]
+CMD [ "npm", "run", "start:prod" ]
 
