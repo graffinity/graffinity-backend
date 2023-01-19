@@ -11,9 +11,20 @@ import { PrismaService } from './prisma/prisma.service';
 async function bootstrap() {
 	const app: INestApplication = await NestFactory.create(AppModule);
 	app.enableCors({
-		origin: 'http://localhost:3000',
+		origin: [
+			'http://localhost:3000',
+			'http://graffinity.art',
+			'https://graffinity.art',
+			'https://graffinity-images.s3.eu-central-1.amazonaws.com',
+			'https://google.com',
+			'https://developers.google.com/',
+		],
 		credentials: true,
-		exposedHeaders: ['Set-Cookie'],
+		exposedHeaders: [
+			'Set-Cookie',
+			'Access-Control-Allow-Origin',
+			'Access-Control-Allow-Headers',
+		],
 		allowedHeaders: [
 			'Content-Type',
 			'Authorization',
@@ -22,12 +33,12 @@ async function bootstrap() {
 			'Access-Control-Allow-Methods',
 			'Access-Control-Allow-Credentials',
 		],
+
 		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	});
+
 	app.useGlobalPipes(new ValidationPipe());
-	dotenv.config(
-		process.env.NODE_ENV === 'test' ? { path: '.env.test' } : { path: '.env' },
-	);
+	dotenv.config({ path: '.env' });
 
 	const config = new DocumentBuilder()
 		.setTitle('Graffinity')
@@ -47,6 +58,7 @@ async function bootstrap() {
 			name: 'session',
 			secret: 'keyboard',
 			maxAge: 24 * 60 * 60 * 1000, // 24 hours
+			sameSite: 'none',
 		}),
 	);
 	app.use(passport.initialize());
@@ -59,6 +71,7 @@ async function bootstrap() {
 	await prismaService.enableShutdownHooks(app);
 
 	await app.listen(8080);
+
 	console.log(
 		`Application is running on: ${
 			(await app.getUrl()) === 'http://[::1]:8080'
