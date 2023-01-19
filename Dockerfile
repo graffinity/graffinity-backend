@@ -79,5 +79,5 @@ RUN npx prisma generate
 EXPOSE 8080
 
 # Run the app
-CMD [ "node", "dist/main.js", "&&", "npx", "prisma", "migrate", "deploy", ]
+CMD [ "node", "dist/main.js", "&&", "npx", "prisma", "migrate", "deploy"]
 
