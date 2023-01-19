@@ -8,7 +8,11 @@ import session from 'express-session';
 import passport from 'passport';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
+import { main } from '../prisma/seed';
 
+function seedDb() {
+	main();
+}
 async function bootstrap() {
 	const app: INestApplication = await NestFactory.create(AppModule);
 
