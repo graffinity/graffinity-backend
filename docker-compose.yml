@@ -9,11 +9,11 @@ services:
       POSTGRES_DB: graffinity
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-    labels:
-      collect_logs_with_filebeat: "true"
 
   graffinity-backend:
     image: 445007777844.dkr.ecr.eu-central-1.amazonaws.com/graffinity-backend
+    ports:
+      - "8080:8080"
     depends_on:
       - graffinity-db
     env_file:
