@@ -19,7 +19,7 @@ services:
     depends_on:
       - graffinity-db
     env_file:
-      - ./.env
+      - ./prod.env
     labels:
       decode_log_event_to_json_object: "true"
 
@@ -31,7 +31,7 @@ services:
     depends_on:
       - graffinity-backend
     env_file:
-      - ./.env
+      - ./prod.env
     volumes:
       - /etc/ssl/live/:/etc/ssl/live/
 
