@@ -31,7 +31,7 @@ services:
     depends_on:
       - graffinity-backend
     env_file:
-      - ./prod.env
+      - ./prod.front.env
     volumes:
       - /etc/ssl/live/:/etc/ssl/live/
 
