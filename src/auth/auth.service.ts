@@ -35,7 +35,6 @@ export class AuthService {
 			.create({
 				...request,
 				password: hash,
-				likeIds: [],
 			})
 			.catch((error) => {
 				if (error instanceof PrismaClientKnownRequestError) {
@@ -46,7 +45,7 @@ export class AuthService {
 				throw error;
 			});
 
-		let tokens = await this.getTokens(user.id, user.email);
+		let tokens = await this.getTokens(user.id, user.email, user.username);
 		await this.updateRefreshToken(user.id, tokens.refreshToken);
 
 		return tokens;
@@ -58,7 +57,7 @@ export class AuthService {
 			throw new UnauthorizedException('Wrong username or password');
 		}
 
-		let tokens = await this.getTokens(user.id, user.email);
+		let tokens = await this.getTokens(user.id, user.email, user.username);
 		await this.updateRefreshToken(user.id, tokens.refreshToken);
 
 		return tokens;
@@ -130,7 +129,7 @@ export class AuthService {
 			throw new ForbiddenException('Access denied');
 		}
 
-		let tokens = await this.getTokens(user.id, user.email);
+		let tokens = await this.getTokens(user.id, user.email, user.username);
 		await this.updateRefreshToken(user.id, tokens.refreshToken);
 
 		return tokens;
@@ -152,10 +151,11 @@ export class AuthService {
 		});
 	}
 
-	async getTokens(userId: number, email: string) {
+	async getTokens(userId: number, email: string, username: string) {
 		let jwtPayload: JwtPayload = {
-			sub: userId,
-			email,
+			userId: userId,
+			email: email,
+			username: username,
 		};
 
 		const [accessToken, refreshToken] = await Promise.all([

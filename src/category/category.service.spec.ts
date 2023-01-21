@@ -5,11 +5,13 @@ import { DeepMockProxy } from 'jest-mock-extended';
 import { MockContext, createMockContext } from '../prisma/context';
 import { PrismaService } from '../prisma/prisma.service';
 import { CategoryService } from './category.service';
+import DataFactory from '../../prisma/data/util/DataFactory';
 
 describe('CategoryService', () => {
 	let service: CategoryService;
 	let mockContext: MockContext;
 	let prismaService: DeepMockProxy<PrismaClient>;
+	let dataFactory: DataFactory;
 
 	beforeEach(async () => {
 		jest.resetAllMocks();
@@ -23,6 +25,7 @@ describe('CategoryService', () => {
 			.useValue(mockContext.prisma)
 			.compile();
 
+		dataFactory = new DataFactory();
 		service = module.get<CategoryService>(CategoryService);
 		prismaService = module.get<DeepMockProxy<PrismaClient>>(PrismaService);
 	});

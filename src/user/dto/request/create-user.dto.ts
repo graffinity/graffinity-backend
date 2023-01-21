@@ -30,10 +30,4 @@ export class CreateUserDto {
 		example: '123456',
 	})
 	password: string;
-
-	@ApiProperty({
-		type: Array<Number>,
-		description: 'Likes is an array of likes ids',
-	})
-	likeIds: number[];
 }

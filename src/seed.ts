@@ -1,11 +1,11 @@
 import { GraffitiPhoto, PrismaClient } from '@prisma/client';
 import { CreateGraffitiDto } from '../src/graffiti/dto/request/create-graffiti.dto';
-import { DataFactory } from './data/util/DataFactory';
+import { DataFactory } from '../prisma/data/util/DataFactory';
 
 export const prisma = new PrismaClient();
 let testDataFactory: DataFactory = DataFactory.getInstance();
 
-export async function main() {
+async function main() {
 	console.log('Seeding...');
 
 	// ----------------------------
@@ -18,13 +18,7 @@ export async function main() {
 				username: user.username,
 			},
 			update: {},
-			create: {
-				name: user.name,
-				lastname: user.lastname,
-				username: user.username,
-				email: user.email,
-				password: user.password,
-			},
+			create: user,
 		});
 	});
 

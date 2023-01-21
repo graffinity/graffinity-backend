@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "Graffinity",
 	"author": "Drop Shot Divas",
-	"private": false,
+	"private": true,
 	"license": "UNLICENSED",
 	"scripts": {
 		"prebuild": "rimraf dist",
@@ -14,8 +14,10 @@
 		"prisma:reset": "npx prisma migrate reset",
 		"prisma:deploy": "npx prisma migrate deploy",
 		"prisma:studio": "npx prisma studio",
-		"prisma:seed": "ts-node prisma/seed.ts",
-		"seed": "ts-node prisma/seed.ts",
+		"prisma:seed": "ts-node prisma/seed",
+		"seed": "node dist/prisma/seed",
+		"seed:prod": "node dist/src/seed",
+		"seed:dev": "ts-node prisma/seed.ts",
 		"start": "nest start",
 		"start:dev": "nest start --watch",
 		"start:debug": "nest start --debug --watch",
@@ -34,8 +36,9 @@
 		"schema": "prisma/schema.prisma",
 		"introspect": true,
 		"generate": true,
-		"seed": "ts-node prisma/seed.ts",
-		"seed:dev": "ts-node src/prisma/seed.ts"
+		"seed": "node dist/prisma/seed",
+		"seed:prod": "node dist/prisma/seed",
+		"seed:dev": "ts-node prisma/seed.ts"
 	},
 	"dependencies": {
 		"@nestjs/common": "^9.2.1",
