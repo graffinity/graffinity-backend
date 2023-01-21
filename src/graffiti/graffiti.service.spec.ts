@@ -26,7 +26,8 @@ describe('GraffitiService', () => {
 								id: 1,
 								name: dto.name,
 								description: dto.description,
-								location: dto.location,
+								latitude: dto.latitude,
+								longitude: dto.longitude,
 								createdAt: dto.createdAt,
 								authorId: dto.authorId,
 							};
@@ -78,7 +79,8 @@ describe('GraffitiService', () => {
 		let testGraffiti: CreateGraffitiDto = {
 			name: 'test',
 			description: 'test',
-			location: 'test',
+			latitude: '54.69605174048014',
+			longitude: '25.26408561972244',
 			createdAt: new Date(),
 			authorId: 1,
 			categoryIds: [],
