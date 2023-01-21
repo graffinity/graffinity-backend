@@ -12,18 +12,21 @@ import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { jwtConstants } from './constants';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
 	imports: [
 		UserModule,
 		PassportModule,
 		PrismaModule,
+		ConfigModule,
 		JwtModule.register({
 			secret: jwtConstants.secret,
 			signOptions: { expiresIn: '3600s' },
 		}),
 	],
 	providers: [
+		ConfigService,
 		AuthService,
 		LocalStrategy,
 		JwtStrategy,

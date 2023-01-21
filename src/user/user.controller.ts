@@ -6,6 +6,7 @@ import {
 	Put,
 	Param,
 	Delete,
+	Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
@@ -24,20 +25,30 @@ export class UserController {
 		return UserMapper.toResponse(entity);
 	}
 
-	@Get()
-	async findAll() {
-		let entities = await this.userService.findAll();
-		return UserMapper.toResponses(entities);
-	}
-
+	// @Get()
+	// async findAll() {
+	// 	let entities = await this.userService.findAll();
+	// 	return UserMapper.toResponses(entities);
+	// }
 	@Get(':id')
 	async findById(@Param('id') id: string) {
+		console.log(id);
+		// if (isNaN(+id)) {
+		// 	return null;
+		// }
 		let entity = await this.userService.findById(+id);
 
 		if (entity !== null) {
 			return UserMapper.toResponse(entity);
 		}
 		return null;
+	}
+
+	@Get('exist/:usernameOrEmail')
+	async existsAlready(@Param('usernameOrEmail') usernameOrEmail?: string) {
+		console.log('username', usernameOrEmail);
+
+		return await this.userService.usernameOrEmailExists(usernameOrEmail);
 	}
 
 	@Put(':id')

@@ -1,5 +1,13 @@
 # Graffinity
 
+[![Website status](https://img.shields.io/website?down_color=cb2432&down_message=offline&up_color=green&up_message=online&url=https%3A%2F%2Fgraffinity.art)](https://graffinity.art)
+
+[![backend continuous integration](https://github.com/graffinity/graffinity-backend/actions/workflows/ci.yml/badge.svg?branch=GRAF-83-further-improvements)](https://github.com/graffinity/graffinity-backend/actions/workflows/ci.yml)
+
+<!-- [![backend continuous integration](https://github.com/graffinity/graffinity-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/graffinity/graffinity-backend/actions/workflows/ci.yml) -->
+  
+[![Open Pull Requests](https://img.shields.io/github/issues-pr-raw/graffinity/graffinity-backend.svg)](https://github.com/graffinity/graffinity-backend/pulls)
+[![GitHub issues](https://img.shields.io/github/issues/graffinity/graffinity-backend.svg)](https://github.com/graffinity/graffinity-backend/issues)
   <!-- <p align="center">
     <a href="http://nestjs.com/" target="blank">
       <img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" />

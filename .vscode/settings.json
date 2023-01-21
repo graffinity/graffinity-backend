@@ -33,5 +33,17 @@
 	"atlascode.bitbucket.statusbar.enabled": false,
 	"atlascode.bitbucket.statusbar.showUser": false,
 	"atlascode.bitbucket.statusbar.showProduct": false,
-	"atlascode.helpExplorerEnabled": true
+	"atlascode.helpExplorerEnabled": true,
+	"jest.rootPath": "src",
+	"jest.jestCommandLine": "npm run test:watch --",
+	"prisma.trace.server": "messages",
+	"[shellscript]": {
+		"editor.defaultFormatter": "foxundermoon.shell-format"
+	},
+	"[dotenv]": {
+		"editor.defaultFormatter": "foxundermoon.shell-format"
+	},
+	"[ignore]": {
+		"editor.defaultFormatter": "foxundermoon.shell-format"
+	}
 }

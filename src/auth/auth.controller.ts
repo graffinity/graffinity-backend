@@ -19,15 +19,19 @@ import { JwtAuthGuard } from './guards/jwt.guard';
 import { LocalAuthGuard } from './guards/local.guard';
 import RtGuard from './guards/refresh-token.guard';
 import { Tokens } from './types';
+import argon2 from 'argon2';
+import { JwtService } from '@nestjs/jwt';
 
 @ApiTags('auth')
 @Controller('api/v1/auth')
 export class AuthController {
-	constructor(private authService: AuthService) {}
+	constructor(
+		private authService: AuthService,
+		private jwtService: JwtService,
+	) {}
 
 	@Public()
 	@Post('signup')
-	@HttpCode(HttpStatus.CREATED)
 	signup(@Body() dto: SignUpRequest): Promise<Tokens> {
 		return this.authService.signup(dto);
 	}
@@ -48,18 +52,37 @@ export class AuthController {
 	@Get('profile')
 	@UseGuards(JwtAuthGuard)
 	getProfile(@Req() req: Request) {
-		console.log('getProfile req', req.user);
 		return req.user;
 	}
 
 	@Post('logout')
 	@HttpCode(HttpStatus.OK)
 	logout(@GetCurrentUserId() userId: number): Promise<boolean> {
+		if (!userId) {
+			return Promise.resolve(false);
+		}
 		return this.authService.logout(userId);
 	}
 
 	@Public()
-	getStatus() {}
+	@Get('status')
+	async getStatus(@Req() request: Request) {
+		if (request.headers.authorization) {
+			let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
+			let access_token = request.headers.authorization.split(' ')[1];
+
+			if (secret && access_token) {
+				let res = await this.jwtService.verifyAsync(access_token, {
+					secret: secret,
+				});
+
+				if (res) {
+					return { isLoggedIn: true };
+				}
+			}
+		}
+		return { isLoggedIn: false };
+	}
 
 	@Public()
 	@UseGuards(RtGuard)

@@ -1,31 +1,33 @@
 import {
-	PrismaClient,
+	Artist,
+	ArtistToGraffiti,
 	Category,
 	CategoryToGraffiti,
 	Graffiti,
-	User,
-	Artist,
-	ArtistToGraffiti,
 	GraffitiPhoto,
-	Comment,
+	GraffitiStatus,
+	User,
 } from '@prisma/client';
 import argon2 from 'argon2';
 import { CreateGraffitiDto } from '../../../src/graffiti/dto/request/create-graffiti.dto';
+import { GraffitiResponseDto } from '../../../src/graffiti/dto/response/graffiti-response.dto';
 
-export class TestDataFactory {
-	private static instance: TestDataFactory;
-	private constructor() {}
+export class DataFactory {
+	public static instance: DataFactory;
+	public constructor() {}
 
-	public static getInstance(): TestDataFactory {
-		if (!TestDataFactory.instance) {
-			TestDataFactory.instance = new TestDataFactory();
+	public static getInstance(): DataFactory {
+		if (!DataFactory.instance) {
+			DataFactory.instance = new DataFactory();
 		}
-		return TestDataFactory.instance;
+		return DataFactory.instance;
 	}
 
 	// --------------------------------
 	// User test data
-	public getValidUser(): User {
+
+	public async getValidUser(): Promise<User> {
+		let hashedPassword = await argon2.hash('password');
 		let newUser: User = {
 			id: 3,
 			name: 'Mary',
@@ -44,10 +46,10 @@ export class TestDataFactory {
 
 		let newUser: User = {
 			id: 4,
-			name: 'Mary',
+			name: 'John',
 			lastname: 'Doe',
-			username: 'marydoe',
-			email: 'marydoe@gmail.com',
+			username: 'johndoe',
+			email: 'johndoe@gmail.com',
 			password: hashedPassword,
 			refreshToken: 'some-refresh',
 		};
@@ -114,19 +116,58 @@ export class TestDataFactory {
 
 	// --------------------------------
 	// Graffiti test data
+	graffiti = {};
 	public getValidGraffiti(): Graffiti {
 		let newGraffiti: Graffiti = {
 			id: 26,
-			name: '',
-
-			description: '',
+			name: 'Graffiti name 26',
+			description: 'Graffiti description 26',
 			authorId: 1,
-
 			createdAt: new Date(),
+			status: GraffitiStatus.SUBMITTED,
 			latitude: '',
 			longitude: '',
-			status: 'SUBMITTED',
 		};
+		return newGraffiti;
+	}
+
+	public getValidCreateGraffitiRequest(): CreateGraffitiDto {
+		let newGraffiti: CreateGraffitiDto = {
+			name: 'Graffiti name 26',
+			description: 'Graffiti description 26',
+			authorId: 1,
+			createdAt: new Date(),
+			categoryIds: [],
+			artistIds: [],
+			latitude: '',
+			longitude: '',
+		};
+
+		return newGraffiti;
+	}
+
+	public getValidGraffitiWithPhotos(): Graffiti & { photos: GraffitiPhoto[] } {
+		let newGraffiti: Graffiti & { photos: GraffitiPhoto[] } = {
+			id: 28,
+			name: 'Graffiti name 28',
+			description: 'Graffiti description 28',
+			authorId: 1,
+			createdAt: new Date(),
+			status: GraffitiStatus.SUBMITTED,
+			latitude: '54.671517 ',
+			longitude: '25.279855',
+			photos: [
+				{
+					id: 1,
+					url: 'https://graffinity.s3.eu-central-1.amazonaws.com/graffiti_photos/1.jpg',
+					graffitiId: 28,
+					addedAt: new Date(),
+					userId: 1,
+					pictureScore: 100,
+				},
+			],
+		};
+
 		return newGraffiti;
 	}
 
@@ -137,15 +178,15 @@ export class TestDataFactory {
 			description: '',
 			authorId: 1,
 			createdAt: new Date(),
+			status: GraffitiStatus.SUBMITTED,
 			latitude: '',
 			longitude: '',
-			status: 'SUBMITTED',
 		};
 
 		return newGraffiti;
 	}
 
-	public getListOfGraffitis(): CreateGraffitiDto[] {
+	public getListOfGraffitiCreateRequests(): CreateGraffitiDto[] {
 		let graffitiList: CreateGraffitiDto[] = [
 			{
 				name: 'Graffiti name 1',
@@ -156,7 +197,6 @@ export class TestDataFactory {
 				longitude: '25.279855',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 2',
@@ -167,7 +207,6 @@ export class TestDataFactory {
 				longitude: '25.279901',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 3',
@@ -178,7 +217,6 @@ export class TestDataFactory {
 				longitude: '25.267214',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 4',
@@ -189,7 +227,6 @@ export class TestDataFactory {
 				longitude: '25.265747',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Grffiti name 5',
@@ -200,7 +237,6 @@ export class TestDataFactory {
 				longitude: '25.265650',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 6',
@@ -211,7 +247,6 @@ export class TestDataFactory {
 				longitude: '25.258051',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [10],
 			},
 			{
 				name: 'Graffiti name 7',
@@ -222,7 +257,6 @@ export class TestDataFactory {
 				longitude: '25.263620',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 8',
@@ -233,7 +267,6 @@ export class TestDataFactory {
 				longitude: '25.263847',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 9',
@@ -244,7 +277,6 @@ export class TestDataFactory {
 				longitude: '25.264181',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 10',
@@ -255,7 +287,6 @@ export class TestDataFactory {
 				longitude: '25.264181',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 11',
@@ -266,7 +297,6 @@ export class TestDataFactory {
 				longitude: '25.263996',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 12',
@@ -277,7 +307,6 @@ export class TestDataFactory {
 				longitude: '25.263996',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 13	',
@@ -288,7 +317,6 @@ export class TestDataFactory {
 				longitude: '25.263847',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 14',
@@ -297,9 +325,8 @@ export class TestDataFactory {
 				createdAt: new Date(),
 				latitude: '54.694719',
 				longitude: '25.264284',
-				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
+				categoryIds: [],
 			},
 			{
 				name: 'Graffiti name 15',
@@ -310,7 +337,6 @@ export class TestDataFactory {
 				longitude: '25.26415',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 16',
@@ -321,7 +347,6 @@ export class TestDataFactory {
 				longitude: '25.263792',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 17',
@@ -332,7 +357,6 @@ export class TestDataFactory {
 				longitude: '25.263980',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 18',
@@ -343,7 +367,6 @@ export class TestDataFactory {
 				longitude: '25.264165',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 19',
@@ -354,7 +377,6 @@ export class TestDataFactory {
 				longitude: '25.263972',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 20',
@@ -365,7 +387,6 @@ export class TestDataFactory {
 				longitude: '25.263787',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 21',
@@ -376,7 +397,6 @@ export class TestDataFactory {
 				longitude: '25.262636',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 22',
@@ -387,7 +407,6 @@ export class TestDataFactory {
 				longitude: '25.262175',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 23',
@@ -398,7 +417,6 @@ export class TestDataFactory {
 				longitude: '25.263925',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 24',
@@ -409,7 +427,6 @@ export class TestDataFactory {
 				longitude: '25.264010',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 25',
@@ -420,11 +437,25 @@ export class TestDataFactory {
 				longitude: '25.26408561972244',
 				categoryIds: [],
 				artistIds: [],
-				photoIds: [],
 			},
 		];
 
 		return graffitiList;
+	}
+
+	public getValidGraffitiResponse(): GraffitiResponseDto {
+		let response: GraffitiResponseDto = {
+			id: 1,
+			name: 'Graffiti name 1',
+			description: 'Graffiti description 1',
+			authorId: 1,
+			creationDate: new Date(),
+			latitude: '54.695357',
+			longitude: '25.26415',
+			photos: [],
+		};
+
+		return response;
 	}
 
 	// --------------------------------
@@ -432,7 +463,6 @@ export class TestDataFactory {
 
 	public getValidGraffitiToCategory(): CategoryToGraffiti {
 		let newCategoryToGraffiti: CategoryToGraffiti = {
-			//id: 1,
 			categoryId: 1,
 			graffitiId: 1,
 		};
@@ -461,132 +491,106 @@ export class TestDataFactory {
 	public getListOfArtistToGraffiti(): ArtistToGraffiti[] {
 		let ArtistToGraffitiList: ArtistToGraffiti[] = [
 			{
-				//id: 1,
 				artistId: 1,
 				graffitiId: 1,
 			},
 			{
-				//id: 2,
 				artistId: 1,
 				graffitiId: 2,
 			},
 			{
-				//id: 3,
 				artistId: 1,
 				graffitiId: 3,
 			},
 			{
-				//id: 4,
 				artistId: 1,
 				graffitiId: 4,
 			},
 			{
-				//id: 5,
 				artistId: 1,
 				graffitiId: 5,
 			},
 			{
-				//id: 6,
 				artistId: 1,
 				graffitiId: 6,
 			},
 			{
-				//id: 7,
 				artistId: 1,
 				graffitiId: 7,
 			},
 			{
-				//id: 8,
 				artistId: 1,
 				graffitiId: 8,
 			},
 			{
-				//id: 9,
 				artistId: 1,
 				graffitiId: 9,
 			},
 			{
-				//id: 10,
 				artistId: 1,
 				graffitiId: 10,
 			},
 			{
-				//id: 11,
 				artistId: 1,
 				graffitiId: 11,
 			},
 			{
-				//id: 12,
 				artistId: 1,
 				graffitiId: 12,
 			},
 			{
-				//id: 13,
 				artistId: 1,
 				graffitiId: 13,
 			},
 			{
-				//id: 14,
 				artistId: 1,
 				graffitiId: 14,
 			},
 			{
-				//id: 15,
 				artistId: 1,
 				graffitiId: 15,
 			},
 			{
-				//id: 16,
 				artistId: 1,
 				graffitiId: 16,
 			},
 			{
-				//id: 17,
 				artistId: 1,
 				graffitiId: 17,
 			},
 			{
-				//id: 18,
 				artistId: 1,
 				graffitiId: 18,
 			},
 			{
-				//id: 19,
 				artistId: 1,
 				graffitiId: 19,
 			},
 			{
-				//id: 20,
 				artistId: 1,
 				graffitiId: 20,
 			},
 			{
-				//id: 21,
 				artistId: 1,
 				graffitiId: 21,
 			},
 			{
-				//id: 22,
 				artistId: 1,
 				graffitiId: 22,
 			},
 			{
-				//id: 23,
 				artistId: 1,
 				graffitiId: 23,
 			},
 			{
-				//id: 24,
 				artistId: 1,
 				graffitiId: 24,
 			},
 			{
-				//id: 25,
 				artistId: 1,
 				graffitiId: 25,
 			},
 			{
-				//id: 26,
 				artistId: 2,
 				graffitiId: 25,
 			},
@@ -600,119 +604,119 @@ export class TestDataFactory {
 			{
 				id: 1,
 				graffitiId: 1,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.jpg',
 				addedAt: new Date(),
 				userId: 1,
-				pictureScore: 0,
+				pictureScore: 10,
 			},
 			{
 				id: 2,
 				graffitiId: 1,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9494.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9494.jpg',
 				addedAt: new Date(),
 				userId: 2,
-				pictureScore: 0,
+				pictureScore: 20,
 			},
 			{
 				id: 3,
 				graffitiId: 2,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9496.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9496.jpg',
 				addedAt: new Date(),
 				userId: 1,
-				pictureScore: 0,
+				pictureScore: 30,
 			},
 			{
 				id: 4,
 				graffitiId: 2,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9495.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9495.jpg',
 				addedAt: new Date(),
 				userId: 2,
-				pictureScore: 0,
+				pictureScore: 40,
 			},
 			{
 				id: 5,
 				graffitiId: 3,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9503.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9503.jpg',
 				addedAt: new Date(),
 				userId: 1,
-				pictureScore: 0,
+				pictureScore: 50,
 			},
 			{
 				id: 6,
 				graffitiId: 4,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9505.JPG',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9505.jpg',
 				addedAt: new Date(),
 				userId: 1,
-				pictureScore: 0,
+				pictureScore: 60,
 			},
 			{
 				id: 7,
 				graffitiId: 4,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9504.JPG',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9504.jpg',
 				addedAt: new Date(),
 				userId: 2,
-				pictureScore: 0,
+				pictureScore: 70,
 			},
 			{
 				id: 8,
 				graffitiId: 5,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9507.JPG',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9507.jpg',
 				addedAt: new Date(),
 				userId: 1,
-				pictureScore: 0,
+				pictureScore: 80,
 			},
 			{
 				id: 9,
 				graffitiId: 5,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9506.JPG',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9506.jpg',
 				addedAt: new Date(),
 				userId: 2,
-				pictureScore: 0,
+				pictureScore: 90,
 			},
 			{
 				id: 10,
 				graffitiId: 6,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9182.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9182.jpg',
 				addedAt: new Date(),
 				userId: 1,
-				pictureScore: 0,
+				pictureScore: 100,
 			},
 			{
 				id: 11,
 				graffitiId: 6,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9183.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9183.jpg',
 				addedAt: new Date(),
 				userId: 2,
-				pictureScore: 0,
+				pictureScore: 110,
 			},
 			{
 				id: 12,
 				graffitiId: 7,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9192.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9192.jpg',
 				addedAt: new Date(),
 				userId: 1,
-				pictureScore: 0,
+				pictureScore: 120,
 			},
 			{
 				id: 13,
 				graffitiId: 8,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9206.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9206.jpg',
 				addedAt: new Date(),
 				userId: 1,
-				pictureScore: 0,
+				pictureScore: 130,
 			},
 			{
 				id: 14,
 				graffitiId: 9,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9208.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9208.jpg',
 				addedAt: new Date(),
 				userId: 1,
-				pictureScore: 0,
+				pictureScore: 140,
 			},
 			{
 				id: 15,
 				graffitiId: 9,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9210.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9210.jpg',
 				addedAt: new Date(),
 				userId: 2,
 				pictureScore: 0,
@@ -720,7 +724,7 @@ export class TestDataFactory {
 			{
 				id: 16,
 				graffitiId: 10,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9213.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9213.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -728,7 +732,7 @@ export class TestDataFactory {
 			{
 				id: 17,
 				graffitiId: 11,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9211.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9211.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -736,7 +740,7 @@ export class TestDataFactory {
 			{
 				id: 18,
 				graffitiId: 12,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9214.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9214.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -744,7 +748,7 @@ export class TestDataFactory {
 			{
 				id: 19,
 				graffitiId: 13,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9215.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9215.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -752,7 +756,7 @@ export class TestDataFactory {
 			{
 				id: 20,
 				graffitiId: 14,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9216.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9216.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -760,7 +764,7 @@ export class TestDataFactory {
 			{
 				id: 21,
 				graffitiId: 15,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9219.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9219.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -768,7 +772,7 @@ export class TestDataFactory {
 			{
 				id: 22,
 				graffitiId: 16,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9223.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9223.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -776,7 +780,7 @@ export class TestDataFactory {
 			{
 				id: 23,
 				graffitiId: 17,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9224.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9224.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -784,7 +788,7 @@ export class TestDataFactory {
 			{
 				id: 24,
 				graffitiId: 18,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9226.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9226.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -792,7 +796,7 @@ export class TestDataFactory {
 			{
 				id: 25,
 				graffitiId: 19,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9227.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9227.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -800,7 +804,7 @@ export class TestDataFactory {
 			{
 				id: 26,
 				graffitiId: 20,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9229.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9229.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -808,7 +812,7 @@ export class TestDataFactory {
 			{
 				id: 27,
 				graffitiId: 21,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9230.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9230.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -816,7 +820,7 @@ export class TestDataFactory {
 			{
 				id: 28,
 				graffitiId: 22,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9232.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9232.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -824,7 +828,7 @@ export class TestDataFactory {
 			{
 				id: 29,
 				graffitiId: 23,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9228.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9228.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -832,7 +836,7 @@ export class TestDataFactory {
 			{
 				id: 30,
 				graffitiId: 24,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9207.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9207.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -840,7 +844,7 @@ export class TestDataFactory {
 			{
 				id: 31,
 				graffitiId: 25,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9203.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9203.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 0,
@@ -849,3 +853,5 @@ export class TestDataFactory {
 		return GraffitiPhotoList;
 	}
 }
+
+export default DataFactory;

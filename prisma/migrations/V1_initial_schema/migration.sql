@@ -1,9 +1,14 @@
+-- CreateEnum
+CREATE TYPE "GraffitiStatus" AS ENUM ('SUBMITTED', 'PENDING', 'APPROVED', 'REJECTED');
+
 -- CreateTable
 CREATE TABLE "Graffiti" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "location" TEXT NOT NULL,
+    "latitude" TEXT NOT NULL,
+    "longitude" TEXT NOT NULL,
+    "status" "GraffitiStatus" NOT NULL DEFAULT 'SUBMITTED',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "authorId" INTEGER NOT NULL,
 
@@ -20,11 +25,10 @@ CREATE TABLE "Category" (
 
 -- CreateTable
 CREATE TABLE "CategoryToGraffiti" (
-    "id" SERIAL NOT NULL,
-    "graffitiId" INTEGER NOT NULL,
     "categoryId" INTEGER NOT NULL,
+    "graffitiId" INTEGER NOT NULL,
 
-    CONSTRAINT "CategoryToGraffiti_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "CategoryToGraffiti_pkey" PRIMARY KEY ("graffitiId","categoryId")
 );
 
 -- CreateTable
@@ -70,11 +74,10 @@ CREATE TABLE "Tag" (
 
 -- CreateTable
 CREATE TABLE "TagToGraffiti" (
-    "id" SERIAL NOT NULL,
     "graffitiId" INTEGER NOT NULL,
     "tagId" INTEGER NOT NULL,
 
-    CONSTRAINT "TagToGraffiti_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "TagToGraffiti_pkey" PRIMARY KEY ("graffitiId","tagId")
 );
 
 -- CreateTable
@@ -113,11 +116,10 @@ CREATE TABLE "Artist" (
 
 -- CreateTable
 CREATE TABLE "ArtistToGraffiti" (
-    "id" SERIAL NOT NULL,
     "graffitiId" INTEGER NOT NULL,
     "artistId" INTEGER NOT NULL,
 
-    CONSTRAINT "ArtistToGraffiti_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "ArtistToGraffiti_pkey" PRIMARY KEY ("graffitiId","artistId")
 );
 
 -- CreateTable
@@ -135,11 +137,10 @@ CREATE TABLE "Report" (
 
 -- CreateTable
 CREATE TABLE "Likes" (
-    "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "graffitiPhotoId" INTEGER NOT NULL,
 
-    CONSTRAINT "Likes_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Likes_pkey" PRIMARY KEY ("userId","graffitiPhotoId")
 );
 
 -- CreateIndex
@@ -191,10 +192,10 @@ ALTER TABLE "GraffitiPhoto" ADD CONSTRAINT "GraffitiPhoto_graffitiId_fkey" FOREI
 ALTER TABLE "GraffitiPhoto" ADD CONSTRAINT "GraffitiPhoto_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ArtistToGraffiti" ADD CONSTRAINT "ArtistToGraffiti_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "Artist"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ArtistToGraffiti" ADD CONSTRAINT "ArtistToGraffiti_graffitiId_fkey" FOREIGN KEY ("graffitiId") REFERENCES "Graffiti"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ArtistToGraffiti" ADD CONSTRAINT "ArtistToGraffiti_graffitiId_fkey" FOREIGN KEY ("graffitiId") REFERENCES "Graffiti"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ArtistToGraffiti" ADD CONSTRAINT "ArtistToGraffiti_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "Artist"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Report" ADD CONSTRAINT "Report_graffitiId_fkey" FOREIGN KEY ("graffitiId") REFERENCES "Graffiti"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
