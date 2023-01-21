@@ -27,6 +27,12 @@ export class CreateGraffitiDto {
 	longitude: string;
 
 	@ApiProperty({
+		type: String,
+		description: 'The address of a graffiti',
+	})
+	address: string;
+
+	@ApiProperty({
 		type: Date,
 		description:
 			'The date of creation of a graffiti is provided as a timestamp and is required',

@@ -53,6 +53,7 @@ describe('GraffitiService', () => {
 				longitude: 'test',
 				latitude: 'test',
 				status: GraffitiStatus.PENDING,
+				address: 'test',
 				authorId: 1,
 				createdAt: new Date(),
 			},

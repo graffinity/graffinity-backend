@@ -24,6 +24,7 @@ export class GraffitiService {
 				},
 				latitude: createGraffitiDto.latitude,
 				longitude: createGraffitiDto.longitude,
+				address: createGraffitiDto.address,
 			},
 			include: {
 				photos: true,
