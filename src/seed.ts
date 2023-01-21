@@ -22,7 +22,7 @@ async function main() {
 		});
 	});
 
-	let user = testDataFactory.getValidUser();
+	let user = await testDataFactory.getValidUser();
 	await prisma.user.upsert({
 		where: { username: user.username },
 		update: {

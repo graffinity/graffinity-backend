@@ -18,11 +18,17 @@ export async function main() {
 				username: user.username,
 			},
 			update: {},
-			create: user,
+			create: {
+				name: user.name,
+				lastname: user.lastname,
+				username: user.username,
+				email: user.email,
+				password: user.password,
+			},
 		});
 	});
 
-	let user = testDataFactory.getValidUser();
+	let user = await testDataFactory.getValidUser();
 	await prisma.user.upsert({
 		where: { username: user.username },
 		update: {

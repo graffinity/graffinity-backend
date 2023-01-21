@@ -26,7 +26,8 @@ export class DataFactory {
 	// --------------------------------
 	// User test data
 
-	public getValidUser(): User {
+	public async getValidUser(): Promise<User> {
+		let hashedPassword = await argon2.hash('password');
 		let newUser: User = {
 			id: 3,
 			name: 'Mary',

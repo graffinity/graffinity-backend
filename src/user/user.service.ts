@@ -11,6 +11,14 @@ export class UserService {
 	constructor(private prisma: PrismaService) {}
 
 	async create(createUserDto: CreateUserDto) {
+		let existsByEmail = await this.usernameOrEmailExists(createUserDto.email);
+		let existsByUsername = await this.usernameOrEmailExists(
+			createUserDto.username,
+		);
+
+		if (existsByEmail || existsByUsername) {
+			throw new Error('User already exists');
+		}
 		return await this.prisma.user.create({ data: createUserDto });
 	}
 
@@ -32,6 +40,26 @@ export class UserService {
 				username: username,
 			},
 		});
+	}
+
+	async usernameOrEmailExists(usernameOrEmail?: string): Promise<boolean> {
+		let res = await this.prisma.user.findFirst({
+			where: {
+				OR: [
+					{
+						username: usernameOrEmail,
+					},
+					{
+						email: usernameOrEmail,
+					},
+				],
+			},
+		});
+
+		if (res) {
+			return true;
+		}
+		return false;
 	}
 
 	async findByEmail(email: string) {
