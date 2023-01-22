@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE IF NOT EXISTS "GraffitiStatus" AS ENUM (
+CREATE IF NOT EXISTS TYPE "GraffitiStatus" AS ENUM (
     'SUBMITTED',
     'PENDING',
     'APPROVED',
