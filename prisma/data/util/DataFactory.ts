@@ -125,8 +125,9 @@ export class DataFactory {
 			authorId: 1,
 			createdAt: new Date(),
 			status: GraffitiStatus.SUBMITTED,
-			latitude: '',
-			longitude: '',
+			address: 'Graffiti address 26',
+			latitude: '54.671517',
+			longitude: '25.279855',
 		};
 		return newGraffiti;
 	}
@@ -138,9 +139,10 @@ export class DataFactory {
 			authorId: 1,
 			createdAt: new Date(),
 			categoryIds: [],
+			address: 'Graffiti address',
 			artistIds: [],
-			latitude: '',
-			longitude: '',
+			latitude: '54.671517',
+			longitude: '25.279855',
 		};
 
 		return newGraffiti;
@@ -154,8 +156,9 @@ export class DataFactory {
 			authorId: 1,
 			createdAt: new Date(),
 			status: GraffitiStatus.SUBMITTED,
-			latitude: '54.671517 ',
+			latitude: '54.671517',
 			longitude: '25.279855',
+			address: 'Graffiti address 28',
 			photos: [
 				{
 					id: 1,
@@ -174,13 +177,14 @@ export class DataFactory {
 	public getValidGraffitiWithCategory(): Graffiti {
 		let newGraffiti: Graffiti = {
 			id: 27,
-			name: '',
-			description: '',
+			name: 'Graffiti name 27',
+			description: 'Grffiti description 27',
 			authorId: 1,
 			createdAt: new Date(),
 			status: GraffitiStatus.SUBMITTED,
-			latitude: '',
-			longitude: '',
+			latitude: '54.671517',
+			longitude: '25.279855',
+			address: 'Graffiti address 27',
 		};
 
 		return newGraffiti;
@@ -196,6 +200,7 @@ export class DataFactory {
 				latitude: '54.671517 ',
 				longitude: '25.279855',
 				categoryIds: [],
+				address: 'Graffiti address 1',
 				artistIds: [],
 			},
 			{
@@ -206,6 +211,7 @@ export class DataFactory {
 				latitude: '54.672498',
 				longitude: '25.279901',
 				categoryIds: [],
+				address: 'Graffiti address 2',
 				artistIds: [],
 			},
 			{
@@ -216,6 +222,7 @@ export class DataFactory {
 				latitude: '54.692858',
 				longitude: '25.267214',
 				categoryIds: [],
+				address: 'Graffiti address 3',
 				artistIds: [],
 			},
 			{
@@ -226,6 +233,7 @@ export class DataFactory {
 				latitude: '54.692583',
 				longitude: '25.265747',
 				categoryIds: [],
+				address: 'Graffiti address 4',
 				artistIds: [],
 			},
 			{
@@ -236,6 +244,7 @@ export class DataFactory {
 				latitude: '54.692608',
 				longitude: '25.265650',
 				categoryIds: [],
+				address: 'Graffiti address 5',
 				artistIds: [],
 			},
 			{
@@ -246,6 +255,7 @@ export class DataFactory {
 				latitude: '54.688846',
 				longitude: '25.258051',
 				categoryIds: [],
+				address: 'Graffiti address 6',
 				artistIds: [],
 			},
 			{
@@ -256,6 +266,7 @@ export class DataFactory {
 				latitude: '54.696029',
 				longitude: '25.263620',
 				categoryIds: [],
+				address: 'Graffiti address 7',
 				artistIds: [],
 			},
 			{
@@ -266,6 +277,7 @@ export class DataFactory {
 				latitude: '54.694989',
 				longitude: '25.263847',
 				categoryIds: [],
+				address: 'Graffiti address 8',
 				artistIds: [],
 			},
 			{
@@ -276,6 +288,7 @@ export class DataFactory {
 				latitude: '54.694997',
 				longitude: '25.264181',
 				categoryIds: [],
+				address: 'Graffiti address 9',
 				artistIds: [],
 			},
 			{
@@ -286,6 +299,7 @@ export class DataFactory {
 				latitude: '54.694997',
 				longitude: '25.264181',
 				categoryIds: [],
+				address: 'Graffiti address 10',
 				artistIds: [],
 			},
 			{
@@ -296,6 +310,7 @@ export class DataFactory {
 				latitude: '54.694983',
 				longitude: '25.263996',
 				categoryIds: [],
+				address: 'Graffiti address 11',
 				artistIds: [],
 			},
 			{
@@ -306,6 +321,7 @@ export class DataFactory {
 				latitude: '54.694983',
 				longitude: '25.263996',
 				categoryIds: [],
+				address: 'Graffiti address 12',
 				artistIds: [],
 			},
 			{
@@ -316,6 +332,7 @@ export class DataFactory {
 				latitude: '54.694989',
 				longitude: '25.263847',
 				categoryIds: [],
+				address: 'Graffiti address 13',
 				artistIds: [],
 			},
 			{
@@ -327,6 +344,7 @@ export class DataFactory {
 				longitude: '25.264284',
 				artistIds: [],
 				categoryIds: [],
+				address: 'Graffiti address 14',
 			},
 			{
 				name: 'Graffiti name 15',
@@ -336,6 +354,7 @@ export class DataFactory {
 				latitude: '54.695357',
 				longitude: '25.26415',
 				categoryIds: [],
+				address: 'Graffiti address 15',
 				artistIds: [],
 			},
 			{
@@ -346,6 +365,7 @@ export class DataFactory {
 				latitude: '54.695342',
 				longitude: '25.263792',
 				categoryIds: [],
+				address: 'Graffiti address 16',
 				artistIds: [],
 			},
 			{
@@ -356,6 +376,7 @@ export class DataFactory {
 				latitude: '54.695342',
 				longitude: '25.263980',
 				categoryIds: [],
+				address: 'Graffiti address 17',
 				artistIds: [],
 			},
 			{
@@ -366,6 +387,7 @@ export class DataFactory {
 				latitude: '54.695385',
 				longitude: '25.264165',
 				categoryIds: [],
+				address: 'Graffiti address 18',
 				artistIds: [],
 			},
 			{
@@ -376,6 +398,7 @@ export class DataFactory {
 				latitude: '54.695373',
 				longitude: '25.263972',
 				categoryIds: [],
+				address: 'Graffiti address 19',
 				artistIds: [],
 			},
 			{
@@ -386,6 +409,7 @@ export class DataFactory {
 				latitude: '54.695349',
 				longitude: '25.263787',
 				categoryIds: [],
+				address: 'Graffiti address 20',
 				artistIds: [],
 			},
 			{
@@ -396,6 +420,7 @@ export class DataFactory {
 				latitude: '54.689126',
 				longitude: '25.262636',
 				categoryIds: [],
+				address: 'Graffiti address 21',
 				artistIds: [],
 			},
 			{
@@ -406,6 +431,7 @@ export class DataFactory {
 				latitude: '54.688933',
 				longitude: '25.262175',
 				categoryIds: [],
+				address: 'Graffiti address 22',
 				artistIds: [],
 			},
 			{
@@ -416,6 +442,7 @@ export class DataFactory {
 				latitude: '54.696029',
 				longitude: '25.263925',
 				categoryIds: [],
+				address: 'Graffiti address 23',
 				artistIds: [],
 			},
 			{
@@ -426,6 +453,7 @@ export class DataFactory {
 				latitude: '54.694984',
 				longitude: '25.264010',
 				categoryIds: [],
+				address: 'Graffiti address 24',
 				artistIds: [],
 			},
 			{
@@ -436,6 +464,7 @@ export class DataFactory {
 				latitude: '54.69605174048014',
 				longitude: '25.26408561972244',
 				categoryIds: [],
+				address: 'Graffiti address 25',
 				artistIds: [],
 			},
 		];
@@ -452,6 +481,7 @@ export class DataFactory {
 			creationDate: new Date(),
 			latitude: '54.695357',
 			longitude: '25.26415',
+			address: 'Graffiti address 1',
 			photos: [],
 		};
 

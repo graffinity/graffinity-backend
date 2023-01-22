@@ -80,6 +80,7 @@ export async function main() {
 				description: graffiti.description,
 				latitude: graffiti.latitude,
 				longitude: graffiti.longitude,
+				address: graffiti.address,
 				artists: {
 					createMany: {
 						data: graffiti.artistIds.map((id) => ({

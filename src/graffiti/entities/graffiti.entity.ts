@@ -20,6 +20,9 @@ export class GraffitiEntity implements Graffiti {
 	longitude: string;
 
 	@ApiProperty()
+	address: string;
+
+	@ApiProperty()
 	status: GraffitiStatus;
 
 	@ApiProperty()

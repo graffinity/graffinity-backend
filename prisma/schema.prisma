@@ -20,6 +20,7 @@ model Graffiti {
   description String
   latitude    String
   longitude   String
+  address     String
   status      GraffitiStatus       @default(SUBMITTED)
   createdAt   DateTime             @default(now())
   authorId    Int

@@ -36,6 +36,13 @@ export class GraffitiResponseDto {
 	longitude: string;
 
 	@ApiProperty({
+		type: String,
+		description: 'The address of a graffiti',
+		example: 'Berlin, Germany',
+	})
+	address: string;
+
+	@ApiProperty({
 		type: GraffitiStatus,
 		description: 'The status of the graffiti post submission',
 		example: 'PENDING',
