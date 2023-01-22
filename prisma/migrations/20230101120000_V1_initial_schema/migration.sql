@@ -1,13 +1,20 @@
 -- CreateEnum
-CREATE IF NOT EXISTS TYPE "GraffitiStatus" AS ENUM (
-    'SUBMITTED',
-    'PENDING',
-    'APPROVED',
-    'REJECTED'
+DO $$
+BEGIN
+    CREATE TYPE "GraffitiStatus" AS ENUM (
+        'SUBMITTED',
+        'PENDING',
+        'APPROVED',
+        'REJECTED'
 );
+EXCEPTION
+    WHEN duplicate_object THEN
+        NULL;
+END
+$$;
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "Graffiti" (
+CREATE TABLE IF NOT EXISTS "Graffiti" (
     "id" serial NOT NULL,
     "name" text NOT NULL,
     "description" text NOT NULL,
@@ -20,21 +27,21 @@ CREATE IF NOT EXISTS TABLE "Graffiti" (
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "Category" (
+CREATE TABLE IF NOT EXISTS "Category" (
     "id" serial NOT NULL,
     "name" text NOT NULL,
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "CategoryToGraffiti" (
+CREATE TABLE IF NOT EXISTS "CategoryToGraffiti" (
     "categoryId" integer NOT NULL,
     "graffitiId" integer NOT NULL,
     CONSTRAINT "CategoryToGraffiti_pkey" PRIMARY KEY ("graffitiId", "categoryId")
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "Comment" (
+CREATE TABLE IF NOT EXISTS "Comment" (
     "id" serial NOT NULL,
     "body" text NOT NULL,
     "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -44,7 +51,7 @@ CREATE IF NOT EXISTS TABLE "Comment" (
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "Email" (
+CREATE TABLE IF NOT EXISTS "Email" (
     "id" serial NOT NULL,
     "dateSent" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "subject" text NOT NULL,
@@ -54,7 +61,7 @@ CREATE IF NOT EXISTS TABLE "Email" (
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "EmailTemplate" (
+CREATE TABLE IF NOT EXISTS "EmailTemplate" (
     "name" text NOT NULL,
     "id" serial NOT NULL,
     "subject" text NOT NULL,
@@ -63,7 +70,7 @@ CREATE IF NOT EXISTS TABLE "EmailTemplate" (
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "Tag" (
+CREATE TABLE IF NOT EXISTS "Tag" (
     "id" serial NOT NULL,
     "name" text NOT NULL,
     "description" text NOT NULL,
@@ -71,14 +78,14 @@ CREATE IF NOT EXISTS TABLE "Tag" (
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "TagToGraffiti" (
+CREATE TABLE IF NOT EXISTS "TagToGraffiti" (
     "graffitiId" integer NOT NULL,
     "tagId" integer NOT NULL,
     CONSTRAINT "TagToGraffiti_pkey" PRIMARY KEY ("graffitiId", "tagId")
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "GraffitiPhoto" (
+CREATE TABLE IF NOT EXISTS "GraffitiPhoto" (
     "id" serial NOT NULL,
     "graffitiId" integer NOT NULL,
     "url" text NOT NULL,
@@ -89,7 +96,7 @@ CREATE IF NOT EXISTS TABLE "GraffitiPhoto" (
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "User" (
+CREATE TABLE IF NOT EXISTS "User" (
     "id" serial NOT NULL,
     "email" text NOT NULL,
     "password" text NOT NULL,
@@ -101,7 +108,7 @@ CREATE IF NOT EXISTS TABLE "User" (
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "Artist" (
+CREATE TABLE IF NOT EXISTS "Artist" (
     "id" serial NOT NULL,
     "name" text NOT NULL,
     "surname" text NOT NULL,
@@ -109,14 +116,14 @@ CREATE IF NOT EXISTS TABLE "Artist" (
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "ArtistToGraffiti" (
+CREATE TABLE IF NOT EXISTS "ArtistToGraffiti" (
     "graffitiId" integer NOT NULL,
     "artistId" integer NOT NULL,
     CONSTRAINT "ArtistToGraffiti_pkey" PRIMARY KEY ("graffitiId", "artistId")
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "Report" (
+CREATE TABLE IF NOT EXISTS "Report" (
     "id" serial NOT NULL,
     "graffitiId" integer NOT NULL,
     "userId" integer NOT NULL,
@@ -128,7 +135,7 @@ CREATE IF NOT EXISTS TABLE "Report" (
 );
 
 -- CreateTable
-CREATE IF NOT EXISTS TABLE "Likes" (
+CREATE TABLE IF NOT EXISTS "Likes" (
     "userId" integer NOT NULL,
     "graffitiPhotoId" integer NOT NULL,
     CONSTRAINT "Likes_pkey" PRIMARY KEY ("userId", "graffitiPhotoId")
