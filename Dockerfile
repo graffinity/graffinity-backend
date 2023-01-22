@@ -63,9 +63,12 @@ COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/package*.json ./
 COPY --chown=node:node --from=build /usr/src/app/prisma ./prisma
 
+# Generate the prisma client
+RUN npx prisma generate
+
 # Expose port 8080
 EXPOSE 8080
 
 # Run the app
-CMD [ "npm", "run", "start:prod" ]
+CMD [ "npm", "run", "start:migrate:prod" ]
 
