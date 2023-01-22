@@ -121,6 +121,16 @@ jobs:
         remote_user: ${{env.REMOTE_USERNAME}}
         remote_key: ${{env.AWS_REMOTE_SSH_KEY}}
 
+    - uses: Burnett01/rsync-deployments@5.2
+      name: Add schema.prisma to remote 
+      with:
+        switches: -av --progress
+        path: prisma/schema.prisma
+        remote_path: ~/schema.prisma
+        remote_host: ${{env.REMOTE_HOST}}
+        remote_user: ${{env.REMOTE_USERNAME}}
+        remote_key: ${{env.AWS_REMOTE_SSH_KEY}}
+
     - name: Rebuild and start docker containers 
       uses: appleboy/ssh-action@master
       with:
