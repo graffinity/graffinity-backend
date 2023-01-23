@@ -9,6 +9,15 @@ import passport from 'passport';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
 import { main } from '../prisma/seed';
+import { ArtistModule } from './artist/artist.module';
+import { AuthModule } from './auth/auth.module';
+import { CategoryModule } from './category/category.module';
+import { CommentModule } from './comment/comment.module';
+import { GraffitiModule } from './graffiti/graffiti.module';
+import { GraffitiPhotoModule } from './graffitiphoto/graffitiphoto.module';
+import { ReportModule } from './report/report.module';
+import { TagModule } from './tag/tag.module';
+import { UserModule } from './user/user.module';
 
 function seedDb() {
 	main();
@@ -56,7 +65,18 @@ async function bootstrap() {
 		.build();
 
 	const document = SwaggerModule.createDocument(app, config, {
-		include: [AppModule],
+		include: [
+			AppModule,
+			ArtistModule,
+			AuthModule,
+			CategoryModule,
+			CommentModule,
+			GraffitiModule,
+			GraffitiPhotoModule,
+			ReportModule,
+			TagModule,
+			UserModule,
+		],
 	});
 
 	SwaggerModule.setup('api', app, document);

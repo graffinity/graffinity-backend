@@ -7,20 +7,17 @@ import {
 	Post,
 	Put,
 	UploadedFile,
-	UseGuards,
 	UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { LikesEntry } from './dto/request/LikesEntry';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
 import { GraffitiPhotoService } from './graffitiphoto.service';
 import GraffitiPhotoMapper from './mapper/GraffitiPhotoMapper';
-import { AccessTokenStrategy } from '../auth/strategies/access-token.strategy';
-import { LikesEntry } from './dto/request/LikesEntry';
-import { Express } from 'express';
 
-@ApiTags('api/v1/graffiti-photo')
+@ApiTags('graffiti photo')
 @Controller('api/v1/graffiti-photo')
 export class GraffitiPhotoController {
 	constructor(private readonly graffitiPhotoService: GraffitiPhotoService) {}
