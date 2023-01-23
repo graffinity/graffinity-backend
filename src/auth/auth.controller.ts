@@ -8,6 +8,7 @@ import {
 	Req,
 	UseGuards,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
@@ -19,8 +20,6 @@ import { JwtAuthGuard } from './guards/jwt.guard';
 import { LocalAuthGuard } from './guards/local.guard';
 import RtGuard from './guards/refresh-token.guard';
 import { Tokens } from './types';
-import argon2 from 'argon2';
-import { JwtService } from '@nestjs/jwt';
 
 @ApiTags('auth')
 @Controller('api/v1/auth')
@@ -68,20 +67,10 @@ export class AuthController {
 	@Get('status')
 	async getStatus(@Req() request: Request) {
 		if (request.headers.authorization) {
-			let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
 			let access_token = request.headers.authorization.split(' ')[1];
-
-			if (secret && access_token) {
-				let res = await this.jwtService.verifyAsync(access_token, {
-					secret: secret,
-				});
-
-				if (res) {
-					return { isLoggedIn: true };
-				}
-			}
+			let isLoggedIn = this.authService.isUserLoggedIn(access_token);
+			return { isLoggedIn: isLoggedIn };
 		}
-		return { isLoggedIn: false };
 	}
 
 	@Public()

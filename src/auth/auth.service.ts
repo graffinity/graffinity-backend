@@ -75,7 +75,6 @@ export class AuthService {
 		return {
 			access_token: this.jwtService.sign(payload, {
 				secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-				// privateKey: process.env.JWT_ACCESS_TOKEN_SECRET,
 			}),
 		};
 	}
@@ -99,6 +98,19 @@ export class AuthService {
 	// async isLoggedIn(request: any) {
 	// 	return request.user != null;
 	// }
+
+	async isUserLoggedIn(access_token?: string): Promise<boolean> {
+		let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
+		if (access_token) {
+			let isLoggedIn = await this.jwtService.verifyAsync(access_token, {
+				secret: secret,
+			});
+			if (isLoggedIn) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	async validateUser(request: LoginRequest): Promise<User> {
 		let user = await this.userService.findByUsername(request.username);
