@@ -1,15 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Request } from 'express';
 import sharp from 'sharp';
+import { AuthService } from '../auth/auth.service';
 import { MetadataServiceJS } from '../metadata/metadata.servicejs';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
-import { LikesEntry } from './dto/request/LikesEntry';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
-
-import { Multer } from 'multer';
-import { AuthService } from '../auth/auth.service';
-import { Request } from 'express';
 
 type File = Express.Multer.File;
 
@@ -30,6 +27,11 @@ export class GraffitiPhotoService {
 		let isUserLoggedIn = await this.authService.isLoggedIn(request);
 
 		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		if (!user) {
 			throw new UnauthorizedException('User is not logged in');
 		}
 
@@ -54,7 +56,7 @@ export class GraffitiPhotoService {
 				addedAt: createGraffitiPhotoDto.addedAt,
 				user: {
 					connect: {
-						id: createGraffitiPhotoDto.userId ?? 1,
+						id: user.userId,
 					},
 				},
 				graffiti: {
@@ -68,7 +70,7 @@ export class GraffitiPhotoService {
 				addedAt: createGraffitiPhotoDto.addedAt,
 				user: {
 					connect: {
-						id: createGraffitiPhotoDto.userId ?? 1,
+						id: user.userId,
 					},
 				},
 				graffiti: {
