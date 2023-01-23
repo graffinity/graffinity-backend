@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
 import { GraffitiPhotoModule } from '../graffitiphoto/graffitiphoto.module';
 import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
 import { MetadataService } from '../metadata/metadata.service';

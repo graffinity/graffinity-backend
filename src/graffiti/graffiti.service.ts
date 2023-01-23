@@ -1,18 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Graffiti, GraffitiPhoto } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
 import { CategoryEntry } from './dto/request/category-entry.dto';
 import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
+import { AuthService } from '../auth/auth.service';
+import { Request } from 'express';
 
 const EARTH_RADIUS_KM = 6371; // Earth's radius in kilometers
 
 @Injectable()
 export class GraffitiService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService,
+		private authService: AuthService,
+	) {}
 
-	async create(createGraffitiDto: CreateGraffitiDto) {
+	async create(createGraffitiDto: CreateGraffitiDto, request: Request) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
 		return await this.prisma.graffiti.create({
 			data: {
 				name: createGraffitiDto.name,
@@ -81,97 +92,200 @@ export class GraffitiService {
 		});
 	}
 
-	async addCategoryToGraffiti(id: number, request: CategoryEntry) {
-		let entity = await this.prisma.graffiti.update({
+	async addCategoryToGraffiti(
+		id: number,
+		entry: CategoryEntry,
+		request: Request,
+	) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		let entity = await this.prisma.graffiti.findUniqueOrThrow({
 			where: {
 				id: id,
 			},
-			data: {
-				categories: {
-					create: request.categoryIds.map((categoryId) => ({
-						categoryId: categoryId,
-					})),
-				},
-			},
-			include: {
-				photos: true,
-			},
 		});
-		return entity;
-	}
+		if (entity.authorId !== user?.userId) {
+			throw new UnauthorizedException('User is not authorized');
+		}
 
-	async removeCategoryFromGraffiti(id: number, request: CategoryEntry) {
-		let entity = await this.prisma.graffiti.update({
-			where: {
-				id: id,
-			},
-			data: {
-				categories: {
-					deleteMany: request.categoryIds.map((categoryId) => ({
-						categoryId: categoryId,
-					})),
-				},
-			},
-			include: {
-				photos: true,
-			},
-		});
-		return entity;
-	}
-
-	async addArtistToGraffiti(id: number, request: ArtistEntry) {
-		let entity = await this.prisma.graffiti.update({
-			where: {
-				id: id,
-			},
-			data: {
-				artists: {
-					create: request.artistIds.map((artistId) => ({
-						artistId: artistId,
-					})),
-				},
-			},
-			include: {
-				photos: true,
-			},
-		});
-
-		return entity;
-	}
-
-	async removeArtistFromGraffiti(id: number, request: ArtistEntry) {
-		let entity = await this.prisma.graffiti.update({
-			where: {
-				id: id,
-			},
-			data: {
-				artists: {
-					deleteMany: request.artistIds.map((artistId) => ({
-						artistId: artistId,
-					})),
-				},
-			},
-			include: {
-				photos: true,
-			},
-		});
-
-		return entity;
-	}
-
-	async update(id: number, request: UpdateGraffitiDto) {
 		return await this.prisma.graffiti.update({
 			where: {
 				id: id,
 			},
-			data: request,
+			data: {
+				categories: {
+					create: entry.categoryIds.map((categoryId) => ({
+						categoryId: categoryId,
+					})),
+				},
+			},
 			include: {
 				photos: true,
 			},
 		});
 	}
 
-	async delete(id: number) {
+	async removeCategoryFromGraffiti(
+		id: number,
+		entry: CategoryEntry,
+		request: Request,
+	) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		let entity = await this.prisma.graffiti.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+		});
+		if (entity.authorId !== user?.userId) {
+			throw new UnauthorizedException('User is not authorized');
+		}
+
+		return await this.prisma.graffiti.update({
+			where: {
+				id: id,
+			},
+			data: {
+				categories: {
+					deleteMany: entry.categoryIds.map((categoryId) => ({
+						categoryId: categoryId,
+					})),
+				},
+			},
+			include: {
+				photos: true,
+			},
+		});
+	}
+
+	async addArtistToGraffiti(id: number, entry: ArtistEntry, request: Request) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		let entity = await this.prisma.graffiti.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+		});
+		if (entity.authorId !== user?.userId) {
+			throw new UnauthorizedException('User is not authorized');
+		}
+
+		return await this.prisma.graffiti.update({
+			where: {
+				id: id,
+			},
+			data: {
+				artists: {
+					create: entry.artistIds.map((artistId) => ({
+						artistId: artistId,
+					})),
+				},
+			},
+			include: {
+				photos: true,
+			},
+		});
+	}
+
+	async removeArtistFromGraffiti(
+		id: number,
+		entry: ArtistEntry,
+		request: Request,
+	) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		let entity = await this.prisma.graffiti.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+		});
+		if (entity.authorId !== user?.userId) {
+			throw new UnauthorizedException('User is not authorized');
+		}
+
+		return await this.prisma.graffiti.update({
+			where: {
+				id: id,
+			},
+			data: {
+				artists: {
+					deleteMany: entry.artistIds.map((artistId) => ({
+						artistId: artistId,
+					})),
+				},
+			},
+			include: {
+				photos: true,
+			},
+		});
+	}
+
+	async update(
+		id: number,
+		updateGraffitiDto: UpdateGraffitiDto,
+		request: Request,
+	) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		let entity = await this.prisma.graffiti.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+		});
+		if (entity.authorId !== user?.userId) {
+			throw new UnauthorizedException('User is not authorized');
+		}
+
+		return await this.prisma.graffiti.update({
+			where: {
+				id: id,
+			},
+			data: updateGraffitiDto,
+			include: {
+				photos: true,
+			},
+		});
+	}
+
+	async delete(id: number, request: Request) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+
+		let entity = await this.prisma.graffiti.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+		});
+
+		if (entity.authorId !== user?.userId) {
+			throw new UnauthorizedException('User is not authorized');
+		}
+
 		return await this.prisma.graffiti.delete({
 			where: {
 				id: id,

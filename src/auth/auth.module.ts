@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -14,6 +14,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { jwtConstants } from './constants';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+@Global()
 @Module({
 	imports: [
 		UserModule,

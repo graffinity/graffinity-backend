@@ -68,9 +68,10 @@ export class AuthController {
 	async getStatus(@Req() request: Request) {
 		if (request.headers.authorization) {
 			let access_token = request.headers.authorization.split(' ')[1];
-			let isLoggedIn = this.authService.isUserLoggedIn(access_token);
+			let isLoggedIn = await this.authService.isUserLoggedIn(access_token);
 			return { isLoggedIn: isLoggedIn };
 		}
+		return { isLoggedIn: false };
 	}
 
 	@Public()
