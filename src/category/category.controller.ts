@@ -1,14 +1,13 @@
 import {
-	Controller,
-	Get,
-	Post,
 	Body,
-	Patch,
-	Param,
+	Controller,
 	Delete,
+	Get,
+	Param,
+	Post,
 	Put,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/request/create-category.dto';
 import { UpdateCategoryDto } from './dto/request/update-category.dto';
@@ -40,7 +39,6 @@ export class CategoryController {
 		if (entity) {
 			return CategoryMapper.toResponse(entity);
 		}
-		return null;
 	}
 
 	@Put(':id')
