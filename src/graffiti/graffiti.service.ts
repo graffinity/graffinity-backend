@@ -24,13 +24,15 @@ export class GraffitiService {
 			throw new UnauthorizedException('User is not logged in');
 		}
 
+		let user = await this.authService.getUserFromRequest(request);
+
 		return await this.prisma.graffiti.create({
 			data: {
 				name: createGraffitiDto.name,
 				description: createGraffitiDto.description,
 				author: {
 					connect: {
-						id: +createGraffitiDto.authorId,
+						id: user?.userId,
 					},
 				},
 				latitude: createGraffitiDto.latitude,
@@ -260,7 +262,23 @@ export class GraffitiService {
 			where: {
 				id: id,
 			},
-			data: updateGraffitiDto,
+			data: {
+				name: updateGraffitiDto.name,
+				description: updateGraffitiDto.description,
+				latitude: updateGraffitiDto.latitude,
+				longitude: updateGraffitiDto.longitude,
+				address: updateGraffitiDto.address,
+				categories: {
+					create: updateGraffitiDto.categoryIds.map((categoryId) => ({
+						categoryId: categoryId,
+					})),
+				},
+				artists: {
+					create: updateGraffitiDto.artistIds.map((artistId) => ({
+						artistId: artistId,
+					})),
+				},
+			},
 			include: {
 				photos: true,
 			},

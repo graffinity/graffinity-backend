@@ -114,7 +114,7 @@ export class AuthService {
 	}
 
 	async isLoggedIn(request: Request) {
-		let access_token = request.cookies['access_token'];
+		let access_token = request.headers['authorization']?.split(' ')[1];
 		let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
 		if (access_token && secret) {
 			let isLoggedin = await this.jwtService.verifyAsync(access_token, {

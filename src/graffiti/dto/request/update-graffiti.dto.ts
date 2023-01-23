@@ -52,6 +52,7 @@ export class UpdateGraffitiDto extends PartialType(CreateGraffitiDto) {
 		type: Number,
 		description: 'The authorId of a graffiti is a required value',
 	})
+	// Remove authorId from the updateGraffitiDto
 	authorId: number;
 
 	@ApiProperty({
