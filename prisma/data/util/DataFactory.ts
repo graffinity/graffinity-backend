@@ -36,7 +36,7 @@ export class DataFactory {
 			lastname: 'Doe',
 			username: 'marydoe',
 			email: 'marydoe@gmail.com',
-			password: 'password',
+			password: hashedPassword,
 			refreshToken: 'some-refresh',
 		};
 

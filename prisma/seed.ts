@@ -1,6 +1,6 @@
 import { GraffitiPhoto, PrismaClient } from '@prisma/client';
 import { CreateGraffitiDto } from '../src/graffiti/dto/request/create-graffiti.dto';
-import { DataFactory } from '../prisma/data/util/DataFactory';
+import { DataFactory } from './data/util/DataFactory';
 
 export const prisma = new PrismaClient();
 let testDataFactory: DataFactory = DataFactory.getInstance();
@@ -13,12 +13,18 @@ export async function main() {
 	// User test data
 	let users = await testDataFactory.getListofUsersWithHashedPassword();
 	users.forEach(async (user) => {
-		await prisma.user.upsert({
+		await prisma?.user.upsert({
 			where: {
 				username: user.username,
 			},
 			update: {},
-			create: user,
+			create: {
+				name: user.name,
+				lastname: user.lastname,
+				username: user.username,
+				email: user.email,
+				password: user.password,
+			},
 		});
 	});
 
@@ -128,8 +134,6 @@ export async function main() {
 }
 // ----------------------------
 // Done...
-
-export default main;
 
 main()
 	.catch((e) => {
