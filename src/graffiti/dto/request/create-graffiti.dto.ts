@@ -44,6 +44,7 @@ export class CreateGraffitiDto {
 		type: Number,
 		description: 'The authorId of a graffiti is a required value',
 	})
+	// Remove authorId from createGraffitiDto
 	authorId: number;
 
 	@ApiProperty({

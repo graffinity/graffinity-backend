@@ -1,12 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Request } from 'express';
 import sharp from 'sharp';
+import { AuthService } from '../auth/auth.service';
 import { MetadataServiceJS } from '../metadata/metadata.servicejs';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
-import { LikesEntry } from './dto/request/LikesEntry';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
-import { Multer } from 'multer';
 
 type File = Express.Multer.File;
 
@@ -14,14 +14,27 @@ type File = Express.Multer.File;
 export class GraffitiPhotoService {
 	constructor(
 		private prisma: PrismaService,
-		@Inject(S3Service)
 		private S3Service: S3Service,
-
-		@Inject(MetadataServiceJS)
 		private MetadataService: MetadataServiceJS,
+		private authService: AuthService,
 	) {}
 
-	async create(createGraffitiPhotoDto: CreateGraffitiPhotoDto, file: File) {
+	async create(
+		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
+		file: File,
+		request: Request,
+	) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		if (!user) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
 		file.buffer = await this.MetadataService.removeMetadata(file);
 		let md = await sharp(file.buffer).metadata();
 		console.log('metadata111:', md);
@@ -43,7 +56,7 @@ export class GraffitiPhotoService {
 				addedAt: createGraffitiPhotoDto.addedAt,
 				user: {
 					connect: {
-						id: createGraffitiPhotoDto.userId ?? 1,
+						id: user.userId,
 					},
 				},
 				graffiti: {
@@ -57,7 +70,7 @@ export class GraffitiPhotoService {
 				addedAt: createGraffitiPhotoDto.addedAt,
 				user: {
 					connect: {
-						id: createGraffitiPhotoDto.userId ?? 1,
+						id: user.userId,
 					},
 				},
 				graffiti: {
@@ -85,7 +98,26 @@ export class GraffitiPhotoService {
 		return entity;
 	}
 
-	async update(id: number, updateGraffitiPhotoDto: UpdateGraffitiPhotoDto) {
+	async update(
+		id: number,
+		updateGraffitiPhotoDto: UpdateGraffitiPhotoDto,
+		request: Request,
+	) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+		});
+		if (entity.userId !== user?.userId) {
+			throw new UnauthorizedException('User is not authorized');
+		}
+
 		return await this.prisma.graffitiPhoto.update({
 			where: {
 				id: id,
@@ -94,39 +126,73 @@ export class GraffitiPhotoService {
 		});
 	}
 
-	async addLikedPhoto(id: number, request: LikesEntry) {
-		let entity = await this.prisma.graffitiPhoto.update({
+	async addLikedPhoto(id: number, request: Request) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+		let user = await this.authService.getUserFromRequest(request);
+		if (!user || !user.userId) {
+			throw new UnauthorizedException('User does not exist');
+		}
+
+		return await this.prisma.graffitiPhoto.update({
 			where: {
 				id: id,
 			},
 			data: {
 				likes: {
-					create: request.userId.map((userId) => ({
-						userId: userId,
-					})),
+					create: {
+						userId: user.userId,
+					},
 				},
 			},
 		});
-		return entity;
 	}
 
-	async removeLikedPhoto(id: number, request: LikesEntry) {
-		let entity = await this.prisma.graffitiPhoto.update({
+	async removeLikedPhoto(id: number, request: Request) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+		let user = await this.authService.getUserFromRequest(request);
+		if (!user || !user.userId) {
+			throw new UnauthorizedException('User does not exist');
+		}
+
+		return await this.prisma.graffitiPhoto.update({
 			where: {
 				id: id,
 			},
 			data: {
 				likes: {
-					deleteMany: request.userId.map((userId) => ({
-						userId: userId,
-					})),
+					delete: {
+						userId_graffitiPhotoId: {
+							userId: user.userId,
+							graffitiPhotoId: id,
+						},
+					},
 				},
 			},
 		});
-		return entity;
 	}
 
-	async delete(id: number) {
+	async delete(id: number, request: Request) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+		});
+		if (entity.userId !== user?.userId) {
+			throw new UnauthorizedException('User is not authorized');
+		}
+
 		return await this.prisma.graffitiPhoto.delete({
 			where: {
 				id: id,

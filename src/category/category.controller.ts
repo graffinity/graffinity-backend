@@ -1,17 +1,17 @@
 import {
-	Controller,
-	Get,
-	Post,
 	Body,
-	Patch,
-	Param,
+	Controller,
 	Delete,
+	Get,
+	Param,
+	Post,
 	Put,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CreateCategoryDto } from './dto/request/create-category.dto';
+import { UpdateCategoryDto } from './dto/request/update-category.dto';
+import CategoryMapper from './mapper/CategoryMapper';
 
 @ApiTags('category')
 @Controller('api/v1/category')
@@ -20,35 +20,41 @@ export class CategoryController {
 
 	@Post()
 	@ApiOperation({ summary: 'Create a category entity' })
-	create(@Body() createCategoryDto: CreateCategoryDto) {
-		return this.categoryService.create(createCategoryDto);
+	async create(@Body() createCategoryDto: CreateCategoryDto) {
+		let entity = await this.categoryService.create(createCategoryDto);
+		return CategoryMapper.toResponse(entity);
 	}
 
 	@Get()
 	@ApiOperation({ summary: 'Find all categories' })
-	findAll() {
-		return this.categoryService.findAll();
+	async findAll() {
+		let entities = await this.categoryService.findAll();
+		return CategoryMapper.toResponses(entities);
 	}
 
 	@Get(':id')
 	@ApiOperation({ summary: 'Find a category by id' })
-	findOne(@Param('id') id: number) {
-		console.log(id);
-		return this.categoryService.findOne(+id);
+	async findOne(@Param('id') id: number) {
+		let entity = await this.categoryService.findOne(+id);
+		if (entity) {
+			return CategoryMapper.toResponse(entity);
+		}
 	}
 
 	@Put(':id')
 	@ApiOperation({ summary: 'Update a category entity by id' })
-	update(
+	async update(
 		@Param('id') id: string,
 		@Body() updateCategoryDto: UpdateCategoryDto,
 	) {
-		return this.categoryService.update(+id, updateCategoryDto);
+		let entity = await this.categoryService.update(+id, updateCategoryDto);
+		return CategoryMapper.toResponse(entity);
 	}
 
 	@Delete(':id')
 	@ApiOperation({ summary: 'Delete a category by id' })
-	delete(@Param('id') id: string) {
-		return this.categoryService.delete(+id);
+	async delete(@Param('id') id: string) {
+		let entity = await this.categoryService.delete(+id);
+		return CategoryMapper.toResponse(entity);
 	}
 }

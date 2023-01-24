@@ -11,6 +11,8 @@ import {
 import argon2 from 'argon2';
 import { CreateGraffitiDto } from '../../../src/graffiti/dto/request/create-graffiti.dto';
 import { GraffitiResponseDto } from '../../../src/graffiti/dto/response/graffiti-response.dto';
+import { Request } from 'express';
+import { CategoryResponseDto } from '../../../src/category/dto/response/category-response.dto';
 
 export class DataFactory {
 	public static instance: DataFactory;
@@ -93,6 +95,14 @@ export class DataFactory {
 		};
 
 		return newCategory;
+	}
+
+	public getValidCategoryResponse(): CategoryResponseDto {
+		let response = {
+			id: 5,
+			name: 'Category 5',
+		};
+		return response;
 	}
 
 	public getListOfCategories(): Category[] {
@@ -881,6 +891,14 @@ export class DataFactory {
 			},
 		];
 		return GraffitiPhotoList;
+	}
+	public getValidExpressRequest(): Request {
+		let req = {
+			headers: {
+				authorization: 'Bearer token',
+			},
+		} as Request;
+		return req;
 	}
 }
 

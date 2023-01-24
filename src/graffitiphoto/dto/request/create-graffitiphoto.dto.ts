@@ -8,28 +8,10 @@ export class CreateGraffitiPhotoDto {
 	graffitiId: number;
 
 	@ApiProperty({
-		type: String,
-		description: 'The url of a graffiti is a required value and must be unique',
-	})
-	url: string;
-
-	@ApiProperty({
 		type: Date,
 		description:
 			'The date of creation of a graffiti is provided as a timestamp and is required',
 		default: new Date(),
 	})
 	addedAt: Date;
-
-	@ApiProperty({
-		type: Number,
-		description: 'UserId is a required value',
-	})
-	userId: number;
-
-	@ApiProperty({
-		type: Array<Number>,
-		description: 'Likes is an array of likes ids',
-	})
-	likeIds: number[];
 }
