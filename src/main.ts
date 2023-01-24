@@ -8,7 +8,6 @@ import session from 'express-session';
 import passport from 'passport';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
-import { main } from '../prisma/seed';
 import { ArtistModule } from './artist/artist.module';
 import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
@@ -18,6 +17,7 @@ import { GraffitiPhotoModule } from './graffitiphoto/graffitiphoto.module';
 import { ReportModule } from './report/report.module';
 import { TagModule } from './tag/tag.module';
 import { UserModule } from './user/user.module';
+import { main } from '../prisma/seed';
 
 function seedDb() {
 	main();
