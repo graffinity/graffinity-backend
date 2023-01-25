@@ -37,7 +37,7 @@ describe('CategoryController', () => {
 	});
 
 	it('should return all categories', async () => {
-		let expected = [testDataFactory.getValidGraffiti()];
+		let expected = [testDataFactory.getValidCategoryResponse()];
 		categoryService.findAll.mockResolvedValueOnce(expected);
 		const actual = await controller.findAll();
 

@@ -12,8 +12,8 @@ export async function main() {
 
 	// User test data
 	let users = await testDataFactory.getListofUsersWithHashedPassword();
-	users.forEach(async (user) => {
-		await prisma?.user.upsert({
+	let res1 = users.map(async (user) => {
+		return await prisma.user.upsert({
 			where: {
 				username: user.username,
 			},
@@ -27,6 +27,8 @@ export async function main() {
 			},
 		});
 	});
+
+	await Promise.all(res1);
 
 	let user = await testDataFactory.getValidUser();
 	await prisma.user.upsert({
@@ -69,8 +71,8 @@ export async function main() {
 
 	let graffitis: CreateGraffitiDto[] =
 		testDataFactory.getListOfGraffitiCreateRequests();
-	graffitis.forEach(async (graffiti: CreateGraffitiDto) => {
-		await prisma.graffiti.upsert({
+	let res2 = graffitis.map(async (graffiti: CreateGraffitiDto) => {
+		return await prisma.graffiti.upsert({
 			where: {
 				name: graffiti.name,
 			},
@@ -80,6 +82,7 @@ export async function main() {
 				description: graffiti.description,
 				latitude: graffiti.latitude,
 				longitude: graffiti.longitude,
+				address: graffiti.address,
 				artists: {
 					createMany: {
 						data: graffiti.artistIds.map((id) => ({
@@ -102,13 +105,14 @@ export async function main() {
 			},
 		});
 	});
+	await Promise.all(res2);
 
 	console.log('Graffiti data seed success!');
 
 	let photos: GraffitiPhoto[] = testDataFactory.getListOfGraffitiPhotos();
 
-	photos.forEach(async (photo) => {
-		await prisma.graffitiPhoto.upsert({
+	let res3 = photos.map(async (photo) => {
+		return await prisma.graffitiPhoto.upsert({
 			where: { url: photo.url },
 			update: {},
 			create: {
@@ -126,6 +130,8 @@ export async function main() {
 			},
 		});
 	});
+
+	await Promise.all(res3);
 
 	console.log('Graffiti photo data seed success!');
 

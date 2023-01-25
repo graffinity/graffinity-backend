@@ -1,5 +1,7 @@
 export type JwtPayload = {
-	email: string;
+	sub: number;
 	userId: number;
+	email: string;
 	username: string;
+	isLoggedIn?: boolean;
 };

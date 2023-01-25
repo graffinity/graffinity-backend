@@ -6,11 +6,18 @@ import { DataFactory } from '../../prisma/data/util/DataFactory';
 import { MockContext, createMockContext } from '../prisma/context';
 import { PrismaService } from '../prisma/prisma.service';
 import { GraffitiService } from './graffiti.service';
+import { AuthService } from '../auth/auth.service';
+import { AuthModule } from '../auth/auth.module';
+import { UserModule } from '../user/user.module';
+import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
+import { Request } from 'express';
 
 describe('GraffitiService', () => {
 	let service: GraffitiService;
 	let mockContext: MockContext;
 	let prismaService: DeepMockProxy<PrismaClient>;
+	let authService: DeepMockProxy<AuthService>;
 	let dataFactory: DataFactory = new DataFactory();
 
 	beforeEach(async () => {
@@ -19,14 +26,23 @@ describe('GraffitiService', () => {
 
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule],
-			providers: [GraffitiService, PrismaService],
+			providers: [
+				GraffitiService,
+				PrismaService,
+				AuthService,
+				JwtService,
+				UserService,
+			],
 		})
 			.overrideProvider(PrismaService)
 			.useValue(mockContext.prisma)
+			.overrideProvider(AuthService)
+			.useValue(mockContext.authService)
 			.compile();
 
 		service = module.get<GraffitiService>(GraffitiService);
 		prismaService = module.get<DeepMockProxy<PrismaClient>>(PrismaService);
+		authService = module.get<DeepMockProxy<AuthService>>(AuthService);
 	});
 
 	it('should be defined', () => {
@@ -36,9 +52,12 @@ describe('GraffitiService', () => {
 	it('should create a graffiti', async () => {
 		let request = dataFactory.getValidCreateGraffitiRequest();
 		let entity = dataFactory.getValidGraffiti();
+		let req = dataFactory.getValidExpressRequest();
 
+		authService.isLoggedIn.mockResolvedValueOnce(true);
 		prismaService.graffiti.create.mockResolvedValueOnce(entity);
-		let graffiti = await service.create(request);
+
+		let graffiti = await service.create(request, req);
 
 		expect(graffiti).toBeDefined();
 		expect(graffiti.name).toBe(request.name);
@@ -53,6 +72,7 @@ describe('GraffitiService', () => {
 				longitude: 'test',
 				latitude: 'test',
 				status: GraffitiStatus.PENDING,
+				address: 'test',
 				authorId: 1,
 				createdAt: new Date(),
 			},

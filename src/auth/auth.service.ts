@@ -14,6 +14,7 @@ import { LoginRequest } from './dto/request/login-request.dto';
 import { SignUpRequest } from './dto/request/signup-request.dto';
 import { JwtPayload } from './types';
 import { Tokens } from './types/tokens.types';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -75,7 +76,6 @@ export class AuthService {
 		return {
 			access_token: this.jwtService.sign(payload, {
 				secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-				// privateKey: process.env.JWT_ACCESS_TOKEN_SECRET,
 			}),
 		};
 	}
@@ -99,6 +99,46 @@ export class AuthService {
 	// async isLoggedIn(request: any) {
 	// 	return request.user != null;
 	// }
+
+	async isUserLoggedIn(access_token?: string): Promise<boolean> {
+		let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
+		if (access_token) {
+			let isLoggedIn = await this.jwtService.verifyAsync(access_token, {
+				secret: secret,
+			});
+			if (isLoggedIn && isLoggedIn.isLoggedIn && isLoggedIn.userId !== null) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	async isLoggedIn(request: Request) {
+		let access_token = request.headers['authorization']?.split(' ')[1];
+		let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
+		if (access_token && secret) {
+			let isLoggedin = await this.jwtService.verifyAsync(access_token, {
+				secret: secret,
+			});
+			if (isLoggedin) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	getUserFromRequest = async (request: Request) => {
+		if (!request.headers.authorization) return null;
+		let access_token = request.headers.authorization.split(' ')[1];
+		let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
+		if (access_token && secret) {
+			let user: JwtPayload = this.jwtService.verify(access_token, {
+				secret: secret,
+			});
+			return user;
+		}
+		return null;
+	};
 
 	async validateUser(request: LoginRequest): Promise<User> {
 		let user = await this.userService.findByUsername(request.username);
@@ -153,6 +193,7 @@ export class AuthService {
 
 	async getTokens(userId: number, email: string, username: string) {
 		let jwtPayload: JwtPayload = {
+			sub: userId,
 			userId: userId,
 			email: email,
 			username: username,

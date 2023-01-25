@@ -15,19 +15,19 @@ export class GraffitiPhotoResponseDto {
 
 	@ApiProperty({
 		description: 'The url of a graffiti photo',
-		example: 'wwww.example.com',
+		example: 'https://www.amazon.s3.example.com/photo.jpg',
 	})
 	url: string;
+
+	@ApiProperty({
+		description: 'The userId of the user who uploaded the graffiti photo',
+		example: 1,
+	})
+	userId: number;
 
 	@ApiProperty({
 		description: 'The given score of a graffiti photo',
 		example: 1,
 	})
 	pictureScore: number | null;
-
-	@ApiProperty({
-		description: 'The UserId of a graffirti photo',
-		example: 1,
-	})
-	userId: number;
 }

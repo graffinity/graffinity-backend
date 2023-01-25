@@ -6,6 +6,8 @@ import {
 	Param,
 	Post,
 	Put,
+	Req,
+	UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
@@ -14,6 +16,8 @@ import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
 import { GraffitiService } from './graffiti.service';
 import GraffitiMapper from './mapper/GraffitiMapper';
+import { Request } from 'express';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @ApiTags('graffiti')
 @Controller('api/v1/graffiti')
@@ -21,9 +25,13 @@ export class GraffitiController {
 	constructor(private readonly graffitiService: GraffitiService) {}
 
 	@Post()
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Create a graffiti post' })
-	async create(@Body() createGraffitiDto: CreateGraffitiDto) {
-		let entity = await this.graffitiService.create(createGraffitiDto);
+	async create(
+		@Body() createGraffitiDto: CreateGraffitiDto,
+		@Req() request: Request,
+	) {
+		let entity = await this.graffitiService.create(createGraffitiDto, request);
 
 		return GraffitiMapper.toResponse(entity);
 	}
@@ -40,7 +48,10 @@ export class GraffitiController {
 	@ApiOperation({
 		summary: 'Find nearest graffiti posts',
 	})
-	async findnearest(@Param() latitude: string, @Param() longitude: string) {
+	async findNearestGraffiti(
+		@Param() latitude: string,
+		@Param() longitude: string,
+	) {
 		let graffitis = await this.graffitiService.findAll();
 		let entities = await this.graffitiService.findNearestNeighbor(
 			graffitis,
@@ -76,62 +87,90 @@ export class GraffitiController {
 	}
 
 	@Put(':id')
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Update a graffiti post by id' })
 	async update(
 		@Param('id') id: string,
 		@Body() updateGraffitiDto: UpdateGraffitiDto,
+		@Req() request: Request,
 	) {
-		let entity = await this.graffitiService.update(+id, updateGraffitiDto);
+		let entity = await this.graffitiService.update(
+			+id,
+			updateGraffitiDto,
+			request,
+		);
 		return GraffitiMapper.toResponse(entity);
 	}
 
 	@Put('/:id/category/add')
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Update a graffiti post by id' })
 	async addCategoryToGraffiti(
 		@Param('id') id: string,
-		@Body() request: CategoryEntry,
+		@Body() entry: CategoryEntry,
+		@Req() request: Request,
 	) {
-		let entity = await this.graffitiService.addCategoryToGraffiti(+id, request);
+		let entity = await this.graffitiService.addCategoryToGraffiti(
+			+id,
+			entry,
+			request,
+		);
 		return GraffitiMapper.toResponse(entity);
 	}
 
 	@Put('/:id/category/remove')
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Update a graffiti post by id' })
 	async removeCategoryFromGraffiti(
 		@Param('id') id: string,
-		@Body() request: CategoryEntry,
+		@Body() entry: CategoryEntry,
+		@Req() request: Request,
 	) {
-		let entity = await this.graffitiService.addCategoryToGraffiti(+id, request);
+		let entity = await this.graffitiService.addCategoryToGraffiti(
+			+id,
+			entry,
+			request,
+		);
 		return GraffitiMapper.toResponse(entity);
 	}
 
 	@Put('/:id/artist/add')
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Update a graffiti post by id' })
 	async addArtistToGraffiti(
 		@Param('id') id: string,
-		@Body() request: ArtistEntry,
+		@Body() entry: ArtistEntry,
+		@Req() request: Request,
 	) {
-		let entity = await this.graffitiService.addArtistToGraffiti(+id, request);
+		let entity = await this.graffitiService.addArtistToGraffiti(
+			+id,
+			entry,
+			request,
+		);
 		return GraffitiMapper.toResponse(entity);
 	}
 
 	@Put('/:id/artist/remove')
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Update a graffiti post by id' })
 	async removeArtistFromGraffiti(
 		@Param('id') id: string,
-		@Body() request: ArtistEntry,
+		@Body() entry: ArtistEntry,
+		@Req() request: Request,
 	) {
 		let entity = await this.graffitiService.removeArtistFromGraffiti(
 			+id,
+			entry,
 			request,
 		);
 		return GraffitiMapper.toResponse(entity);
 	}
 
 	@Delete(':id')
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Delete a graffiti post by id' })
-	async delete(@Param('id') id: string) {
-		let entity = await this.graffitiService.delete(+id);
+	async delete(@Param('id') id: string, @Req() request: Request) {
+		let entity = await this.graffitiService.delete(+id, request);
 		return GraffitiMapper.toResponse(entity);
 	}
 }
