@@ -22,5 +22,4 @@ filebeat.autodiscover:
 cloud.id: ${ELASTIC_CLOUD_ID}
 cloud.auth: ${ELASTIC_CLOUD_AUTH}
 
-
 logging.metrics.enabled: false
