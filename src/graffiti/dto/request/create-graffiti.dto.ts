@@ -44,13 +44,13 @@ export class CreateGraffitiDto {
 		type: Array<Number>,
 		description: 'Categories is an array of category ids',
 	})
-	categoryIds?: number[];
+	categoryIds: number[];
 
 	@ApiProperty({
 		type: Array<Number>,
 		description: 'Artists is an array of artist ids',
 	})
-	artistIds?: number[];
+	artistIds: number[];
 
 	@ApiProperty({
 		type: Array<String>,

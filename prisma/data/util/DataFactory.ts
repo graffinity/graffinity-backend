@@ -151,11 +151,11 @@ export class DataFactory {
 			id: 28,
 			name: 'Graffiti name 28',
 			description: 'Graffiti description 28',
-			authorId: 1,
-			createdAt: new Date(),
-			status: GraffitiStatus.SUBMITTED,
 			latitude: '54.671517 ',
 			longitude: '25.279855',
+			status: GraffitiStatus.SUBMITTED,
+			createdAt: new Date(),
+			authorId: 1,
 			photos: [
 				{
 					id: 1,
@@ -178,9 +178,10 @@ export class DataFactory {
 			description: '',
 			authorId: 1,
 			createdAt: new Date(),
-			status: GraffitiStatus.SUBMITTED,
+			//status: GraffitiStatus.SUBMITTED,
 			latitude: '',
 			longitude: '',
+			status: 'SUBMITTED',
 		};
 
 		return newGraffiti;
@@ -197,6 +198,7 @@ export class DataFactory {
 				longitude: '25.279855',
 				categoryIds: [],
 				artistIds: [],
+				photoIds: [1],
 			},
 			{
 				name: 'Graffiti name 2',
@@ -247,6 +249,7 @@ export class DataFactory {
 				longitude: '25.258051',
 				categoryIds: [],
 				artistIds: [],
+				photoIds: [],
 			},
 			{
 				name: 'Graffiti name 7',
@@ -327,6 +330,7 @@ export class DataFactory {
 				longitude: '25.264284',
 				artistIds: [],
 				categoryIds: [],
+				photoIds: [2, 3],
 			},
 			{
 				name: 'Graffiti name 15',
@@ -445,17 +449,39 @@ export class DataFactory {
 
 	public getValidGraffitiResponse(): GraffitiResponseDto {
 		let response: GraffitiResponseDto = {
-			id: 1,
-			name: 'Graffiti name 1',
-			description: 'Graffiti description 1',
+			id: 6,
+			name: 'Graffiti name 6',
+			description: 'Graffiti description 6',
 			authorId: 1,
 			creationDate: new Date(),
-			latitude: '54.695357',
-			longitude: '25.26415',
-			photos: [],
+			latitude: '54.688846',
+			longitude: '25.258051',
+			photos: [
+				{
+					id: 6,
+					graffitiId: 6,
+					url: '',
+					//addedAt: new Date(),
+					userId: 0,
+					pictureScore: null,
+				},
+			],
 		};
 
 		return response;
+	}
+
+	public getValidGraffitiToPhoto(): GraffitiPhoto {
+		let newCategoryToGraffiti: GraffitiPhoto = {
+			id: 1,
+			graffitiId: 1,
+			url: '',
+			addedAt: new Date(),
+			userId: 0,
+			pictureScore: null,
+		};
+
+		return newCategoryToGraffiti;
 	}
 
 	// --------------------------------
@@ -602,9 +628,10 @@ export class DataFactory {
 	public getListOfGraffitiPhotos(): GraffitiPhoto[] {
 		let GraffitiPhotoList: GraffitiPhoto[] = [
 			{
+				//Mindaugo kiemas
 				id: 1,
 				graffitiId: 1,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.jpg',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.HEIC',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 10,
@@ -628,7 +655,7 @@ export class DataFactory {
 			{
 				id: 4,
 				graffitiId: 2,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9495.jpg',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.jpg',
 				addedAt: new Date(),
 				userId: 2,
 				pictureScore: 40,
@@ -659,7 +686,7 @@ export class DataFactory {
 			},
 			{
 				id: 8,
-				graffitiId: 5,
+				graffitiId: 6,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9507.jpg',
 				addedAt: new Date(),
 				userId: 1,
@@ -667,7 +694,7 @@ export class DataFactory {
 			},
 			{
 				id: 9,
-				graffitiId: 5,
+				graffitiId: 6,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9506.jpg',
 				addedAt: new Date(),
 				userId: 2,
@@ -675,7 +702,7 @@ export class DataFactory {
 			},
 			{
 				id: 10,
-				graffitiId: 6,
+				graffitiId: 5,
 				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9182.jpg',
 				addedAt: new Date(),
 				userId: 1,
