@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCategoryDto } from './dto/request/create-category.dto';
 import { UpdateCategoryDto } from './dto/request/update-category.dto';
+import { Request } from 'express';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class CategoryService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService,
+		private authService: AuthService,
+	) {}
 
 	async findAll() {
 		return await this.prisma.category.findMany();
@@ -19,7 +24,12 @@ export class CategoryService {
 		});
 	}
 
-	async create(createCategoryDto: CreateCategoryDto) {
+	async create(createCategoryDto: CreateCategoryDto, request: Request) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
 		return await this.prisma.category.create({
 			data: {
 				name: createCategoryDto.name,
@@ -32,7 +42,16 @@ export class CategoryService {
 		});
 	}
 
-	async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+	async update(
+		id: number,
+		updateCategoryDto: UpdateCategoryDto,
+		request: Request,
+	) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
 		return await this.prisma.category.update({
 			where: {
 				id: id,
@@ -41,7 +60,15 @@ export class CategoryService {
 		});
 	}
 
-	async delete(id: number) {
+	async delete(id: number, request: Request) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		// TODO: Add admin check
+
 		return await this.prisma.category.delete({
 			where: {
 				id: id,

@@ -13,6 +13,7 @@ import { CreateGraffitiDto } from '../../../src/graffiti/dto/request/create-graf
 import { GraffitiResponseDto } from '../../../src/graffiti/dto/response/graffiti-response.dto';
 import { Request } from 'express';
 import { CategoryResponseDto } from '../../../src/category/dto/response/category-response.dto';
+import { CreateCategoryDto } from '../../../src/category/dto/request/create-category.dto';
 
 export class DataFactory {
 	public static instance: DataFactory;
@@ -103,6 +104,14 @@ export class DataFactory {
 			name: 'Category 5',
 		};
 		return response;
+	}
+
+	public getValidCategoryCreateRequest(): CreateCategoryDto {
+		let request: CreateCategoryDto = {
+			name: 'Category 6',
+			graffitiIds: [],
+		};
+		return request;
 	}
 
 	public getListOfCategories(): Category[] {

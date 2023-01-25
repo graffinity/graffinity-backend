@@ -6,11 +6,13 @@ import { MockContext, createMockContext } from '../prisma/context';
 import { PrismaService } from '../prisma/prisma.service';
 import { CategoryService } from './category.service';
 import DataFactory from '../../prisma/data/util/DataFactory';
+import { AuthService } from '../auth/auth.service';
 
 describe('CategoryService', () => {
 	let service: CategoryService;
 	let mockContext: MockContext;
 	let prismaService: DeepMockProxy<PrismaClient>;
+	let authService: DeepMockProxy<AuthService>;
 	let dataFactory: DataFactory;
 
 	beforeEach(async () => {
@@ -19,34 +21,33 @@ describe('CategoryService', () => {
 
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule],
-			providers: [CategoryService, PrismaService],
+			providers: [CategoryService, PrismaService, AuthService],
 		})
 			.overrideProvider(PrismaService)
 			.useValue(mockContext.prisma)
+			.overrideProvider(AuthService)
+			.useValue(mockContext.authService)
 			.compile();
 
 		dataFactory = new DataFactory();
 		service = module.get<CategoryService>(CategoryService);
 		prismaService = module.get<DeepMockProxy<PrismaClient>>(PrismaService);
+		authService = module.get<DeepMockProxy<AuthService>>(AuthService);
 	});
 
 	it('should be defined', () => {
 		expect(service).toBeDefined();
 	});
 	it('should return all categories', async () => {
-		let category1 = {
-			id: 1,
-			name: 'indigo',
-			graffitiIds: [],
-		};
-		let categories = await service.findAll();
-		let categories1 = await prismaService.category.findMany();
-		prismaService.category.create.mockResolvedValue(category1);
+		let category = dataFactory.getValidCategoryCreateRequest();
+		let response = dataFactory.getValidCategory();
+		let req = dataFactory.getValidExpressRequest();
 
-		let testCreate = service.create(category1);
+		authService.isLoggedIn.mockResolvedValueOnce(true);
+		prismaService.category.create.mockResolvedValueOnce(response);
 
-		// expect(categories[0]).toMatchObject(category1);
-		await expect(testCreate).resolves.toMatchObject(category1);
-		// expect(categories).toBeDefined();
+		let result = service.create(category, req);
+
+		await expect(result).resolves.toMatchObject(response);
 	});
 });

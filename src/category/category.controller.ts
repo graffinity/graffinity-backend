@@ -6,12 +6,16 @@ import {
 	Param,
 	Post,
 	Put,
+	Req,
+	UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/request/create-category.dto';
 import { UpdateCategoryDto } from './dto/request/update-category.dto';
 import CategoryMapper from './mapper/CategoryMapper';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { Request } from 'express';
 
 @ApiTags('category')
 @Controller('api/v1/category')
@@ -19,9 +23,13 @@ export class CategoryController {
 	constructor(private readonly categoryService: CategoryService) {}
 
 	@Post()
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Create a category entity' })
-	async create(@Body() createCategoryDto: CreateCategoryDto) {
-		let entity = await this.categoryService.create(createCategoryDto);
+	async create(
+		@Body() createCategoryDto: CreateCategoryDto,
+		@Req() request: Request,
+	) {
+		let entity = await this.categoryService.create(createCategoryDto, request);
 		return CategoryMapper.toResponse(entity);
 	}
 
@@ -42,19 +50,26 @@ export class CategoryController {
 	}
 
 	@Put(':id')
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Update a category entity by id' })
 	async update(
 		@Param('id') id: string,
 		@Body() updateCategoryDto: UpdateCategoryDto,
+		@Req() request: Request,
 	) {
-		let entity = await this.categoryService.update(+id, updateCategoryDto);
+		let entity = await this.categoryService.update(
+			+id,
+			updateCategoryDto,
+			request,
+		);
 		return CategoryMapper.toResponse(entity);
 	}
 
 	@Delete(':id')
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Delete a category by id' })
-	async delete(@Param('id') id: string) {
-		let entity = await this.categoryService.delete(+id);
+	async delete(@Param('id') id: string, @Req() request: Request) {
+		let entity = await this.categoryService.delete(+id, request);
 		return CategoryMapper.toResponse(entity);
 	}
 }
