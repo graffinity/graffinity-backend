@@ -86,7 +86,7 @@ export class GraffitiPhotoController {
 		return GraffitiPhotoMapper.toResponse(entity);
 	}
 
-	@Put('/:id/likes/add')
+	@Put(':id/likes/add')
 	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Update Graffiti Photo likes by id' })
 	async addLikesToPhoto(@Param('id') id: string, @Req() request: Request) {
@@ -94,12 +94,32 @@ export class GraffitiPhotoController {
 		return GraffitiPhotoMapper.toResponse(entity);
 	}
 
-	@Put('/:id/likes/remove')
+	@Put(':id/likes/remove')
 	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ summary: 'Update Graffiti Photo likes by id' })
 	async removeLikesFromPhoto(@Param('id') id: string, @Req() request: Request) {
 		let entity = await this.graffitiPhotoService.removeLikedPhoto(+id, request);
 		return GraffitiPhotoMapper.toResponse(entity);
+	}
+
+	@Get(':id/likes/count')
+	@ApiOperation({ summary: 'Get Graffiti Photo likes count by id' })
+	async getLikeCount(@Param('id') id: string): Promise<number> {
+		let likeCount = await this.graffitiPhotoService.getLikeCount(+id);
+		return likeCount;
+	}
+
+	@Get(':id/likes/is-liked')
+	@UseGuards(JwtAuthGuard)
+	@ApiOperation({
+		summary: 'Get info whether Graffiti Photo is liked by a logged in user',
+	})
+	async isLikedByUser(
+		@Param('id') id: string,
+		@Req() request: Request,
+	): Promise<boolean> {
+		let isLiked = await this.graffitiPhotoService.isLikedByUser(+id, request);
+		return isLiked;
 	}
 
 	@Delete(':id')

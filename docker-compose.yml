@@ -11,6 +11,8 @@ services:
       POSTGRES_DB: graffinity
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+    labels:
+      collect_logs_with_filebeat: "true"
 
   graffinity-backend:
     image: 445007777844.dkr.ecr.eu-central-1.amazonaws.com/graffinity-backend
@@ -21,6 +23,7 @@ services:
     env_file:
       - ./prod.env
     labels:
+      collect_logs_with_filebeat: "true"
       decode_log_event_to_json_object: "true"
 
   graffinity-frontend:
@@ -34,6 +37,20 @@ services:
       - ./prod.front.env
     volumes:
       - /etc/ssl/live/:/etc/ssl/live/
+    labels:
+      collect_logs_with_filebeat: "true"
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.6.0
+    volumes:
+      - ./config/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro # Configuration file
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro # Docker logs
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Additional information about containers
+      - ./config/filebeat-data:/usr/share/filebeat/data:rw # Persistence data
+    user: root # Allow access to log files and docker.sock
+    restart: on-failure
+    env_file:
+      - ./prod.env
 
 volumes:
   prometheus_data: {}

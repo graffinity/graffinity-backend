@@ -15,7 +15,7 @@
 		"prisma:deploy": "npx prisma migrate deploy",
 		"prisma:studio": "npx prisma studio",
 		"prisma:seed": "ts-node prisma/seed",
-		"seed": "node dist/prisma/seed",
+		"seed": "npx prisma db seed",
 		"seed:prod": "node dist/src/seed",
 		"seed:dev": "ts-node prisma/seed.ts",
 		"start": "nest start",

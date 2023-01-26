@@ -3,13 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma/prisma.service';
 import { ArtistController } from './artist.controller';
 import { ArtistService } from './artist.service';
+import { AuthModule } from '../auth/auth.module';
 
 describe('ArtistController', () => {
 	let controller: ArtistController;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			imports: [ConfigModule],
+			imports: [ConfigModule, AuthModule],
 			controllers: [ArtistController],
 			providers: [PrismaService, ArtistService],
 		}).compile();
