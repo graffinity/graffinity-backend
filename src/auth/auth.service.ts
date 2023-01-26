@@ -128,16 +128,16 @@ export class AuthService {
 	}
 
 	getUserFromRequest = async (request: Request) => {
-		if (!request.headers.authorization) return null;
+		if (!request.headers.authorization) {
+			throw new UnauthorizedException('Unauthorized');
+		}
 		let access_token = request.headers.authorization.split(' ')[1];
 		let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
-		if (access_token && secret) {
-			let user: JwtPayload = this.jwtService.verify(access_token, {
-				secret: secret,
-			});
-			return user;
-		}
-		return null;
+
+		let user: JwtPayload = this.jwtService.verify(access_token, {
+			secret: secret,
+		});
+		return user;
 	};
 
 	async validateUser(request: LoginRequest): Promise<User> {

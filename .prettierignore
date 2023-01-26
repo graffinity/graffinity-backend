@@ -8,6 +8,7 @@ dist
 # Ignore all files of these formats:
 *.html
 *.yml
+*.yaml
 
 # Ignore all files with these names:
 README.md

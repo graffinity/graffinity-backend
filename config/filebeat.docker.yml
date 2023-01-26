@@ -19,7 +19,7 @@ filebeat.autodiscover:
                     target: ''
                     overwrite_keys: true
 
-cloud.id: ${CLOUD_ID}
-cloud.auth: ${CLOUD_AUTH}
+cloud.id: ${ELASTIC_CLOUD_ID}
+cloud.auth: ${ELASTIC_CLOUD_AUTH}
 
 logging.metrics.enabled: false

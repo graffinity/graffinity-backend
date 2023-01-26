@@ -45,5 +45,8 @@
 	},
 	"[ignore]": {
 		"editor.defaultFormatter": "foxundermoon.shell-format"
+	},
+	"[env]": {
+		"editor.defaultFormatter": "IronGeek.vscode-env"
 	}
 }
