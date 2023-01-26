@@ -2,7 +2,7 @@ version: '3'
 
 services:
   test-db:
-    image: postgres:latest
+    image: postgres:15
     restart: always
     container_name: test
     hostname: test
@@ -16,7 +16,7 @@ services:
       - .db:/var/lib/postgresql/
 
   db:
-    image: postgres:latest
+    image: postgres:15
     container_name: graffinity
     restart: always
     hostname: graffinity
