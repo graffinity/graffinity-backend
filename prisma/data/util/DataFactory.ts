@@ -9,11 +9,11 @@ import {
 	User,
 } from '@prisma/client';
 import argon2 from 'argon2';
+import { Request } from 'express';
+import { CreateCategoryDto } from '../../../src/category/dto/request/create-category.dto';
+import { CategoryResponseDto } from '../../../src/category/dto/response/category-response.dto';
 import { CreateGraffitiDto } from '../../../src/graffiti/dto/request/create-graffiti.dto';
 import { GraffitiResponseDto } from '../../../src/graffiti/dto/response/graffiti-response.dto';
-import { Request } from 'express';
-import { CategoryResponseDto } from '../../../src/category/dto/response/category-response.dto';
-import { CreateCategoryDto } from '../../../src/category/dto/request/create-category.dto';
 
 export class DataFactory {
 	public static instance: DataFactory;
@@ -901,6 +901,7 @@ export class DataFactory {
 		];
 		return GraffitiPhotoList;
 	}
+
 	public getValidExpressRequest(): Request {
 		let req = {
 			headers: {

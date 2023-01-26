@@ -94,6 +94,9 @@ export class GraffitiPhotoService {
 			where: {
 				id: id,
 			},
+			include: {
+				likes: true,
+			},
 		});
 		return entity;
 	}
@@ -147,6 +150,9 @@ export class GraffitiPhotoService {
 					},
 				},
 			},
+			include: {
+				likes: true,
+			},
 		});
 	}
 
@@ -173,6 +179,9 @@ export class GraffitiPhotoService {
 						},
 					},
 				},
+			},
+			include: {
+				likes: true,
 			},
 		});
 	}
@@ -202,6 +211,46 @@ export class GraffitiPhotoService {
 
 	async findAllFilteredBy() {
 		return await this.prisma.graffitiPhoto.findMany({});
+	}
+
+	async getLikeCount(id: number) {
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+			include: {
+				likes: true,
+			},
+		});
+
+		return entity.likes.length;
+	}
+
+	async isLikedByUser(id: number, request: Request) {
+		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			return false;
+		}
+
+		let user = await this.authService.getUserFromRequest(request);
+		if (!user || !user.userId) {
+			return false;
+		}
+
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+			include: {
+				likes: {
+					where: {
+						userId: user.userId,
+					},
+				},
+			},
+		});
+
+		return entity.likes.length > 0;
 	}
 }
 

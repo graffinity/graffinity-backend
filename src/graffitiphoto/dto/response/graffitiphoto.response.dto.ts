@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Likes } from '@prisma/client';
 
 export class GraffitiPhotoResponseDto {
 	@ApiProperty({
@@ -30,4 +31,16 @@ export class GraffitiPhotoResponseDto {
 		example: 1,
 	})
 	pictureScore: number | null;
+
+	@ApiProperty({
+		description: 'The date when the graffiti photo was added',
+		example: '2021-01-01T00:00:00.000Z',
+	})
+	addedAt: Date;
+
+	@ApiProperty({
+		description: 'The likes of a graffiti photo',
+		example: 1,
+	})
+	likes?: Likes[];
 }
