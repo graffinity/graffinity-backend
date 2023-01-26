@@ -12,6 +12,8 @@ import argon2 from 'argon2';
 import { Request } from 'express';
 import { CreateCategoryDto } from '../../../src/category/dto/request/create-category.dto';
 import { CategoryResponseDto } from '../../../src/category/dto/response/category-response.dto';
+import { CreateGraffitiDto } from '../../../src/graffiti/dto/request/create-graffiti.dto';
+import { GraffitiResponseDto } from '../../../src/graffiti/dto/response/graffiti-response.dto';
 import { GraffitiAndGraffitiPhotoCreateDto } from './GraffitiAndGraffitiPhotoEntity';
 
 export class DataFactory {
@@ -712,7 +714,7 @@ export class DataFactory {
 				//Mindaugo kiemas
 				id: 1,
 				graffitiId: 1,
-				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.HEIC',
+				url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.jpg',
 				addedAt: new Date(),
 				userId: 1,
 				pictureScore: 10,
@@ -1051,20 +1053,20 @@ export class DataFactory {
 
 					graffitiPhotos: [
 						{
-							id: 1,
-							url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9203.jpg',
-							addedAt: new Date(),
-							userId: 1,
-							graffitiId: 0,
-							pictureScore: 0,
-						},
-						{
 							id: 2,
 							graffitiId: 0,
 							url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9494.jpg',
 							addedAt: new Date(),
 							userId: 1,
 							pictureScore: 20,
+						},
+						{
+							id: 2,
+							url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.jpg',
+							addedAt: new Date(),
+							userId: 1,
+							graffitiId: 0,
+							pictureScore: 0,
 						},
 					],
 				},
@@ -1092,7 +1094,7 @@ export class DataFactory {
 						{
 							id: 4,
 							graffitiId: 0,
-							url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9493.jpg',
+							url: 'https://graffinity-images.s3.eu-central-1.amazonaws.com/IMG_9495.jpg',
 							addedAt: new Date(),
 							userId: 2,
 							pictureScore: 40,
