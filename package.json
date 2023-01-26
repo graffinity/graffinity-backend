@@ -37,7 +37,7 @@
 		"schema": "prisma/schema.prisma",
 		"introspect": true,
 		"generate": true,
-		"seed": "node dist/prisma/seed",
+		"seed": "ts-node prisma/seed.ts",
 		"seed:prod": "node dist/prisma/seed",
 		"seed:dev": "ts-node prisma/seed.ts"
 	},
