@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { MetadataService } from './metadata.service';
+
 import { MetadataServiceJS } from './metadata.servicejs';
 
 @Module({
-	providers: [MetadataService, MetadataServiceJS],
+	providers: [MetadataServiceJS],
 })
 export class MetadataModule {}
