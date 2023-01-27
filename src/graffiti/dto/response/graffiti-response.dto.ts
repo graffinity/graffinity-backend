@@ -37,10 +37,11 @@ export class GraffitiResponseDto {
 
 	@ApiProperty({
 		type: String,
+
 		description: 'The address of a graffiti',
 		example: 'Berlin, Germany',
 	})
-	address: string;
+	address: string | null;
 
 	@ApiProperty({
 		type: GraffitiStatus,

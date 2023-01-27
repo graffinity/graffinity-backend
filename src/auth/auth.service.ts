@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	ForbiddenException,
 	Injectable,
 	NotFoundException,
@@ -30,24 +31,25 @@ export class AuthService {
 		});
 	}
 
-	async signup(request: SignUpRequest): Promise<Tokens> {
-		let hash = await this.hashPassword(request.password);
-		let user = await this.userService
-			.create({
-				...request,
-				password: hash,
-			})
-			.catch((error) => {
-				if (error instanceof PrismaClientKnownRequestError) {
-					if (error.code === 'P2002') {
-						throw new ForbiddenException('Username or email already exists');
-					}
-				}
-				throw error;
-			});
+	async hash(token: string) {
+		return await argon2.hash(token, {
+			hashLength: 36,
+		});
+	}
 
-		let tokens = await this.getTokens(user.id, user.email, user.username);
-		await this.updateRefreshToken(user.id, tokens.refreshToken);
+	async signup(request: any): Promise<Tokens> {
+		let user = request.user;
+
+		const payload: JwtPayload = {
+			sub: user.id,
+			userId: user.id,
+			username: user.username,
+			email: user.email,
+			isLoggedIn: true,
+		};
+
+		let tokens = await this.getTokens(payload);
+		await this.updateRefreshToken(user.id, tokens.refresh_token);
 
 		return tokens;
 	}
@@ -58,26 +60,29 @@ export class AuthService {
 			throw new UnauthorizedException('Wrong username or password');
 		}
 
-		let tokens = await this.getTokens(user.id, user.email, user.username);
-		await this.updateRefreshToken(user.id, tokens.refreshToken);
+		let payload = this.getPayloadFromUser(user);
+		let tokens = await this.getTokens(payload);
+
+		await this.updateRefreshToken(user.id, tokens.refresh_token);
 
 		return tokens;
 	}
 
-	async login2(user: any) {
-		const payload = {
+	async login2(request: any) {
+		let user = request.user;
+
+		const payload: JwtPayload = {
 			sub: user.id,
 			userId: user.id,
 			username: user.username,
 			email: user.email,
 			isLoggedIn: true,
 		};
-		console.log('payload', payload);
-		return {
-			access_token: this.jwtService.sign(payload, {
-				secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-			}),
-		};
+
+		let tokens: Tokens = await this.getTokens(payload);
+		await this.updateRefreshToken(user.id, tokens.refresh_token);
+
+		return tokens;
 	}
 
 	async logout(userId: number) {
@@ -137,21 +142,31 @@ export class AuthService {
 		let user: JwtPayload = this.jwtService.verify(access_token, {
 			secret: secret,
 		});
+
+		if (!user || !user.isLoggedIn || !user.userId) {
+			throw new UnauthorizedException('Unauthorized');
+		}
+
 		return user;
 	};
 
 	async validateUser(request: LoginRequest): Promise<User> {
 		let user = await this.userService.findByUsername(request.username);
-		// ||
-		// (await this.userService.findByEmail(request.loginBy.email));
 
 		if (!user) {
-			throw new NotFoundException('User not found');
+			throw new NotFoundException(
+				`User with the username ${request.username} was not found`,
+			);
 		}
 		let isPasswordValid = await argon2.verify(user.password, request.password);
 		if (!isPasswordValid) {
-			throw new UnauthorizedException('Wrong username or password');
+			throw new BadRequestException('Wrong username or password');
 		}
+		return user;
+	}
+
+	async validae(request: Request) {
+		let user = await this.getUserFromRequest(request);
 		return user;
 	}
 
@@ -169,8 +184,9 @@ export class AuthService {
 			throw new ForbiddenException('Access denied');
 		}
 
-		let tokens = await this.getTokens(user.id, user.email, user.username);
-		await this.updateRefreshToken(user.id, tokens.refreshToken);
+		let payload = this.getPayloadFromUser(user);
+		let tokens = await this.getTokens(payload);
+		await this.updateRefreshToken(user.id, tokens.refresh_token);
 
 		return tokens;
 	}
@@ -179,7 +195,7 @@ export class AuthService {
 		userId: number,
 		refreshToken: string,
 	): Promise<void> {
-		let hash = await this.hashPassword(refreshToken);
+		let hash = await this.hash(refreshToken);
 
 		await this.prisma.user.update({
 			where: {
@@ -191,29 +207,35 @@ export class AuthService {
 		});
 	}
 
-	async getTokens(userId: number, email: string, username: string) {
-		let jwtPayload: JwtPayload = {
-			sub: userId,
-			userId: userId,
-			email: email,
-			username: username,
-		};
-
-		const [accessToken, refreshToken] = await Promise.all([
-			this.jwtService.signAsync(jwtPayload, {
+	async getTokens(payload: JwtPayload): Promise<Tokens> {
+		let [accessToken, refreshToken] = await Promise.all([
+			this.jwtService.signAsync(payload, {
 				secret: process.env.JWT_ACCESS_TOKEN_SECRET,
 				expiresIn: 60 * 60, // 1 hour
 			}),
 
-			this.jwtService.signAsync(jwtPayload, {
+			this.jwtService.signAsync(payload, {
 				secret: process.env.JWT_REFRESH_TOKEN_SECRET,
 				expiresIn: 60 * 60 * 24 * 14, // 2 weeks
 			}),
 		]);
 
-		return {
-			accessToken: accessToken,
-			refreshToken: refreshToken,
+		let tokens: Tokens = {
+			access_token: accessToken,
+			refresh_token: refreshToken,
 		};
+		return tokens;
+	}
+
+	getPayloadFromUser(user: User): JwtPayload {
+		let isLoggedIn = user.refreshToken ? true : false;
+		let payload: JwtPayload = {
+			sub: user.id,
+			userId: user.id,
+			username: user.username,
+			email: user.email,
+			isLoggedIn: isLoggedIn,
+		};
+		return payload;
 	}
 }

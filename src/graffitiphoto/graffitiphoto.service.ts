@@ -1,4 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+	BadRequestException,
+	ConflictException,
+	Injectable,
+	NotFoundException,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { Request } from 'express';
 import sharp from 'sharp';
 import { AuthService } from '../auth/auth.service';
@@ -7,6 +13,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 type File = Express.Multer.File;
 
@@ -139,6 +146,19 @@ export class GraffitiPhotoService {
 			throw new UnauthorizedException('User does not exist');
 		}
 
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+			include: {
+				likes: true,
+			},
+		});
+
+		if (entity.likes.find((like) => like.userId === user.userId)) {
+			throw new BadRequestException('User already liked this photo');
+		}
+
 		return await this.prisma.graffitiPhoto.update({
 			where: {
 				id: id,
@@ -164,6 +184,19 @@ export class GraffitiPhotoService {
 		let user = await this.authService.getUserFromRequest(request);
 		if (!user || !user.userId) {
 			throw new UnauthorizedException('User does not exist');
+		}
+
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+			include: {
+				likes: true,
+			},
+		});
+
+		if (!entity.likes.find((like) => like.userId === user.userId)) {
+			throw new BadRequestException('User has not liked this photo');
 		}
 
 		return await this.prisma.graffitiPhoto.update({
