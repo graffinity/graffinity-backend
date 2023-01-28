@@ -81,8 +81,8 @@ export class GraffitiController {
 
 	@Get(':id')
 	@ApiOperation({ summary: 'Find a graffiti post by id' })
-	async findOne(@Param('id') id: string) {
-		let entity = await this.graffitiService.findOne(+id);
+	async findById(@Param('id') id: string) {
+		let entity = await this.graffitiService.findById(+id);
 		return GraffitiMapper.toResponse(entity);
 	}
 

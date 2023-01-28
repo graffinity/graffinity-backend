@@ -16,6 +16,11 @@ export class MetadataService extends MetadataServiceJS {
 
 	calculatePictureScore = async (metadata: sharp.Metadata) => {
 		let score = 0;
+		if (metadata.width && metadata.height) {
+			if (metadata.width > 1000 && metadata.height > 1000) {
+				score += 1;
+			}
+		}
 		if (metadata.exif) {
 			score += 1;
 		}
@@ -28,7 +33,7 @@ export class MetadataService extends MetadataServiceJS {
 		if (metadata.xmp) {
 			score += 1;
 		}
-		console.log('score', score);
+
 		return score;
 	};
 }

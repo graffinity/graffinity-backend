@@ -11,6 +11,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
+import { GraffitiPhoto, Likes } from '@prisma/client';
+import { GraffitiPhotoEntity } from './entities/graffitiphoto.entity';
 
 type File = Express.Multer.File;
 
@@ -40,13 +42,11 @@ export class GraffitiPhotoService {
 		}
 
 		let metadata = await this.metadataService.getMetadata(file);
-		let exif1 = metadata.exif;
 
 		let localPictureScore = await this.metadataService.calculatePictureScore(
 			metadata,
 		);
-		console.log('score', localPictureScore);
-		console.log('exif1: ', exif1);
+		console.log('localPictureScore: ', localPictureScore);
 
 		file.buffer = await this.metadataService.removeMetadata(file);
 
@@ -95,7 +95,9 @@ export class GraffitiPhotoService {
 	}
 
 	async findAll() {
-		return await this.prisma.graffitiPhoto.findMany();
+		let entities = await this.prisma.graffitiPhoto.findMany();
+
+		return entities;
 	}
 
 	async findOne(id: number) {
@@ -221,6 +223,18 @@ export class GraffitiPhotoService {
 		});
 	}
 
+	async findLikesByPhotoId(id: number) {
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+			include: {
+				likes: true,
+			},
+		});
+		return entity.likes;
+	}
+
 	async delete(id: number, request: Request) {
 		let isUserLoggedIn = await this.authService.isLoggedIn(request);
 		if (!isUserLoggedIn) {
@@ -287,6 +301,67 @@ export class GraffitiPhotoService {
 
 		return entity.likes.length > 0;
 	}
+
+	sortByPictureScore(entities: GraffitiPhotoEntity[]) {
+		let sortedByPictureScore = entities.sort((photo1, photo2) => {
+			if (photo1.pictureScore === null) {
+				if (photo2.pictureScore === null) {
+					return 0;
+				}
+				return 1;
+			} else if (photo2.pictureScore === null) {
+				if (photo1.pictureScore === null) {
+					return 0;
+				}
+				return -1;
+			}
+			return photo2.pictureScore - photo1.pictureScore;
+		});
+
+		return sortedByPictureScore;
+	}
+
+	sortByLikeCount(entities: GraffitiPhotoEntity[]) {
+		let sortedByLikeCount = entities.sort((photo1, photo2) => {
+			if (photo1.likes?.length === 0 || !photo1.likes?.length) {
+				if (photo2.likes?.length === 0) {
+					return 0;
+				}
+				return 1;
+			}
+			if (photo2.likes?.length === 0 || !photo2.likes?.length) {
+				if (photo1.likes?.length === 0) {
+					return 0;
+				}
+				return -1;
+			}
+			return photo2.likes.length - photo1.likes.length;
+		});
+
+		return sortedByLikeCount;
+	}
+
+	sortGraffitiPhotos = async (photos: GraffitiPhoto[]) => {
+		let promise = photos.map(async (photo) => {
+			let likes = await this.findLikesByPhotoId(photo.id);
+
+			let graffitiPhotoEntity: GraffitiPhotoEntity = {
+				...photo,
+				likes: likes,
+			};
+			return graffitiPhotoEntity;
+		});
+
+		let photosWithLikes = await Promise.all(promise);
+
+		console.log('step 1: ', photosWithLikes);
+		let sortedByPictureScore = this.sortByPictureScore(photosWithLikes);
+		console.log('step 2: ', sortedByPictureScore);
+		let sortedByLikeCount = this.sortByLikeCount(sortedByPictureScore);
+		console.log('step 3: ', sortedByLikeCount);
+
+		return sortedByLikeCount;
+	};
 }
 
 //   Image Extension   MIME Type
