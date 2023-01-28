@@ -1,5 +1,4 @@
 import {
-	Body,
 	Controller,
 	Get,
 	HttpCode,
@@ -14,12 +13,11 @@ import { AuthService } from './auth.service';
 import GetCurrentUserId from './decorators/get-current-user-id.decorator';
 import GetCurrentUser from './decorators/get-current-user.decorator';
 import Public from './decorators/public.decorator';
-import { SignUpRequest } from './dto/request/signup-request.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { LocalAuthGuard } from './guards/local.guard';
 import RtGuard from './guards/refresh-token.guard';
-import { Tokens } from './types';
 import { SignupAuthGuard } from './guards/signup.guard';
+import { Tokens } from './types';
 
 @ApiTags('auth')
 @Controller('api/v1/auth')
@@ -32,13 +30,6 @@ export class AuthController {
 	signup(@Req() request: Request): Promise<Tokens> {
 		return this.authService.signup(request);
 	}
-
-	// @Public()
-	// @Post('login')
-	// @HttpCode(HttpStatus.OK)
-	// login(@Body() dto: LoginRequest): Promise<Tokens> {
-	// 	return this.authService.login(dto);
-	// }
 
 	@Post('login')
 	@UseGuards(LocalAuthGuard)

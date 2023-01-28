@@ -42,7 +42,4 @@ export class MetadataServiceJS {
 
 		return fileBuffer;
 	};
-	calculatePictureScore = async () => {
-		return { name: 'PictureScore' };
-	};
 }

@@ -39,12 +39,16 @@ export class GraffitiPhotoService {
 			throw new UnauthorizedException('User is not logged in');
 		}
 
-		file.buffer = await this.metadataService.removeMetadata(file);
-		let md = await sharp(file.buffer).metadata();
-		console.log('metadata111:', md);
-		let exif = md.exif;
+		let metadata = await this.metadataService.getMetadata(file);
+		let exif1 = metadata.exif;
 
-		console.log('exif111: ', exif);
+		let localPictureScore = await this.metadataService.calculatePictureScore(
+			metadata,
+		);
+		console.log('score', localPictureScore);
+		console.log('exif1: ', exif1);
+
+		file.buffer = await this.metadataService.removeMetadata(file);
 
 		let filenameEnd = mimetypes[file.mimetype];
 		if (filenameEnd) {
@@ -58,6 +62,7 @@ export class GraffitiPhotoService {
 			create: {
 				url: response.Location,
 				addedAt: createGraffitiPhotoDto.addedAt,
+				pictureScore: localPictureScore,
 				user: {
 					connect: {
 						id: user.userId,
