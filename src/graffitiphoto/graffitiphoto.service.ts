@@ -1,19 +1,16 @@
 import {
 	BadRequestException,
-	ConflictException,
 	Injectable,
-	NotFoundException,
 	UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import sharp from 'sharp';
 import { AuthService } from '../auth/auth.service';
-import { MetadataServiceJS } from '../metadata/metadata.servicejs';
+import { MetadataService } from '../metadata/metadata.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 type File = Express.Multer.File;
 
@@ -22,7 +19,7 @@ export class GraffitiPhotoService {
 	constructor(
 		private prisma: PrismaService,
 		private S3Service: S3Service,
-		private MetadataService: MetadataServiceJS,
+		private metadataService: MetadataService,
 		private authService: AuthService,
 	) {}
 
@@ -42,7 +39,7 @@ export class GraffitiPhotoService {
 			throw new UnauthorizedException('User is not logged in');
 		}
 
-		file.buffer = await this.MetadataService.removeMetadata(file);
+		file.buffer = await this.metadataService.removeMetadata(file);
 		let md = await sharp(file.buffer).metadata();
 		console.log('metadata111:', md);
 		let exif = md.exif;

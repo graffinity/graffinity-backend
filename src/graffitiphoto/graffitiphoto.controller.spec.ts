@@ -2,7 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '../auth/auth.service';
-import { MetadataServiceJS } from '../metadata/metadata.servicejs';
+import { MetadataService } from '../metadata/metadata.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { UserService } from '../user/user.service';
@@ -20,7 +20,7 @@ describe('GraffitiPhotoController', () => {
 				S3Service,
 				GraffitiPhotoService,
 				PrismaService,
-				MetadataServiceJS,
+				MetadataService,
 				AuthService,
 				UserService,
 				JwtService,

@@ -5,8 +5,6 @@ const piexif = require('piexifjs');
 export class MetadataServiceJS {
 	constructor() {}
 
-	getMetadata = async () => {};
-
 	removeMetadata = async (file) => {
 		const getBase64DataFromJpegFile = (filename) =>
 			fs.readFileSync(filename).toString('binary');

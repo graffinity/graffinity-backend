@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthModule } from '../auth/auth.module';
 import { AuthService } from '../auth/auth.service';
 import { MetadataModule } from '../metadata/metadata.module';
-
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { MetadataServiceJS } from '../metadata/metadata.servicejs';
+import { MetadataService } from '../metadata/metadata.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { S3Module } from '../s3/S3module';
 import S3Service from '../s3/S3service';
@@ -21,12 +20,13 @@ import { GraffitiPhotoService } from './graffitiphoto.service';
 		AuthModule,
 		UserModule,
 		JwtModule,
+		MetadataModule,
 	],
 	controllers: [GraffitiPhotoController],
 	providers: [
 		GraffitiPhotoService,
 		S3Service,
-		MetadataServiceJS,
+		MetadataService,
 		AuthService,
 		UserService,
 		JwtService,
