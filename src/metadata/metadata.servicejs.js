@@ -30,12 +30,14 @@ export class MetadataServiceJS {
 				orientation: orientation,
 			})
 			.toBuffer();
-		// fs.writeFileSync('./scrubbed.png', fileBuffer);
 
 		if (fs.existsSync('temp.jpg')) {
 			fs.unlinkSync('temp.jpg');
 			fs.unlink('src/metadata/temp.jpg', (err) => {
-				if (err) throw err;
+				if (err) {
+					console.log('Error deleting temp/jpg: ');
+					console.error(err);
+				}
 				console.log('temp/jpg deleted');
 			});
 		}
@@ -43,3 +45,5 @@ export class MetadataServiceJS {
 		return fileBuffer;
 	};
 }
+
+// fs.writeFileSync('./scrubbed.png', fileBuffer);
