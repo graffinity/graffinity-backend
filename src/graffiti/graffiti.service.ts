@@ -11,9 +11,6 @@ import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
 import { GraffitiEntity } from './entities/graffiti.entity';
 
-const EARTH_RADIUS = 6371e3;
-const EARTH_RADIUS_KM = 6371;
-
 @Injectable()
 export class GraffitiService {
 	constructor(
