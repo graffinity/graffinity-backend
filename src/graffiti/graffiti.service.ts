@@ -1,17 +1,18 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Graffiti, GraffitiPhoto, GraffitiStatus } from '@prisma/client';
+import { GraffitiStatus } from '@prisma/client';
+import { Request } from 'express';
+import { AuthService } from '../auth/auth.service';
+import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
 import { PrismaService } from '../prisma/prisma.service';
+import LocationUtil from '../utils/location.util';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
 import { CategoryEntry } from './dto/request/category-entry.dto';
 import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
-import { AuthService } from '../auth/auth.service';
-import { Request } from 'express';
-import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
-import { GraffitiResponseDto } from './dto/response/graffiti-response.dto';
 import { GraffitiEntity } from './entities/graffiti.entity';
 
-const EARTH_RADIUS_KM = 6371; // Earth's radius in kilometers
+const EARTH_RADIUS = 6371e3;
+const EARTH_RADIUS_KM = 6371;
 
 @Injectable()
 export class GraffitiService {
@@ -333,62 +334,45 @@ export class GraffitiService {
 		});
 	}
 
-	async calculateDistance(
-		lat1: string,
-		lon1: string,
-		lat2: string,
-		lon2: string,
-	) {
-		const latitude1 = Number(lat1);
-		const longitude1 = Number(lon1);
-		const latitude2 = Number(lat2);
-		const longitude2 = Number(lon2);
-
-		let grafiti: Graffiti[] = await this.prisma.graffiti.findMany();
-		const latDiff = this.toRadians(latitude2 - latitude1);
-		const lonDiff = this.toRadians(longitude2 - longitude1);
-		const a =
-			Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-			Math.cos(this.toRadians(latitude1)) *
-				Math.cos(this.toRadians(latitude2)) *
-				Math.sin(lonDiff / 2) *
-				Math.sin(lonDiff / 2);
-		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		return EARTH_RADIUS_KM * c;
-	}
-
-	// Convert degrees to radians
-	toRadians(degrees: number): number {
-		return degrees * (Math.PI / 180);
-	}
-
-	// Find the nearest neighbor graffiti to the given coordinates
-	async findNearestNeighbor(
-		graffitiList: (Graffiti & {
-			photos: GraffitiPhoto[];
-		})[],
-		lat: string,
-		lon: string,
-	) {
+	async findNearbyGraffiti(userLatitude: string, userLongitude: string) {
 		// Initialize the nearest neighbors array with the first graffiti in the list
-		let nearestNeighbors: (Graffiti & {
-			photos: GraffitiPhoto[];
-		})[] = [graffitiList[0]];
+		let entities: GraffitiEntity[] = await this.prisma.graffiti.findMany({
+			include: { photos: true },
+		});
 
-		// Loop through the rest of the graffiti list and compare distances
-		for (let i = 1; i < graffitiList.length; i++) {
-			const graffiti = graffitiList[i];
-			const distance = await this.calculateDistance(
-				graffiti.latitude,
-				graffiti.longitude,
-				lat,
-				lon,
+		let graffitiCloserThanOneKm = entities.filter(async (graffitiEntity) => {
+			let distance = LocationUtil.calculateDistanceBetweenCoordinates(
+				userLatitude,
+				userLongitude,
+				graffitiEntity.latitude,
+				graffitiEntity.longitude,
 			);
-			if (distance >= 1) {
-				nearestNeighbors.push(graffiti);
-			}
+			let distanceInMeters = distance * 1000;
+			distanceInMeters = Math.round(distanceInMeters);
+			graffitiEntity.distance = distanceInMeters;
+			return distanceInMeters < 1000;
+		});
+
+		if (graffitiCloserThanOneKm.length <= 10) {
+			return graffitiCloserThanOneKm;
 		}
 
-		return nearestNeighbors;
+		let sortedGraffiti = graffitiCloserThanOneKm.sort(
+			(a: GraffitiEntity, b: GraffitiEntity) => {
+				if (!a.distance) {
+					if (!b.distance) {
+						return 0;
+					}
+					return 1;
+				}
+				if (!b.distance) {
+					return -1;
+				}
+				return a.distance - b.distance;
+			},
+		);
+		let nearestGraffiti = sortedGraffiti.slice(0, 10);
+
+		return nearestGraffiti;
 	}
 }

@@ -72,4 +72,11 @@ export class GraffitiResponseDto {
 		],
 	})
 	photos: GraffitiPhotoResponseDto[];
+
+	@ApiProperty({
+		description: 'The distance of the graffiti post from the user in meters',
+		required: false,
+		example: 150,
+	})
+	distance?: number;
 }

@@ -43,4 +43,6 @@ export class GraffitiEntity implements Graffiti {
 
 	@ApiProperty()
 	artists?: ArtistToGraffiti[];
+	@ApiProperty()
+	distance?: number;
 }
