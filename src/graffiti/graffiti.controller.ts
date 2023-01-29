@@ -10,14 +10,14 @@ import {
 	UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
 import { CategoryEntry } from './dto/request/category-entry.dto';
 import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
 import { GraffitiService } from './graffiti.service';
 import GraffitiMapper from './mapper/GraffitiMapper';
-import { Request } from 'express';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @ApiTags('graffiti')
 @Controller('api/v1/graffiti')
@@ -44,22 +44,22 @@ export class GraffitiController {
 		let entities = await this.graffitiService.findAll();
 		return GraffitiMapper.toResponses(entities);
 	}
-	@Get()
+	@Get('nearby/:latitude/:longitude')
 	@ApiOperation({
-		summary: 'Find nearest graffiti posts',
+		summary: 'Find graffiti posts which are closest to the given coordinates',
 	})
-	async findNearestGraffiti(
-		@Param() latitude: string,
-		@Param() longitude: string,
+	async findNearbyGraffiti(
+		@Param('latitude') latitude: string,
+		@Param('longitude') longitude: string,
 	) {
-		let graffitis = await this.graffitiService.findAll();
-		let entities = await this.graffitiService.findNearestNeighbor(
-			graffitis,
+		let entities = await this.graffitiService.findNearbyGraffiti(
 			latitude,
 			longitude,
 		);
 
-		return GraffitiMapper.toResponses(entities);
+		let responses = GraffitiMapper.toResponses(entities);
+		console.log('responses: ', responses);
+		return responses;
 	}
 
 	@Get('/filtered')
