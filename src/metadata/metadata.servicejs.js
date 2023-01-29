@@ -1,11 +1,10 @@
 import fs from 'fs';
 import sharp from 'sharp';
+import { v4 as uuidv4 } from 'uuid';
 const piexif = require('piexifjs');
 
 export class MetadataServiceJS {
 	constructor() {}
-
-	getMetadata = async () => {};
 
 	removeMetadata = async (file) => {
 		const getBase64DataFromJpegFile = (filename) =>
@@ -18,12 +17,10 @@ export class MetadataServiceJS {
 				console.log('exif: ', metadata.exif);
 				return metadata.orientation;
 			});
+		let tempFileName = `temp_${uuidv4()}.jpg`;
+		await sharp(file.buffer).toFile(`./${tempFileName}`);
 
-		await sharp(file.buffer).toFile('src/metadata/temp.jpg');
-
-		// let fd = fs.openSync('temp.jpg', 'w');
-		fs.linkSync('src/metadata/temp.jpg', 'temp.jpg');
-		const imageData = getBase64DataFromJpegFile('temp.jpg');
+		const imageData = getBase64DataFromJpegFile(`./${tempFileName}`);
 		const scrubbedData = piexif.remove(imageData);
 		let tempBuffer = Buffer.from(scrubbedData, 'binary');
 		console.log('orientation', orientation);
@@ -32,19 +29,21 @@ export class MetadataServiceJS {
 				orientation: orientation,
 			})
 			.toBuffer();
-		// fs.writeFileSync('./scrubbed.png', fileBuffer);
 
-		if (fs.existsSync('temp.jpg')) {
-			fs.unlinkSync('temp.jpg');
-			fs.unlink('src/metadata/temp.jpg', (err) => {
-				if (err) throw err;
-				console.log('temp/jpg deleted');
-			});
+		if (fs.existsSync(`./${tempFileName}`)) {
+			fs.unlinkSync(`./${tempFileName}`);
+			// fs.unlink(`./${tempFileName}`, (err) => {
+			// 	if (err) {
+			// 		console.log(`Error deleting ${tempFileName}:`);
+			// 		console.error(err);
+			// 	} else {
+			// 		console.log(`${tempFileName} was deleted`);
+			// 	}
+			// });
 		}
 
 		return fileBuffer;
 	};
-	calculatePictureScore = async () => {
-		return { name: 'PictureScore' };
-	};
 }
+
+// fs.writeFileSync('./scrubbed.png', fileBuffer);

@@ -79,13 +79,15 @@ async function bootstrap() {
 		],
 	});
 
+	let sessionSecret = process.env.EXPRESS_SESSION_SECRET || 'keyboard-cat';
+
 	SwaggerModule.setup('api', app, document);
 
 	// ### Cookie session
 	// app.use(
 	// 	session({
 	// 		name: 'session',
-	// 		secret: 'keyboard',
+	// 		secret: sessionSecret,
 	// 		maxAge: 24 * 60 * 60 * 1000, // 24 hours
 	// 		sameSite: 'none',
 	// 	}),
@@ -95,7 +97,7 @@ async function bootstrap() {
 	// ### Express session
 	app.use(
 		session({
-			secret: 'keyboard cat',
+			secret: sessionSecret,
 			resave: false,
 			saveUninitialized: false,
 			cookie: {

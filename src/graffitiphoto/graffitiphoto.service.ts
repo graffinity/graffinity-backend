@@ -1,12 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { Request } from 'express';
 import sharp from 'sharp';
 import { AuthService } from '../auth/auth.service';
-import { MetadataServiceJS } from '../metadata/metadata.servicejs';
+import { MetadataService } from '../metadata/metadata.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
+import { GraffitiPhoto, Likes } from '@prisma/client';
+import { GraffitiPhotoEntity } from './entities/graffitiphoto.entity';
 
 type File = Express.Multer.File;
 
@@ -15,7 +21,7 @@ export class GraffitiPhotoService {
 	constructor(
 		private prisma: PrismaService,
 		private S3Service: S3Service,
-		private MetadataService: MetadataServiceJS,
+		private metadataService: MetadataService,
 		private authService: AuthService,
 	) {}
 
@@ -35,12 +41,14 @@ export class GraffitiPhotoService {
 			throw new UnauthorizedException('User is not logged in');
 		}
 
-		file.buffer = await this.MetadataService.removeMetadata(file);
-		let md = await sharp(file.buffer).metadata();
-		console.log('metadata111:', md);
-		let exif = md.exif;
+		let metadata = await this.metadataService.getMetadata(file);
 
-		console.log('exif111: ', exif);
+		let localPictureScore = await this.metadataService.calculatePictureScore(
+			metadata,
+		);
+		console.log('localPictureScore: ', localPictureScore);
+
+		file.buffer = await this.metadataService.removeMetadata(file);
 
 		let filenameEnd = mimetypes[file.mimetype];
 		if (filenameEnd) {
@@ -54,6 +62,7 @@ export class GraffitiPhotoService {
 			create: {
 				url: response.Location,
 				addedAt: createGraffitiPhotoDto.addedAt,
+				pictureScore: localPictureScore,
 				user: {
 					connect: {
 						id: user.userId,
@@ -86,7 +95,9 @@ export class GraffitiPhotoService {
 	}
 
 	async findAll() {
-		return await this.prisma.graffitiPhoto.findMany();
+		let entities = await this.prisma.graffitiPhoto.findMany();
+
+		return entities;
 	}
 
 	async findOne(id: number) {
@@ -139,6 +150,19 @@ export class GraffitiPhotoService {
 			throw new UnauthorizedException('User does not exist');
 		}
 
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+			include: {
+				likes: true,
+			},
+		});
+
+		if (entity.likes.find((like) => like.userId === user.userId)) {
+			throw new BadRequestException('User already liked this photo');
+		}
+
 		return await this.prisma.graffitiPhoto.update({
 			where: {
 				id: id,
@@ -166,6 +190,19 @@ export class GraffitiPhotoService {
 			throw new UnauthorizedException('User does not exist');
 		}
 
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+			include: {
+				likes: true,
+			},
+		});
+
+		if (!entity.likes.find((like) => like.userId === user.userId)) {
+			throw new BadRequestException('User has not liked this photo');
+		}
+
 		return await this.prisma.graffitiPhoto.update({
 			where: {
 				id: id,
@@ -184,6 +221,18 @@ export class GraffitiPhotoService {
 				likes: true,
 			},
 		});
+	}
+
+	async findLikesByPhotoId(id: number) {
+		let entity = await this.prisma.graffitiPhoto.findUniqueOrThrow({
+			where: {
+				id: id,
+			},
+			include: {
+				likes: true,
+			},
+		});
+		return entity.likes;
 	}
 
 	async delete(id: number, request: Request) {
@@ -252,6 +301,67 @@ export class GraffitiPhotoService {
 
 		return entity.likes.length > 0;
 	}
+
+	sortByPictureScore(entities: GraffitiPhotoEntity[]) {
+		let sortedByPictureScore = entities.sort((photo1, photo2) => {
+			if (photo1.pictureScore === null) {
+				if (photo2.pictureScore === null) {
+					return 0;
+				}
+				return 1;
+			} else if (photo2.pictureScore === null) {
+				if (photo1.pictureScore === null) {
+					return 0;
+				}
+				return -1;
+			}
+			return photo2.pictureScore - photo1.pictureScore;
+		});
+
+		return sortedByPictureScore;
+	}
+
+	sortByLikeCount(entities: GraffitiPhotoEntity[]) {
+		let sortedByLikeCount = entities.sort((photo1, photo2) => {
+			if (photo1.likes?.length === 0 || !photo1.likes?.length) {
+				if (photo2.likes?.length === 0) {
+					return 0;
+				}
+				return 1;
+			}
+			if (photo2.likes?.length === 0 || !photo2.likes?.length) {
+				if (photo1.likes?.length === 0) {
+					return 0;
+				}
+				return -1;
+			}
+			return photo2.likes.length - photo1.likes.length;
+		});
+
+		return sortedByLikeCount;
+	}
+
+	sortGraffitiPhotos = async (photos: GraffitiPhoto[]) => {
+		let promise = photos.map(async (photo) => {
+			let likes = await this.findLikesByPhotoId(photo.id);
+
+			let graffitiPhotoEntity: GraffitiPhotoEntity = {
+				...photo,
+				likes: likes,
+			};
+			return graffitiPhotoEntity;
+		});
+
+		let photosWithLikes = await Promise.all(promise);
+
+		console.log('step 1: ', photosWithLikes);
+		let sortedByPictureScore = this.sortByPictureScore(photosWithLikes);
+		console.log('step 2: ', sortedByPictureScore);
+		let sortedByLikeCount = this.sortByLikeCount(sortedByPictureScore);
+		console.log('step 3: ', sortedByLikeCount);
+
+		return sortedByLikeCount;
+	};
 }
 
 //   Image Extension   MIME Type

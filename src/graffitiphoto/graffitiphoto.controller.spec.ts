@@ -1,14 +1,13 @@
+import { ConfigModule } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { AuthService } from '../auth/auth.service';
+import { MetadataService } from '../metadata/metadata.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
+import { UserService } from '../user/user.service';
 import { GraffitiPhotoController } from './graffitiphoto.controller';
 import { GraffitiPhotoService } from './graffitiphoto.service';
-import { MetadataService } from '../metadata/metadata.service';
-import { MetadataServiceJS } from '../metadata/metadata.servicejs';
-import { ConfigModule } from '@nestjs/config';
-import { AuthService } from '../auth/auth.service';
-import { UserService } from '../user/user.service';
-import { JwtService } from '@nestjs/jwt';
 
 describe('GraffitiPhotoController', () => {
 	let controller: GraffitiPhotoController;
@@ -22,7 +21,6 @@ describe('GraffitiPhotoController', () => {
 				GraffitiPhotoService,
 				PrismaService,
 				MetadataService,
-				MetadataServiceJS,
 				AuthService,
 				UserService,
 				JwtService,

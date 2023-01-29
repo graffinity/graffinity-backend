@@ -1,10 +1,10 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
 }
 
 enum GraffitiStatus {
@@ -12,164 +12,196 @@ enum GraffitiStatus {
   PENDING
   APPROVED
   REJECTED
-}
 
-model Graffiti {
-  id          Int                  @id @default(autoincrement())
-  name        String               @unique
-  description String
-  latitude    String
-  longitude   String
-  address     String
-  status      GraffitiStatus       @default(SUBMITTED)
-  createdAt   DateTime             @default(now())
-  authorId    Int
-  artists     ArtistToGraffiti[]
-  categories  CategoryToGraffiti[]
-  comment     Comment[]
-  author      User                 @relation(fields: [authorId], references: [id])
-  photos      GraffitiPhoto[]
-  reports     Report[]
-  tags        TagToGraffiti[]
-}
-
-model Category {
-  id        Int                  @id @default(autoincrement())
-  name      String               @unique
-  graffitis CategoryToGraffiti[]
-}
-
-model CategoryToGraffiti {
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  graffitiId Int
-
-  @@id([graffitiId, categoryId])
-}
-
-model Comment {
-  id         Int      @id @default(autoincrement())
-  body       String
-  createdAt  DateTime @default(now())
-  userId     Int
-  graffitiId Int
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  user       User     @relation(fields: [userId], references: [id])
-}
-
-model Email {
-  id       Int      @id @default(autoincrement())
-  dateSent DateTime @default(now())
-  subject  String
-  body     String
-  status   String
-}
-
-model EmailTemplate {
-  name    String
-  id      Int    @id @default(autoincrement())
-  subject String
-  body    String
-}
-
-model Tag {
-  id          Int             @id @default(autoincrement())
-  name        String          @unique
-  description String
-  graffitis   TagToGraffiti[]
-}
-
-model TagToGraffiti {
-  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  graffitiId Int
-  tag        Tag      @relation(fields: [tagId], references: [id])
-  tagId      Int
-
-  @@id([graffitiId, tagId])
-}
-
-model GraffitiPhoto {
-  id           Int      @id @default(autoincrement())
-  graffitiId   Int
-  graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
-  url          String   @unique
-  addedAt      DateTime @default(now())
-  userId       Int
-  pictureScore Int?
-  user         User     @relation(fields: [userId], references: [id])
-  likes        Likes[]
+  @@map("graffiti_status")
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
-  email          String          @unique
-  password       String
+  id             Int             @id @default(autoincrement()) @db.Integer
   name           String
   lastname       String
+  email          String          @unique
   username       String          @unique
-  refreshToken   String?
+  password       String
+  refreshToken   String?         @map("refresh_token")
   comment        Comment[]
   posts          Graffiti[]
   graffitiPhotos GraffitiPhoto[]
   reports        Report[]
   likes          Likes[]
-  // roles          RoleToUser[]
+  roles          RoleToUser[]
+
+  @@map("user")
+}
+
+model Graffiti {
+  id          Int                  @id @default(autoincrement()) @db.Integer
+  name        String               @unique
+  description String
+  latitude    String
+  longitude   String
+  address     String?
+  author      User                 @relation(fields: [authorId], references: [id])
+  status      GraffitiStatus       @default(SUBMITTED)
+  authorId    Int                  @map("user_id")
+  createdAt   DateTime             @default(now()) @map("created_at")
+  artists     ArtistToGraffiti[]
+  categories  CategoryToGraffiti[]
+  comment     Comment[]
+  photos      GraffitiPhoto[]
+  reports     Report[]
+  tags        TagToGraffiti[]
+
+  @@index([latitude, longitude], name: "location")
+  @@map("graffiti")
+}
+
+model Category {
+  id        Int                  @id @default(autoincrement()) @db.Integer
+  name      String               @unique
+  graffitis CategoryToGraffiti[]
+
+  @@map("category")
+}
+
+model CategoryToGraffiti {
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int      @map("category_id")
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  graffitiId Int      @map("graffiti_id")
+
+  @@unique([categoryId, graffitiId])
+  @@map("category_to_graffiti")
+}
+
+model Comment {
+  id         Int      @id() @default(autoincrement()) @db.Integer
+  body       String
+  createdAt  DateTime @default(now()) @map("created_at")
+  userId     Int      @map("user_id")
+  user       User     @relation(fields: [userId], references: [id])
+  graffitiId Int      @map("graffiti_id")
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+
+  @@map("comment")
+}
+
+model Email {
+  id       Int      @id @default(autoincrement()) @db.Integer
+  dateSent DateTime @default(now()) @map("date_sent") @db.Timestamp
+  subject  String
+  body     String
+  status   String
+
+  @@map("email")
+}
+
+model EmailTemplate {
+  id      Int    @id @default(autoincrement()) @db.Integer
+  name    String
+  subject String
+  body    String
+
+  @@map("email_template")
+}
+
+model Tag {
+  id          Int             @id @default(autoincrement()) @db.Integer
+  name        String          @unique
+  description String
+  graffitis   TagToGraffiti[]
+
+  @@map("tag")
+}
+
+model TagToGraffiti {
+  graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
+  graffitiId Int      @map("graffiti_id")
+  tag        Tag      @relation(fields: [tagId], references: [id])
+  tagId      Int      @map("tag_id")
+
+  @@unique([graffitiId, tagId])
+  @@map("tag_to_graffiti")
+}
+
+model GraffitiPhoto {
+  id           Int      @id @default(autoincrement()) @db.Integer
+  graffitiId   Int      @map("graffiti_id")
+  graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
+  userId       Int      @map("user_id")
+  user         User     @relation(fields: [userId], references: [id])
+  url          String   @unique
+  addedAt      DateTime @default(now()) @map("added_at")
+  pictureScore Int?     @map("picture_score")
+  likes        Likes[]
+
+  @@map("graffiti_photo")
 }
 
 model Artist {
-  id        Int                @id @default(autoincrement())
+  id        Int                @id @default(autoincrement()) @db.Integer
   name      String             @unique
   surname   String
   graffitis ArtistToGraffiti[]
+
+  @@map("artist")
 }
 
 model ArtistToGraffiti {
   graffiti   Graffiti @relation(fields: [graffitiId], references: [id])
-  graffitiId Int
+  graffitiId Int      @map("graffiti_id")
   artist     Artist   @relation(fields: [artistId], references: [id])
-  artistId   Int
+  artistId   Int      @map("artist_id")
 
-  @@id([graffitiId, artistId])
+  @@unique([graffitiId, artistId])
+  @@map("artist_to_graffiti")
 }
 
 model Report {
-  id           Int      @id @default(autoincrement())
-  graffitiId   Int
-  userId       Int
-  createdAt    DateTime @default(now())
-  reportReason String
+  id           Int      @id @default(autoincrement()) @db.Integer
+  reportReason String   @map("report_reason")
   status       String
   comment      String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  graffitiId   Int      @map("graffiti_id")
   graffiti     Graffiti @relation(fields: [graffitiId], references: [id])
+  userId       Int      @map("user_id")
   user         User     @relation(fields: [userId], references: [id])
+
+  @@map("report")
 }
 
 model Likes {
   user            User          @relation(fields: [userId], references: [id])
-  userId          Int
+  userId          Int           @map("user_id")
   graffitiPhoto   GraffitiPhoto @relation(fields: [graffitiPhotoId], references: [id])
-  graffitiPhotoId Int
+  graffitiPhotoId Int           @map("graffiti_photo_id")
 
-  @@id([userId, graffitiPhotoId])
+  @@unique([userId, graffitiPhotoId])
+  @@map(name: "likes")
 }
 
-// enum RoleEnum {
-//   ADMIN
-//   USER
-// }
+enum RoleEnum {
+  ADMIN
+  USER
 
-// model Role {
-//   id    Int          @id @default(autoincrement())
-//   name  RoleEnum     @unique
-//   users RoleToUser[]
-// }
+  @@map("role_enum")
+}
 
-// model RoleToUser {
-//   user   User @relation(fields: [userId], references: [id])
-//   userId Int
-//   role   Role @relation(fields: [roleId], references: [id])
-//   roleId Int
+model Role {
+  id    Int          @id @default(autoincrement()) @db.Integer
+  name  RoleEnum     @unique
+  users RoleToUser[]
 
-//   @@id([userId, roleId])
-// }
+  @@map("role")
+}
+
+model RoleToUser {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+  role   Role @relation(fields: [roleId], references: [id])
+  roleId Int  @map("role_id")
+
+  @@unique([userId, roleId])
+  @@map("role_to_user")
+}

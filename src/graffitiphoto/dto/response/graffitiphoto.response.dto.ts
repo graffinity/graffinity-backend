@@ -40,7 +40,15 @@ export class GraffitiPhotoResponseDto {
 
 	@ApiProperty({
 		description: 'The likes of a graffiti photo',
+		required: false,
 		example: 1,
 	})
 	likes?: Likes[];
+
+	@ApiProperty({
+		description: 'The likes count of a graffiti photo',
+		required: false,
+		example: 1,
+	})
+	likesCount?: number;
 }

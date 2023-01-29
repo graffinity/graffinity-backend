@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { GraffitiPhotoResponseDto } from '../../../graffitiphoto/dto/response/graffitiphoto.response.dto';
-import GraffitiStatus from '../../entities/graffiti-status.enum';
+import { GraffitiStatus } from '@prisma/client';
 
 export class GraffitiResponseDto {
 	@ApiProperty({
@@ -37,10 +37,11 @@ export class GraffitiResponseDto {
 
 	@ApiProperty({
 		type: String,
+
 		description: 'The address of a graffiti',
 		example: 'Berlin, Germany',
 	})
-	address: string;
+	address: string | null;
 
 	@ApiProperty({
 		type: GraffitiStatus,

@@ -1,14 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../prisma/prisma.service';
-import S3service from '../s3/S3service';
-import { GraffitiPhotoService } from './graffitiphoto.service';
-import { MetadataServiceJS } from '../metadata/metadata.servicejs';
-import { MetadataService } from '../metadata/metadata.service';
 import { ConfigModule } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient } from '@prisma/client';
 import { AuthService } from '../auth/auth.service';
+import { MetadataService } from '../metadata/metadata.service';
+import { PrismaService } from '../prisma/prisma.service';
+import S3service from '../s3/S3service';
 import { UserService } from '../user/user.service';
-import { JwtService } from '@nestjs/jwt';
+import { GraffitiPhotoService } from './graffitiphoto.service';
 
 describe('GraffitiphotoService', () => {
 	let service: GraffitiPhotoService;
@@ -20,7 +19,6 @@ describe('GraffitiphotoService', () => {
 				S3service,
 				GraffitiPhotoService,
 				PrismaService,
-				MetadataServiceJS,
 				MetadataService,
 				AuthService,
 				UserService,

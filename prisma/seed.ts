@@ -3,6 +3,7 @@ import { CreateGraffitiDto } from '../src/graffiti/dto/request/create-graffiti.d
 import { GraffitiPhotoController } from '../src/graffitiphoto/graffitiphoto.controller';
 import { DataFactory } from './data/util/DataFactory';
 import { GraffitiAndGraffitiPhotoCreateDto } from './data/util/GraffitiAndGraffitiPhotoEntity';
+import { CreateUserDto } from '../src/user/dto/request/create-user.dto';
 
 export const prisma = new PrismaClient();
 let testDataFactory: DataFactory = DataFactory.getInstance();
@@ -35,11 +36,14 @@ export async function main() {
 	let user = await testDataFactory.getValidUser();
 	await prisma.user.upsert({
 		where: { username: user.username },
-		update: {
+		update: {},
+		create: {
+			name: user.name,
+			lastname: user.lastname,
 			username: user.username,
 			email: user.email,
+			password: user.password,
 		},
-		create: user,
 	});
 
 	let userWithHashedPassword =
@@ -47,7 +51,13 @@ export async function main() {
 	await prisma.user.upsert({
 		where: { username: userWithHashedPassword.username },
 		update: {},
-		create: userWithHashedPassword,
+		create: {
+			name: userWithHashedPassword.name,
+			lastname: userWithHashedPassword.lastname,
+			username: userWithHashedPassword.username,
+			email: userWithHashedPassword.email,
+			password: userWithHashedPassword.password,
+		},
 	});
 
 	console.log('User data seed success!');
@@ -61,7 +71,9 @@ export async function main() {
 		await prisma.category.upsert({
 			where: { name: category.name },
 			update: {},
-			create: category,
+			create: {
+				name: category.name,
+			},
 		});
 	});
 
@@ -207,6 +219,8 @@ export async function main() {
 			return finalRes;
 		},
 	);
+
+	await Promise.all(res2);
 
 	console.log('Graffiti and photo successfully connected.');
 	console.log('Finished...');

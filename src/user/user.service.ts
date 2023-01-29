@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import moment from 'moment';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
 import { LikesEntry } from './dto/request/likesEntry.dto';
 import { UpdateUserDto } from './dto/request/update-user.dto';
 import { UserInfoResponse } from './dto/response/user-info-response.dto';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -19,7 +20,16 @@ export class UserService {
 		if (existsByEmail || existsByUsername) {
 			throw new Error('User already exists');
 		}
-		return await this.prisma.user.create({ data: createUserDto });
+		let user = await this.prisma.user.create({
+			data: {
+				name: createUserDto.name,
+				lastname: createUserDto.lastname,
+				username: createUserDto.username,
+				email: createUserDto.email,
+				password: createUserDto.password,
+			},
+		});
+		return user;
 	}
 
 	async findAll() {
@@ -27,11 +37,16 @@ export class UserService {
 	}
 
 	async findById(id: number) {
-		return await this.prisma.user.findUnique({
+		let user = await this.prisma.user.findUnique({
 			where: {
 				id: id,
 			},
 		});
+
+		if (!user) {
+			throw new NotFoundException(`User #${id} not found`);
+		}
+		return user;
 	}
 
 	async findByUsername(username: string) {
@@ -56,7 +71,7 @@ export class UserService {
 			},
 		});
 
-		if (res) {
+		if (res !== null && res !== undefined && res) {
 			return true;
 		}
 		return false;

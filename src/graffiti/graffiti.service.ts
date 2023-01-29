@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Graffiti, GraffitiPhoto } from '@prisma/client';
+import { Graffiti, GraffitiPhoto, GraffitiStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { ArtistEntry } from './dto/request/artist-entry.dto';
 import { CategoryEntry } from './dto/request/category-entry.dto';
@@ -7,6 +7,9 @@ import { CreateGraffitiDto } from './dto/request/create-graffiti.dto';
 import { UpdateGraffitiDto } from './dto/request/update-graffiti.dto';
 import { AuthService } from '../auth/auth.service';
 import { Request } from 'express';
+import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
+import { GraffitiResponseDto } from './dto/response/graffiti-response.dto';
+import { GraffitiEntity } from './entities/graffiti.entity';
 
 const EARTH_RADIUS_KM = 6371; // Earth's radius in kilometers
 
@@ -15,6 +18,7 @@ export class GraffitiService {
 	constructor(
 		private prisma: PrismaService,
 		private authService: AuthService,
+		private graffitiPhotoService: GraffitiPhotoService,
 	) {}
 
 	async create(createGraffitiDto: CreateGraffitiDto, request: Request) {
@@ -46,7 +50,14 @@ export class GraffitiService {
 	}
 
 	async findAll() {
-		return await this.prisma.graffiti.findMany({ include: { photos: true } });
+		let entities = await this.prisma.graffiti.findMany({
+			include: { photos: true },
+		});
+		entities = entities.map((entity) => {
+			entity.photos;
+			return entity;
+		});
+		return entities;
 	}
 
 	async findPhotosById(id: number) {
@@ -57,8 +68,8 @@ export class GraffitiService {
 		});
 	}
 
-	async findOne(id: number) {
-		let entity = await this.prisma.graffiti.findUniqueOrThrow({
+	async findById(id: number) {
+		let graffiti = await this.prisma.graffiti.findUniqueOrThrow({
 			where: {
 				id: id,
 			},
@@ -66,6 +77,14 @@ export class GraffitiService {
 				photos: true,
 			},
 		});
+		let status: GraffitiStatus = graffiti.status;
+		let entity: GraffitiEntity = {
+			...graffiti,
+			photos: await this.graffitiPhotoService.sortGraffitiPhotos(
+				graffiti.photos,
+			),
+		};
+
 		return entity;
 	}
 

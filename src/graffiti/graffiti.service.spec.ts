@@ -1,6 +1,11 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Graffiti, GraffitiStatus, PrismaClient } from '@prisma/client';
+import {
+	Graffiti,
+	GraffitiPhoto,
+	GraffitiStatus,
+	PrismaClient,
+} from '@prisma/client';
 import { DeepMockProxy } from 'jest-mock-extended';
 import { DataFactory } from '../../prisma/data/util/DataFactory';
 import { MockContext, createMockContext } from '../prisma/context';
@@ -12,6 +17,10 @@ import { UserModule } from '../user/user.module';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { Request } from 'express';
+import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
+import S3Service from '../s3/S3service';
+import { MetadataService } from '../metadata/metadata.service';
+import { GraffitiEntity } from './entities/graffiti.entity';
 
 describe('GraffitiService', () => {
 	let service: GraffitiService;
@@ -32,6 +41,9 @@ describe('GraffitiService', () => {
 				AuthService,
 				JwtService,
 				UserService,
+				GraffitiPhotoService,
+				MetadataService,
+				S3Service,
 			],
 		})
 			.overrideProvider(PrismaService)
@@ -64,7 +76,9 @@ describe('GraffitiService', () => {
 	});
 
 	it('should return all graffiti', async () => {
-		let data: Graffiti[] = [
+		let data: (Graffiti & {
+			photos: GraffitiPhoto[];
+		})[] = [
 			{
 				id: 1,
 				name: 'test',
@@ -75,13 +89,14 @@ describe('GraffitiService', () => {
 				address: 'test',
 				authorId: 1,
 				createdAt: new Date(),
+				photos: [],
 			},
 		];
 		prismaService.graffiti.findMany.mockResolvedValue(data);
 		const response = await service.findAll();
 
 		expect(response).toBeDefined();
-		expect(response).toBe(data);
+		expect(response).toStrictEqual(data);
 	});
 });
 
