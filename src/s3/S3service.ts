@@ -34,21 +34,18 @@ export class S3Service {
 		dataBuffer: Buffer,
 	) => {
 		try {
+			let newFilename = `${uuidv4()}.png`;
 			const params: S3.Types.PutObjectRequest = {
 				Bucket: bucket,
-				Key: `${fileName}_${uuidv4()}`,
+				Key: newFilename,
 				Body: dataBuffer,
 				ACL: 'public-read',
 				ContentType: mimetype,
 				ContentDisposition: 'inline',
 			};
-			console.log(params);
 
 			let s3Response = await this.s3.upload(params).promise();
 
-			console.log(s3Response);
-			let url = s3Response.Location;
-			console.log(url);
 			return s3Response;
 		} catch (e) {
 			throw new Error(e);

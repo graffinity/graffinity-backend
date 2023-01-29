@@ -22,14 +22,7 @@ export class SignupStrategy extends PassportStrategy(Strategy, 'signup') {
 			passReqToCallback: true,
 		});
 	}
-
-	// name: string,
-	// lastname: string,
-	// username: string,
-	// email: string,
-	// password: string,
 	async validate(req: any): Promise<any> {
-		console.log('validate: ', req);
 		let hash = await this.authService.hashPassword(req.body.password);
 		let user = await this.userService
 			.create({

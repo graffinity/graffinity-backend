@@ -188,7 +188,7 @@ export async function main() {
 
 			//await Promise.all(res2);
 
-			console.log('Graffiti created :)');
+			// console.log('Graffiti created :)');
 
 			let res3 = graffitiAndPhoto.graffitiPhotos.map(async (photo) => {
 				photo.graffitiId = createdGraffiti.id;
@@ -213,7 +213,7 @@ export async function main() {
 
 			let result = await Promise.all(res3);
 
-			console.log('Graffiti photo data seed success!');
+			// console.log('Graffiti photo data seed success!');
 
 			let finalRes = { createdGraffiti, result };
 			return finalRes;

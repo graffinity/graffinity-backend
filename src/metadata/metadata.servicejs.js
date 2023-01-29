@@ -13,8 +13,6 @@ export class MetadataServiceJS {
 		let orientation = await sharp(file.buffer)
 			.metadata()
 			.then((metadata) => {
-				console.log('metadata', metadata);
-				console.log('exif: ', metadata.exif);
 				return metadata.orientation;
 			});
 		let tempFileName = `temp_${uuidv4()}.jpg`;
@@ -23,7 +21,6 @@ export class MetadataServiceJS {
 		const imageData = getBase64DataFromJpegFile(`./${tempFileName}`);
 		const scrubbedData = piexif.remove(imageData);
 		let tempBuffer = Buffer.from(scrubbedData, 'binary');
-		console.log('orientation', orientation);
 		let fileBuffer = await sharp(tempBuffer)
 			.withMetadata({
 				orientation: orientation,
@@ -32,18 +29,8 @@ export class MetadataServiceJS {
 
 		if (fs.existsSync(`./${tempFileName}`)) {
 			fs.unlinkSync(`./${tempFileName}`);
-			// fs.unlink(`./${tempFileName}`, (err) => {
-			// 	if (err) {
-			// 		console.log(`Error deleting ${tempFileName}:`);
-			// 		console.error(err);
-			// 	} else {
-			// 		console.log(`${tempFileName} was deleted`);
-			// 	}
-			// });
 		}
 
 		return fileBuffer;
 	};
 }
-
-// fs.writeFileSync('./scrubbed.png', fileBuffer);
