@@ -7,15 +7,13 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import argon2 from 'argon2';
+import { Request } from 'express';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { LoginRequest } from './dto/request/login-request.dto';
-import { SignUpRequest } from './dto/request/signup-request.dto';
 import { JwtPayload } from './types';
 import { Tokens } from './types/tokens.types';
-import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -101,16 +99,16 @@ export class AuthService {
 		return true;
 	}
 
-	// async isLoggedIn(request: any) {
-	// 	return request.user != null;
-	// }
-
 	async isUserLoggedIn(access_token?: string): Promise<boolean> {
 		let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
 		if (access_token) {
-			let isLoggedIn = await this.jwtService.verifyAsync(access_token, {
-				secret: secret,
-			});
+			let isLoggedIn = await this.jwtService
+				.verifyAsync(access_token, {
+					secret: secret,
+				})
+				.catch((err) => {
+					return false;
+				});
 			if (isLoggedIn && isLoggedIn.isLoggedIn && isLoggedIn.userId !== null) {
 				return true;
 			}

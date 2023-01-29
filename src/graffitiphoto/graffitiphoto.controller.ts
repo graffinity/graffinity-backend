@@ -11,7 +11,10 @@ import {
 	UseGuards,
 	UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import {
+	FileFieldsInterceptor,
+	FileInterceptor,
+} from '@nestjs/platform-express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
@@ -41,6 +44,27 @@ export class GraffitiPhotoController {
 		let createGraffitiPhotoDto: CreateGraffitiPhotoDto = JSON.parse(
 			newBody.body,
 		);
+
+		let entity = await this.graffitiPhotoService.create(
+			createGraffitiPhotoDto,
+			file,
+			request,
+		);
+		return GraffitiPhotoMapper.toResponse(entity);
+	}
+	@Post('graffiti/:id/add-photo')
+	@UseInterceptors(FileInterceptor('file'))
+	@UseGuards(JwtAuthGuard)
+	@ApiOperation({ summary: 'Create a GraffitiPhoto' })
+	async createWithParams(
+		@Param('id') id: string,
+		@UploadedFile() file: Express.Multer.File,
+		@Req() request: Request,
+	) {
+		let createGraffitiPhotoDto: CreateGraffitiPhotoDto = {
+			graffitiId: +id,
+			addedAt: new Date(),
+		};
 
 		let entity = await this.graffitiPhotoService.create(
 			createGraffitiPhotoDto,
