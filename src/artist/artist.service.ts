@@ -91,7 +91,6 @@ export class ArtistService {
 				},
 			},
 		});
-		console.log(entity);
 		return entity;
 	}
 

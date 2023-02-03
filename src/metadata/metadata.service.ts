@@ -10,7 +10,7 @@ export class MetadataService extends MetadataServiceJS {
 
 	async getMetadata(file: Express.Multer.File) {
 		let fileMetadata = await sharp(file.buffer).metadata();
-		console.log('fileMetadata', fileMetadata);
+		// console.log('fileMetadata', fileMetadata);
 		return fileMetadata;
 	}
 

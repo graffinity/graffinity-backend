@@ -58,7 +58,6 @@ export class GraffitiController {
 		);
 
 		let responses = GraffitiMapper.toResponses(entities);
-		console.log('responses: ', responses);
 		return responses;
 	}
 

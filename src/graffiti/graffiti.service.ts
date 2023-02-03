@@ -337,24 +337,28 @@ export class GraffitiService {
 			include: { photos: true },
 		});
 
-		let graffitiCloserThanOneKm = entities.filter(async (graffitiEntity) => {
+		let mappedGraffiti = entities.map((graffitiEntity) => {
 			let distance = LocationUtil.calculateDistanceBetweenCoordinates(
 				userLatitude,
 				userLongitude,
 				graffitiEntity.latitude,
 				graffitiEntity.longitude,
 			);
-			let distanceInMeters = distance * 1000;
-			distanceInMeters = Math.round(distanceInMeters);
+			let distanceInMeters = Math.round(distance * 1000);
 			graffitiEntity.distance = distanceInMeters;
-			return distanceInMeters < 1000;
+			return graffitiEntity;
 		});
 
-		if (graffitiCloserThanOneKm.length <= 10) {
-			return graffitiCloserThanOneKm;
+		let closestGraffiti = mappedGraffiti.filter(
+			(graffitiEntity) =>
+				graffitiEntity.distance && graffitiEntity.distance <= 10000,
+		);
+
+		if (closestGraffiti.length <= 10) {
+			return closestGraffiti;
 		}
 
-		let sortedGraffiti = graffitiCloserThanOneKm.sort(
+		let sortedGraffiti = closestGraffiti.sort(
 			(a: GraffitiEntity, b: GraffitiEntity) => {
 				if (!a.distance) {
 					if (!b.distance) {

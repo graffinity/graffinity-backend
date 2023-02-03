@@ -46,7 +46,6 @@ export class GraffitiPhotoService {
 		let localPictureScore = await this.metadataService.calculatePictureScore(
 			metadata,
 		);
-		console.log('localPictureScore: ', localPictureScore);
 
 		file.buffer = await this.metadataService.removeMetadata(file);
 
@@ -353,12 +352,8 @@ export class GraffitiPhotoService {
 		});
 
 		let photosWithLikes = await Promise.all(promise);
-
-		console.log('step 1: ', photosWithLikes);
 		let sortedByPictureScore = this.sortByPictureScore(photosWithLikes);
-		console.log('step 2: ', sortedByPictureScore);
 		let sortedByLikeCount = this.sortByLikeCount(sortedByPictureScore);
-		console.log('step 3: ', sortedByLikeCount);
 
 		return sortedByLikeCount;
 	};
