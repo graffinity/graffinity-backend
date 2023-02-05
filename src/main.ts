@@ -25,8 +25,6 @@ function seedDb() {
 async function bootstrap() {
 	const app: INestApplication = await NestFactory.create(AppModule);
 
-	// app.enableCors(); // Enable CORS for all routes
-
 	// app.enableCors({
 	// 	origin: [
 	// 		'http://localhost:3000',
@@ -54,6 +52,7 @@ async function bootstrap() {
 	// 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	// });
 
+	// app.enableCors(); // Enable CORS for all routes
 	app.useGlobalPipes(new ValidationPipe());
 	dotenv.config({ path: '.env' });
 
