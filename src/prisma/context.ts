@@ -8,6 +8,7 @@ import { ReportService } from '../report/report.service';
 import { AuthService } from '../auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
+import { UserRoleService } from '../userrole/userrole.service';
 
 export type Context = {
 	dataFactory: DataFactory;
@@ -16,6 +17,7 @@ export type Context = {
 	graffitiService: GraffitiService;
 	categoryService: CategoryService;
 	reportService: ReportService;
+	userRoleService: UserRoleService;
 	// Add more services here
 };
 
@@ -29,6 +31,7 @@ export type MockContext = {
 	authService: DeepMockProxy<AuthService>;
 	userService: DeepMockProxy<UserService>;
 	jwtService: DeepMockProxy<JwtService>;
+	userRoleService: DeepMockProxy<UserRoleService>;
 	// Add more services here
 };
 
@@ -43,6 +46,7 @@ export const createMockContext = (): MockContext => {
 		authService: mockDeep<AuthService>(),
 		userService: mockDeep<UserService>(),
 		jwtService: mockDeep<JwtService>(),
+		userRoleService: mockDeep<UserRoleService>(),
 		// Add more services here
 	};
 };

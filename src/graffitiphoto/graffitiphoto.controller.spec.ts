@@ -8,6 +8,7 @@ import { S3Service } from '../s3/S3service';
 import { UserService } from '../user/user.service';
 import { GraffitiPhotoController } from './graffitiphoto.controller';
 import { GraffitiPhotoService } from './graffitiphoto.service';
+import { UserRoleService } from '../userrole/userrole.service';
 
 describe('GraffitiPhotoController', () => {
 	let controller: GraffitiPhotoController;
@@ -22,6 +23,7 @@ describe('GraffitiPhotoController', () => {
 				PrismaService,
 				MetadataService,
 				AuthService,
+				UserRoleService,
 				UserService,
 				JwtService,
 			],

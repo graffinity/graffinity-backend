@@ -21,6 +21,8 @@ import { S3Module } from './s3/S3module';
 import { TagModule } from './tag/tag.module';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
+import { UserRoleModule } from './userrole/userrole.module';
+import { UserRoleService } from './userrole/userrole.service';
 
 @Module({
 	imports: [
@@ -43,6 +45,7 @@ import { UserService } from './user/user.service';
 		ArtistModule,
 		CommentModule,
 		S3Module,
+		UserRoleModule,
 	],
 	controllers: [AppController, FileController],
 	providers: [
@@ -54,6 +57,7 @@ import { UserService } from './user/user.service';
 		UserService,
 		FileService,
 		PrismaService,
+		UserRoleService,
 	],
 	exports: [PrismaService, AppModule, ConfigModule],
 })

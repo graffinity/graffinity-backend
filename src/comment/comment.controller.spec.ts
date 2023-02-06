@@ -1,11 +1,11 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { AuthModule } from '../auth/auth.module';
+import { MockContext, createMockContext } from '../prisma/context';
+import { PrismaService } from '../prisma/prisma.service';
+import { UserRoleService } from '../userrole/userrole.service';
 import { CommentController } from './comment.controller';
 import { CommentService } from './comment.service';
-import { PrismaService } from '../prisma/prisma.service';
-import { AuthService } from '../auth/auth.service';
-import { MockContext, createMockContext } from '../prisma/context';
-import { AuthModule } from '../auth/auth.module';
 
 describe('CommentController', () => {
 	let controller: CommentController;
@@ -18,7 +18,7 @@ describe('CommentController', () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule, AuthModule],
 			controllers: [CommentController],
-			providers: [CommentService, PrismaService],
+			providers: [CommentService, PrismaService, UserRoleService],
 		}).compile();
 
 		controller = module.get<CommentController>(CommentController);

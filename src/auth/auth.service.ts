@@ -37,12 +37,14 @@ export class AuthService {
 
 	async signup(request: any): Promise<Tokens> {
 		let user = request.user;
+		let isUserAdmin = await this.isUserAdminByName(user.username);
 
 		const payload: JwtPayload = {
 			sub: user.id,
 			userId: user.id,
 			username: user.username,
 			email: user.email,
+			isAdmin: isUserAdmin ? true : false,
 			isLoggedIn: true,
 		};
 
@@ -59,7 +61,7 @@ export class AuthService {
 		}
 
 		let payload = this.getPayloadFromUser(user);
-		let tokens = await this.getTokens(payload);
+		let tokens = await this.getTokens(await payload);
 
 		await this.updateRefreshToken(user.id, tokens.refresh_token);
 
@@ -68,12 +70,14 @@ export class AuthService {
 
 	async login2(request: any) {
 		let user = request.user;
+		let isUserAdmin = await this.isUserAdminByName(user.username);
 
 		const payload: JwtPayload = {
 			sub: user.id,
 			userId: user.id,
 			username: user.username,
 			email: user.email,
+			isAdmin: isUserAdmin ? true : false,
 			isLoggedIn: true,
 		};
 
@@ -98,7 +102,12 @@ export class AuthService {
 
 		return true;
 	}
-
+	async isUserAdmin(userId: number) {
+		return await this.userService.isUserAdmin(userId);
+	}
+	async isUserAdminByName(username: string) {
+		return await this.userService.isUserAdminByName(username);
+	}
 	async isUserLoggedIn(access_token?: string): Promise<boolean> {
 		let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
 		if (access_token) {
@@ -197,7 +206,7 @@ export class AuthService {
 		}
 
 		let payload = this.getPayloadFromUser(user);
-		let tokens = await this.getTokens(payload);
+		let tokens = await this.getTokens(await payload);
 		await this.updateRefreshToken(user.id, tokens.refresh_token);
 
 		return tokens;
@@ -239,13 +248,17 @@ export class AuthService {
 		return tokens;
 	}
 
-	getPayloadFromUser(user: User): JwtPayload {
+	async getPayloadFromUser(user: User): Promise<JwtPayload> {
 		let isLoggedIn = user.refreshToken ? true : false;
+
+		let isUserAdmin = await this.isUserAdminByName(user.username);
+
 		let payload: JwtPayload = {
 			sub: user.id,
 			userId: user.id,
 			username: user.username,
 			email: user.email,
+			isAdmin: isUserAdmin ? true : false,
 			isLoggedIn: isLoggedIn,
 		};
 		return payload;

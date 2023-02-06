@@ -6,10 +6,15 @@ import { LikesEntry } from './dto/request/likesEntry.dto';
 import { UpdateUserDto } from './dto/request/update-user.dto';
 import { UserInfoResponse } from './dto/response/user-info-response.dto';
 import { NotFoundError } from 'rxjs';
+import { UserRoleService } from '../userrole/userrole.service';
+import { RoleEnum } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService,
+		private userRoleService: UserRoleService,
+	) {}
 
 	async create(createUserDto: CreateUserDto) {
 		let existsByEmail = await this.usernameOrEmailExists(createUserDto.email);
@@ -20,6 +25,8 @@ export class UserService {
 		if (existsByEmail || existsByUsername) {
 			throw new Error('User already exists');
 		}
+
+		let basicUserRole = await this.userRoleService.findByName(RoleEnum.USER);
 		let user = await this.prisma.user.create({
 			data: {
 				name: createUserDto.name,
@@ -27,6 +34,11 @@ export class UserService {
 				username: createUserDto.username,
 				email: createUserDto.email,
 				password: createUserDto.password,
+				roles: {
+					create: {
+						roleId: basicUserRole?.id || 0,
+					},
+				},
 			},
 		});
 		return user;
@@ -41,12 +53,53 @@ export class UserService {
 			where: {
 				id: id,
 			},
+			include: {
+				roles: true,
+			},
 		});
 
 		if (!user) {
 			throw new NotFoundException(`User #${id} not found`);
 		}
 		return user;
+	}
+
+	async isUserAdminByName(username: string) {
+		let user = await this.prisma.user.findUniqueOrThrow({
+			where: {
+				username: username,
+			},
+			include: {
+				roles: true,
+			},
+		});
+
+		if (!user) {
+			throw new NotFoundException(`User #${username} not found`);
+		}
+
+		let isUserAdmin = user.roles.length > 1;
+
+		return isUserAdmin;
+	}
+
+	async isUserAdmin(userId: number) {
+		let user = await this.prisma.user.findUniqueOrThrow({
+			where: {
+				id: userId,
+			},
+			include: {
+				roles: true,
+			},
+		});
+
+		if (!user) {
+			throw new NotFoundException(`User #${userId} not found`);
+		}
+
+		let isUserAdmin = user.roles.length > 1;
+
+		return isUserAdmin;
 	}
 
 	async findByUsername(username: string) {

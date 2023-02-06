@@ -8,6 +8,10 @@ import { GraffitiController } from './graffiti.controller';
 import { GraffitiModule } from './graffiti.module';
 import { GraffitiService } from './graffiti.service';
 import GraffitiMapper from './mapper/GraffitiMapper';
+import { UserRoleService } from '../userrole/userrole.service';
+import { UserService } from '../user/user.service';
+import { UserRoleModule } from '../userrole/userrole.module';
+import { UserController } from '../user/user.controller';
 
 describe('GraffitiController', () => {
 	let dataFactory: DataFactory = new DataFactory();
@@ -21,10 +25,11 @@ describe('GraffitiController', () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule, GraffitiModule],
 			controllers: [GraffitiController],
-			providers: [GraffitiService, PrismaService],
+			providers: [GraffitiService, PrismaService, UserService, UserRoleService],
 		})
 			.overrideProvider(GraffitiService)
 			.useValue(mockContext.graffitiService)
+
 			.compile();
 
 		controller = module.get<GraffitiController>(GraffitiController);

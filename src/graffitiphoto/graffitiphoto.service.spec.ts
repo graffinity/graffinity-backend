@@ -7,6 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import S3service from '../s3/S3service';
 import { UserService } from '../user/user.service';
 import { GraffitiPhotoService } from './graffitiphoto.service';
+import { UserRoleService } from '../userrole/userrole.service';
 
 describe('GraffitiphotoService', () => {
 	let service: GraffitiPhotoService;
@@ -21,6 +22,7 @@ describe('GraffitiphotoService', () => {
 				AuthService,
 				UserService,
 				JwtService,
+				UserRoleService,
 			],
 		}).compile();
 

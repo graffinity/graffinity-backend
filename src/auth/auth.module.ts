@@ -13,6 +13,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 import { SignupStrategy } from './strategies/signup.strategy';
+import { UserRoleModule } from '../userrole/userrole.module';
+import { UserRoleService } from '../userrole/userrole.service';
 
 @Global()
 @Module({
@@ -20,6 +22,7 @@ import { SignupStrategy } from './strategies/signup.strategy';
 		UserModule,
 		PassportModule,
 		ConfigModule,
+		UserRoleModule,
 		JwtModule.register({
 			secret: jwtConstants.secret,
 			signOptions: { expiresIn: '3600s' },
@@ -35,6 +38,7 @@ import { SignupStrategy } from './strategies/signup.strategy';
 		RefreshTokenStrategy,
 		UserService,
 		JwtService,
+		UserRoleService,
 	],
 	controllers: [AuthController],
 	exports: [AuthService],

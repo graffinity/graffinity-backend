@@ -288,8 +288,12 @@ export class GraffitiService {
 				id: id,
 			},
 		});
-		if (entity.authorId !== user?.userId) {
-			throw new UnauthorizedException('User is not authorized');
+
+		let isUserAdmin = await this.authService.isUserAdmin(user.userId);
+		if (!isUserAdmin) {
+			if (entity.authorId !== user?.userId) {
+				throw new UnauthorizedException('User is not authorized');
+			}
 		}
 
 		return await this.prisma.graffiti.update({
@@ -335,8 +339,11 @@ export class GraffitiService {
 			},
 		});
 
-		if (entity.authorId !== user?.userId) {
-			throw new UnauthorizedException('User is not authorized');
+		let isUserAdmin = await this.authService.isUserAdmin(user.userId);
+		if (!isUserAdmin) {
+			if (entity.authorId !== user?.userId) {
+				throw new UnauthorizedException('User is not authorized');
+			}
 		}
 
 		return await this.prisma.graffiti.delete({

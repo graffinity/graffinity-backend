@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, RoleEnum } from '@prisma/client';
 import { DataFactory } from './data/util/DataFactory';
 import { GraffitiAndGraffitiPhotoCreateDto } from './data/util/GraffitiAndGraffitiPhotoEntity';
 
@@ -9,8 +9,32 @@ export async function main() {
 	console.log('Seeding...');
 
 	// ----------------------------
+	// User Role test data
 
+	let userR = testDataFactory.getBasicUserRole();
+	let adminR = testDataFactory.getAdminUserRole();
+	let userRole = await prisma.userRole.upsert({
+		where: {
+			name: userR.name,
+		},
+		update: {},
+		create: {
+			name: userR.name,
+		},
+	});
+	let adminRole = await prisma.userRole.upsert({
+		where: {
+			name: adminR.name,
+		},
+		update: {},
+		create: {
+			name: adminR.name,
+		},
+	});
+
+	// ----------------------------
 	// User test data
+
 	let users = await testDataFactory.getListofUsersWithHashedPassword();
 	let res1 = users.map(async (user) => {
 		return await prisma.user.upsert({
@@ -24,12 +48,19 @@ export async function main() {
 				username: user.username,
 				email: user.email,
 				password: user.password,
+				roles: {
+					createMany: {
+						data: {
+							roleId: userRole.id,
+						},
+					},
+				},
 			},
 		});
 	});
 
 	await Promise.all(res1);
-
+	let roles = [userRole, adminRole];
 	let user = await testDataFactory.getValidUser();
 	await prisma.user.upsert({
 		where: { username: user.username },
@@ -40,6 +71,13 @@ export async function main() {
 			username: user.username,
 			email: user.email,
 			password: user.password,
+			roles: {
+				createMany: {
+					data: roles.map((role) => ({
+						roleId: role.id,
+					})),
+				},
+			},
 		},
 	});
 
@@ -56,6 +94,13 @@ export async function main() {
 			username: userWithHashedPassword.username,
 			email: userWithHashedPassword.email,
 			password: userWithHashedPassword.password,
+			roles: {
+				createMany: {
+					data: roles.map((role) => ({
+						roleId: role.id,
+					})),
+				},
+			},
 		},
 	});
 
@@ -80,7 +125,7 @@ export async function main() {
 
 	// ----------------------------
 
-	// GraffitiPost test data
+	// Graffiti & GraffitiPhoto test data
 
 	let graffitisAndPhotos: GraffitiAndGraffitiPhotoCreateDto[] =
 		testDataFactory.getGraffitiAndGraffitiPhotoCreateRequests();
@@ -119,8 +164,6 @@ export async function main() {
 				},
 			});
 
-			await Promise.all(res2);
-
 			let res3 = graffitiAndPhoto.graffitiPhotos.map(async (photo) => {
 				photo.graffitiId = createdGraffiti.id;
 				return await prisma.graffitiPhoto.upsert({
@@ -151,7 +194,7 @@ export async function main() {
 
 	await Promise.all(res2);
 
-	console.log('Graffiti and photo successfully connected.:0');
+	console.log('Graffiti and GraffitiPhoto successfully connected :0');
 	console.log('Finished...');
 }
 // ----------------------------
@@ -163,5 +206,6 @@ main()
 		process.exit(1);
 	})
 	.finally(async () => {
+		await Promise.all([]);
 		await prisma.$disconnect();
 	});

@@ -55,7 +55,7 @@ export class GraffitiPhotoService {
 		return await this.prisma.graffitiPhoto.upsert({
 			create: {
 				url: response.Location,
-				addedAt: createGraffitiPhotoDto.addedAt,
+				createdAt: createGraffitiPhotoDto.addedAt,
 				pictureScore: localPictureScore,
 				user: {
 					connect: {
@@ -70,7 +70,7 @@ export class GraffitiPhotoService {
 			},
 			update: {
 				url: response.Location,
-				addedAt: createGraffitiPhotoDto.addedAt,
+				createdAt: createGraffitiPhotoDto.addedAt,
 				user: {
 					connect: {
 						id: user.userId,
@@ -178,8 +178,12 @@ export class GraffitiPhotoService {
 				id: id,
 			},
 		});
-		if (entity.userId !== user?.userId) {
-			throw new UnauthorizedException('User is not authorized');
+
+		let isUserAdmin = await this.authService.isUserAdmin(user.userId);
+		if (!isUserAdmin) {
+			if (entity.userId !== user?.userId) {
+				throw new UnauthorizedException('User is not authorized');
+			}
 		}
 
 		return await this.prisma.graffitiPhoto.update({
@@ -297,8 +301,12 @@ export class GraffitiPhotoService {
 				id: id,
 			},
 		});
-		if (entity.userId !== user?.userId) {
-			throw new UnauthorizedException('User is not authorized');
+
+		let isUserAdmin = await this.authService.isUserAdmin(user.userId);
+		if (!isUserAdmin) {
+			if (entity.userId !== user?.userId) {
+				throw new UnauthorizedException('User is not authorized');
+			}
 		}
 
 		await this.prisma.graffitiPhoto.update({
