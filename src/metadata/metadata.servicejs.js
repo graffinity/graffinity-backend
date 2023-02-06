@@ -7,9 +7,6 @@ export class MetadataServiceJS {
 	constructor() {}
 
 	removeMetadata = async (file) => {
-		const getBase64DataFromJpegFile = (filename) =>
-			fs.readFileSync(filename).toString('binary');
-
 		let orientation = await sharp(file.buffer)
 			.metadata()
 			.then((metadata) => {
@@ -25,6 +22,7 @@ export class MetadataServiceJS {
 			.withMetadata({
 				orientation: orientation,
 			})
+			.png()
 			.toBuffer();
 
 		if (fs.existsSync(`./${tempFileName}`)) {
@@ -34,3 +32,6 @@ export class MetadataServiceJS {
 		return fileBuffer;
 	};
 }
+
+const getBase64DataFromJpegFile = (filename) =>
+	fs.readFileSync(filename).toString('binary');

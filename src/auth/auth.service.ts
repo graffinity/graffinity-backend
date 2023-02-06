@@ -148,6 +148,20 @@ export class AuthService {
 		return user;
 	};
 
+	userAuthValidation = async (request: Request) => {
+		let isUserLoggedIn = await this.isLoggedIn(request);
+		if (!isUserLoggedIn) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		let jwtPayload = await this.getUserFromRequest(request);
+		if (!jwtPayload) {
+			throw new UnauthorizedException('User is not logged in');
+		}
+
+		return jwtPayload;
+	};
+
 	async validateUser(request: LoginRequest): Promise<User> {
 		let user = await this.userService.findByUsername(request.username);
 

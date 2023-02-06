@@ -3,15 +3,14 @@ import {
 	Injectable,
 	UnauthorizedException,
 } from '@nestjs/common';
+import { GraffitiPhoto } from '@prisma/client';
 import { Request } from 'express';
-import sharp from 'sharp';
 import { AuthService } from '../auth/auth.service';
 import { MetadataService } from '../metadata/metadata.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
-import { GraffitiPhoto, Likes } from '@prisma/client';
 import { GraffitiPhotoEntity } from './entities/graffitiphoto.entity';
 
 type File = Express.Multer.File;
@@ -30,22 +29,16 @@ export class GraffitiPhotoService {
 		file: File,
 		request: Request,
 	) {
-		let isUserLoggedIn = await this.authService.isLoggedIn(request);
-
-		if (!isUserLoggedIn) {
-			throw new UnauthorizedException('User is not logged in');
-		}
-
-		let user = await this.authService.getUserFromRequest(request);
-		if (!user) {
-			throw new UnauthorizedException('User is not logged in');
-		}
+		let user = await this.authService.userAuthValidation(request);
 
 		let metadata = await this.metadataService.getMetadata(file);
 
-		let localPictureScore = await this.metadataService.calculatePictureScore(
-			metadata,
+		let localPictureScore = this.metadataService.calculatePictureScore(
+			metadata.metadata,
+			metadata.tags,
 		);
+
+		console.log('localPictureScore', localPictureScore);
 
 		file.buffer = await this.metadataService.removeMetadata(file);
 
