@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { MetadataServiceJS } from './metadata.servicejs';
 import sharp from 'sharp';
 import { ExifParserFactory, ExifTags } from 'ts-exif-parser';
+import { mimetypes } from '../graffitiphoto/graffitiphoto.service';
+import { MetadataServiceJS } from './metadata.servicejs';
 
-@Injectable()
 export class MetadataService extends MetadataServiceJS {
 	constructor() {
 		super();
 	}
 
-	async extractExifData(file: Express.Multer.File) {
+	extractExifData = (file: Express.Multer.File) => {
+		// Extract EXIF data
 		const parser = ExifParserFactory.create(file.buffer)
 			.enableBinaryFields(true)
 			.enableImageSize(true)
@@ -19,15 +19,12 @@ export class MetadataService extends MetadataServiceJS {
 			.enableTagNames(true);
 		const result = parser.parse();
 
-		console.log('ts-exif-parser', result);
-		console.log('Tags: ', result.tags);
-
 		return result;
-	}
+	};
 
 	async getMetadata(file: Express.Multer.File) {
 		let fileMetadata = await sharp(file.buffer).metadata();
-		let exif = await this.extractExifData(file);
+		let exif = this.extractExifData(file);
 		file.filename;
 
 		let result: IExifData = {
@@ -38,7 +35,18 @@ export class MetadataService extends MetadataServiceJS {
 		return result;
 	}
 
-	// TODO: Improve the algorithm
+	convertToPng = (file: Express.Multer.File): [string, string] => {
+		let filenameEnd = mimetypes[file.mimetype];
+		let newName = file.originalname;
+		if (filenameEnd) {
+			newName = file.originalname.replace(filenameEnd, 'png');
+		}
+		let mimetype = 'image/png';
+
+		return [newName, mimetype];
+		// return {newName: newName, mimetype: mimetype }
+	};
+
 	calculatePictureScore = (metadata: sharp.Metadata, exifTags?: ExifTags) => {
 		let score = 0;
 
@@ -177,13 +185,12 @@ export class MetadataService extends MetadataServiceJS {
 					}
 				}
 			}
-
-			return score;
 		}
+		return score;
 	};
 }
 
-interface IExifData {
+export interface IExifData {
 	metadata: sharp.Metadata;
 	tags?: ExifTags;
 }

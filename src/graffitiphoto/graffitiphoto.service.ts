@@ -17,12 +17,14 @@ type File = Express.Multer.File;
 
 @Injectable()
 export class GraffitiPhotoService {
+	metadataService: MetadataService;
 	constructor(
 		private prisma: PrismaService,
 		private S3Service: S3Service,
-		private metadataService: MetadataService,
 		private authService: AuthService,
-	) {}
+	) {
+		this.metadataService = new MetadataService();
+	}
 
 	async create(
 		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
@@ -31,23 +33,23 @@ export class GraffitiPhotoService {
 	) {
 		let user = await this.authService.userAuthValidation(request);
 
+		// Metadata extraction
 		let metadata = await this.metadataService.getMetadata(file);
 
+		// Calculate picture score
 		let localPictureScore = this.metadataService.calculatePictureScore(
 			metadata.metadata,
 			metadata.tags,
 		);
 
-		console.log('localPictureScore', localPictureScore);
-
+		// Remove metadata from file
 		file.buffer = await this.metadataService.removeMetadata(file);
 
-		let filenameEnd = mimetypes[file.mimetype];
-		if (filenameEnd) {
-			file.originalname = file.originalname.replace(filenameEnd, 'png');
-		}
-		file.mimetype = 'image/png';
+		// Convert file to png
+		[file.originalname, file.mimetype] =
+			this.metadataService.convertToPng(file);
 
+		// Upload file to S3
 		let response = await this.S3Service.uploadFile(file);
 
 		return await this.prisma.graffitiPhoto.upsert({
@@ -85,6 +87,61 @@ export class GraffitiPhotoService {
 			},
 		});
 	}
+
+	createMultiple = async (
+		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
+		images: File[],
+		request: Request,
+	) => {
+		let jwtPayload = await this.authService.userAuthValidation(request);
+
+		let tempImages = images.map(async (image) => {
+			// Metadata extraction
+			let metadata = await this.metadataService.getMetadata(image);
+
+			// Calculate picture score
+			let localPictureScore = this.metadataService.calculatePictureScore(
+				metadata.metadata,
+				metadata.tags,
+			);
+
+			// Remove metadata from file
+			image.buffer = await this.metadataService.removeMetadata(image);
+
+			// Convert file to png
+			[image.originalname, image.mimetype] =
+				this.metadataService.convertToPng(image);
+
+			// Upload file to S3
+			let response = await this.S3Service.uploadFile(image);
+
+			return {
+				image: image,
+				localPictureScore: localPictureScore,
+				url: response.Location,
+			};
+		});
+
+		// Map and await all promises
+		let imageEntities: {
+			image: File;
+			localPictureScore: number;
+			url: string;
+		}[] = await Promise.all(tempImages);
+
+		let entities = await this.prisma.graffitiPhoto.createMany({
+			data: imageEntities.map((imageEntity) => {
+				return {
+					url: imageEntity.url,
+					graffitiId: createGraffitiPhotoDto.graffitiId,
+					userId: jwtPayload.userId,
+				};
+			}),
+			skipDuplicates: true,
+		});
+
+		return entities;
+	};
 
 	async findAll() {
 		let entities = await this.prisma.graffitiPhoto.findMany();
@@ -352,8 +409,8 @@ export class GraffitiPhotoService {
 	};
 }
 
-//   Image Extension   MIME Type
-const mimetypes: {
+// Image Extension MIME Type
+export const mimetypes: {
 	[key: string]: string;
 } = {
 	'image/x-jg': 'art',

@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+	ConflictException,
+	Injectable,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { GraffitiStatus, Prisma } from '@prisma/client';
 import { Request } from 'express';
 import { AuthService } from '../auth/auth.service';
@@ -50,9 +54,8 @@ export class GraffitiService {
 			return entity;
 		} catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
-				// The .code property can be accessed in a type-safe manner
 				if (error.code === 'P2002') {
-					console.log(
+					throw new ConflictException(
 						'There is a unique constraint violation, a new graffiti cannot be created with this name',
 					);
 				}
