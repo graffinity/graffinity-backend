@@ -301,6 +301,17 @@ export class GraffitiPhotoService {
 			throw new UnauthorizedException('User is not authorized');
 		}
 
+		await this.prisma.graffitiPhoto.update({
+			where: {
+				id: id,
+			},
+			data: {
+				likes: {
+					deleteMany: {},
+				},
+			},
+		});
+
 		return await this.prisma.graffitiPhoto.delete({
 			where: {
 				id: id,
