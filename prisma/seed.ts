@@ -80,7 +80,7 @@ export async function main() {
 
 	// ----------------------------
 
-	// GraffitiPost test data
+	// Graffiti & GraffitiPhoto test data
 
 	let graffitisAndPhotos: GraffitiAndGraffitiPhotoCreateDto[] =
 		testDataFactory.getGraffitiAndGraffitiPhotoCreateRequests();
@@ -119,8 +119,6 @@ export async function main() {
 				},
 			});
 
-			await Promise.all(res2);
-
 			let res3 = graffitiAndPhoto.graffitiPhotos.map(async (photo) => {
 				photo.graffitiId = createdGraffiti.id;
 				return await prisma.graffitiPhoto.upsert({
@@ -151,7 +149,7 @@ export async function main() {
 
 	await Promise.all(res2);
 
-	console.log('Graffiti and photo successfully connected.:0');
+	console.log('Graffiti and GraffitiPhoto successfully connected :0');
 	console.log('Finished...');
 }
 // ----------------------------
@@ -163,5 +161,6 @@ main()
 		process.exit(1);
 	})
 	.finally(async () => {
+		await Promise.all([]);
 		await prisma.$disconnect();
 	});
