@@ -135,6 +135,7 @@ export class GraffitiPhotoService {
 					url: imageEntity.url,
 					graffitiId: createGraffitiPhotoDto.graffitiId,
 					userId: jwtPayload.userId,
+					pictureScore: imageEntity.localPictureScore,
 				};
 			}),
 			skipDuplicates: true,
