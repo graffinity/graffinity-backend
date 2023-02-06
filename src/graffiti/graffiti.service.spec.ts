@@ -21,6 +21,7 @@ import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
 import S3Service from '../s3/S3service';
 import { MetadataService } from '../metadata/metadata.service';
 import { GraffitiEntity } from './entities/graffiti.entity';
+import { UserRoleService } from '../userrole/userrole.service';
 
 describe('GraffitiService', () => {
 	let service: GraffitiService;
@@ -42,6 +43,7 @@ describe('GraffitiService', () => {
 				JwtService,
 				UserService,
 				GraffitiPhotoService,
+				UserRoleService,
 				MetadataService,
 				S3Service,
 			],

@@ -137,7 +137,7 @@ model GraffitiPhoto {
   userId       Int      @map("user_id")
   user         User     @relation(fields: [userId], references: [id])
   url          String   @unique
-  addedAt      DateTime @default(now()) @map("added_at")
+  createdAt      DateTime @default(now()) @map("created_at")
   pictureScore Int?     @map("picture_score")
   likes        Likes[]
 

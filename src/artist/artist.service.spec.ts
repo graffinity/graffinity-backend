@@ -6,6 +6,7 @@ import { AuthService } from '../auth/auth.service';
 import { AuthModule } from '../auth/auth.module';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { UserRoleService } from '../userrole/userrole.service';
 
 describe('ArtistService', () => {
 	let service: ArtistService;
@@ -18,6 +19,7 @@ describe('ArtistService', () => {
 				ArtistService,
 				AuthService,
 				UserService,
+				UserRoleService,
 				JwtService,
 			],
 		}).compile();

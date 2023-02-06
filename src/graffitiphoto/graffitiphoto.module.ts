@@ -9,13 +9,23 @@ import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { GraffitiPhotoController } from './graffitiphoto.controller';
 import { GraffitiPhotoService } from './graffitiphoto.service';
+import { UserRoleService } from '../userrole/userrole.service';
+import { UserRoleModule } from '../userrole/userrole.module';
 
 @Module({
-	imports: [PrismaModule, S3Module, AuthModule, UserModule, JwtModule],
+	imports: [
+		PrismaModule,
+		S3Module,
+		AuthModule,
+		UserModule,
+		JwtModule,
+		UserRoleModule,
+	],
 	providers: [
 		GraffitiPhotoService,
 		S3Service,
 		AuthService,
+		UserRoleService,
 		UserService,
 		JwtService,
 	],

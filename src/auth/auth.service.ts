@@ -98,7 +98,9 @@ export class AuthService {
 
 		return true;
 	}
-
+	async isUserAdmin(userId: number) {
+		return await this.userService.isUserAdmin(userId);
+	}
 	async isUserLoggedIn(access_token?: string): Promise<boolean> {
 		let secret = process.env.JWT_ACCESS_TOKEN_SECRET;
 		if (access_token) {

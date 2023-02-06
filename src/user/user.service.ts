@@ -6,10 +6,15 @@ import { LikesEntry } from './dto/request/likesEntry.dto';
 import { UpdateUserDto } from './dto/request/update-user.dto';
 import { UserInfoResponse } from './dto/response/user-info-response.dto';
 import { NotFoundError } from 'rxjs';
+import { UserRoleService } from '../userrole/userrole.service';
+import { RoleEnum } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService,
+		private userRoleService: UserRoleService,
+	) {}
 
 	async create(createUserDto: CreateUserDto) {
 		let existsByEmail = await this.usernameOrEmailExists(createUserDto.email);
@@ -41,12 +46,44 @@ export class UserService {
 			where: {
 				id: id,
 			},
+			include: {
+				roles: true,
+			},
 		});
 
 		if (!user) {
 			throw new NotFoundException(`User #${id} not found`);
 		}
 		return user;
+	}
+
+	async isUserAdmin(userId: number) {
+		let user = await this.prisma.user.findUnique({
+			where: {
+				id: userId,
+			},
+			include: {
+				roles: true,
+			},
+		});
+
+		if (!user) {
+			throw new NotFoundException(`User #${userId} not found`);
+		}
+
+		let userroles = user.roles;
+
+		if (userroles) {
+			let allRoles = await this.userRoleService.findAll();
+			let adminRoleId = allRoles.find(
+				(role) => role.name === RoleEnum.ADMIN,
+			)?.id;
+			let isUserAdmin = userroles.find((role) => role.roleId === adminRoleId);
+			if (isUserAdmin) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	async findByUsername(username: string) {

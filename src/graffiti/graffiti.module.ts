@@ -12,6 +12,8 @@ import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { GraffitiController } from './graffiti.controller';
 import { GraffitiService } from './graffiti.service';
+import { UserRoleModule } from '../userrole/userrole.module';
+import { UserRoleService } from '../userrole/userrole.service';
 
 @Module({
 	imports: [
@@ -19,6 +21,7 @@ import { GraffitiService } from './graffiti.service';
 		S3Module,
 		AuthModule,
 		UserModule,
+		UserRoleModule,
 		JwtModule,
 		GraffitiPhotoModule,
 	],
@@ -30,6 +33,7 @@ import { GraffitiService } from './graffiti.service';
 		AuthService,
 		UserService,
 		GraffitiPhotoService,
+		UserRoleService,
 	],
 	controllers: [GraffitiController],
 })
