@@ -30,6 +30,9 @@ FROM node:18-alpine As build
 
 WORKDIR /usr/src/app
 
+ARG DISABLE_ERD=true
+ENV DISABLE_ERD=${DISABLE_ERD}
+
 # COPY package.json and package-lock.json files
 COPY --chown=node:node package*.json ./
 
