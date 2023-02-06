@@ -14,7 +14,6 @@ import { FileController } from './file/file.controller';
 import { FileService } from './file/file.service';
 import { GraffitiModule } from './graffiti/graffiti.module';
 import { GraffitiPhotoModule } from './graffitiphoto/graffitiphoto.module';
-import { MetadataModule } from './metadata/metadata.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
 import { ReportModule } from './report/report.module';
@@ -44,7 +43,6 @@ import { UserService } from './user/user.service';
 		ArtistModule,
 		CommentModule,
 		S3Module,
-		MetadataModule,
 	],
 	controllers: [AppController, FileController],
 	providers: [

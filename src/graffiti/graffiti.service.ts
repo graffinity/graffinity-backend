@@ -1,5 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { GraffitiStatus } from '@prisma/client';
+import {
+	ConflictException,
+	Injectable,
+	UnauthorizedException,
+} from '@nestjs/common';
+import { GraffitiStatus, Prisma } from '@prisma/client';
 import { Request } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { GraffitiPhotoService } from '../graffitiphoto/graffitiphoto.service';
@@ -28,23 +32,36 @@ export class GraffitiService {
 
 		let user = await this.authService.getUserFromRequest(request);
 
-		return await this.prisma.graffiti.create({
-			data: {
-				name: createGraffitiDto.name,
-				description: createGraffitiDto.description,
-				author: {
-					connect: {
-						id: user?.userId,
+		try {
+			let entity = await this.prisma.graffiti.create({
+				data: {
+					name: createGraffitiDto.name,
+					description: createGraffitiDto.description,
+					author: {
+						connect: {
+							id: user?.userId,
+						},
 					},
+					latitude: createGraffitiDto.latitude,
+					longitude: createGraffitiDto.longitude,
+					address: createGraffitiDto.address,
 				},
-				latitude: createGraffitiDto.latitude,
-				longitude: createGraffitiDto.longitude,
-				address: createGraffitiDto.address,
-			},
-			include: {
-				photos: true,
-			},
-		});
+				include: {
+					photos: true,
+				},
+			});
+
+			return entity;
+		} catch (error) {
+			if (error instanceof Prisma.PrismaClientKnownRequestError) {
+				if (error.code === 'P2002') {
+					throw new ConflictException(
+						'There is a unique constraint violation, a new graffiti cannot be created with this name',
+					);
+				}
+			}
+			throw error;
+		}
 	}
 
 	async findAll() {
@@ -305,6 +322,7 @@ export class GraffitiService {
 	async delete(id: number, request: Request) {
 		let isUserLoggedIn = await this.authService.isLoggedIn(request);
 
+		// Figure out
 		if (!isUserLoggedIn) {
 			throw new UnauthorizedException('User is not logged in');
 		}
@@ -331,6 +349,7 @@ export class GraffitiService {
 		});
 	}
 
+	// Figure out
 	async findNearbyGraffiti(userLatitude: string, userLongitude: string) {
 		// Initialize the nearest neighbors array with the first graffiti in the list
 		let entities: GraffitiEntity[] = await this.prisma.graffiti.findMany({

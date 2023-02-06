@@ -8,6 +8,7 @@ import {
 	Put,
 	Req,
 	UploadedFile,
+	UploadedFiles,
 	UseGuards,
 	UseInterceptors,
 } from '@nestjs/common';
@@ -16,12 +17,13 @@ import {
 	FileInterceptor,
 } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
 import { Request } from 'express';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
 import { GraffitiPhotoService } from './graffitiphoto.service';
 import GraffitiPhotoMapper from './mapper/GraffitiPhotoMapper';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 // Leave this import here, it is needed for the file interceptor
 import { Multer } from 'multer';
 
@@ -72,6 +74,44 @@ export class GraffitiPhotoController {
 			request,
 		);
 		return GraffitiPhotoMapper.toResponse(entity);
+	}
+
+	@Post('graffiti/:id/upload-multiple')
+	@UseGuards(JwtAuthGuard)
+	@ApiOperation({ summary: 'Upload multiple photos' })
+	@UseInterceptors(
+		FileFieldsInterceptor([
+			{ name: 'image1', maxCount: 1 },
+			{ name: 'image2', maxCount: 1 },
+			{ name: 'image3', maxCount: 1 },
+		]),
+	)
+	async uploadMultiplePhotos(
+		@Param('id') id: string,
+		@UploadedFiles()
+		files: {
+			image1: Express.Multer.File[];
+			image2?: Express.Multer.File[];
+			image3?: Express.Multer.File[];
+		},
+		@Req() request: Request,
+	) {
+		let images = files.image1;
+		if (files.image2) images.push(files.image2[0]);
+		if (files.image3) images.push(files.image3[0]);
+
+		let createGraffitiPhotoDto: CreateGraffitiPhotoDto = {
+			graffitiId: +id,
+			addedAt: new Date(),
+		};
+
+		let entities: Prisma.BatchPayload =
+			await this.graffitiPhotoService.createMultiple(
+				createGraffitiPhotoDto,
+				images,
+				request,
+			);
+		return entities.count;
 	}
 
 	@Get()

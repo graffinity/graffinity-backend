@@ -31,10 +31,10 @@ const handler = async (req: any, res: any) => {
 
 		// 4.
 		let response = res.status(200).json(post);
-		console.log(response);
+
 		return response;
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 

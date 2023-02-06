@@ -3,58 +3,53 @@ import {
 	Injectable,
 	UnauthorizedException,
 } from '@nestjs/common';
+import { GraffitiPhoto } from '@prisma/client';
 import { Request } from 'express';
-import sharp from 'sharp';
 import { AuthService } from '../auth/auth.service';
 import { MetadataService } from '../metadata/metadata.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/S3service';
 import { CreateGraffitiPhotoDto } from './dto/request/create-graffitiphoto.dto';
 import { UpdateGraffitiPhotoDto } from './dto/request/update-graffitiphoto.dto';
-import { GraffitiPhoto, Likes } from '@prisma/client';
 import { GraffitiPhotoEntity } from './entities/graffitiphoto.entity';
 
 type File = Express.Multer.File;
 
 @Injectable()
 export class GraffitiPhotoService {
+	metadataService: MetadataService;
 	constructor(
 		private prisma: PrismaService,
 		private S3Service: S3Service,
-		private metadataService: MetadataService,
 		private authService: AuthService,
-	) {}
+	) {
+		this.metadataService = new MetadataService();
+	}
 
 	async create(
 		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
 		file: File,
 		request: Request,
 	) {
-		let isUserLoggedIn = await this.authService.isLoggedIn(request);
+		let user = await this.authService.userAuthValidation(request);
 
-		if (!isUserLoggedIn) {
-			throw new UnauthorizedException('User is not logged in');
-		}
-
-		let user = await this.authService.getUserFromRequest(request);
-		if (!user) {
-			throw new UnauthorizedException('User is not logged in');
-		}
-
+		// Metadata extraction
 		let metadata = await this.metadataService.getMetadata(file);
 
-		let localPictureScore = await this.metadataService.calculatePictureScore(
-			metadata,
+		// Calculate picture score
+		let localPictureScore = this.metadataService.calculatePictureScore(
+			metadata.metadata,
+			metadata.tags,
 		);
 
+		// Remove metadata from file
 		file.buffer = await this.metadataService.removeMetadata(file);
 
-		let filenameEnd = mimetypes[file.mimetype];
-		if (filenameEnd) {
-			file.originalname = file.originalname.replace(filenameEnd, 'png');
-		}
-		file.mimetype = 'image/png';
+		// Convert file to png
+		[file.originalname, file.mimetype] =
+			this.metadataService.convertToPng(file);
 
+		// Upload file to S3
 		let response = await this.S3Service.uploadFile(file);
 
 		return await this.prisma.graffitiPhoto.upsert({
@@ -92,6 +87,62 @@ export class GraffitiPhotoService {
 			},
 		});
 	}
+
+	createMultiple = async (
+		createGraffitiPhotoDto: CreateGraffitiPhotoDto,
+		images: File[],
+		request: Request,
+	) => {
+		let jwtPayload = await this.authService.userAuthValidation(request);
+
+		let tempImages = images.map(async (image) => {
+			// Metadata extraction
+			let metadata = await this.metadataService.getMetadata(image);
+
+			// Calculate picture score
+			let localPictureScore = this.metadataService.calculatePictureScore(
+				metadata.metadata,
+				metadata.tags,
+			);
+
+			// Remove metadata from file
+			image.buffer = await this.metadataService.removeMetadata(image);
+
+			// Convert file to png
+			[image.originalname, image.mimetype] =
+				this.metadataService.convertToPng(image);
+
+			// Upload file to S3
+			let response = await this.S3Service.uploadFile(image);
+
+			return {
+				image: image,
+				localPictureScore: localPictureScore,
+				url: response.Location,
+			};
+		});
+
+		// Map and await all promises
+		let imageEntities: {
+			image: File;
+			localPictureScore: number;
+			url: string;
+		}[] = await Promise.all(tempImages);
+
+		let entities = await this.prisma.graffitiPhoto.createMany({
+			data: imageEntities.map((imageEntity) => {
+				return {
+					url: imageEntity.url,
+					graffitiId: createGraffitiPhotoDto.graffitiId,
+					userId: jwtPayload.userId,
+					pictureScore: imageEntity.localPictureScore,
+				};
+			}),
+			skipDuplicates: true,
+		});
+
+		return entities;
+	};
 
 	async findAll() {
 		let entities = await this.prisma.graffitiPhoto.findMany();
@@ -250,6 +301,17 @@ export class GraffitiPhotoService {
 			throw new UnauthorizedException('User is not authorized');
 		}
 
+		await this.prisma.graffitiPhoto.update({
+			where: {
+				id: id,
+			},
+			data: {
+				likes: {
+					deleteMany: {},
+				},
+			},
+		});
+
 		return await this.prisma.graffitiPhoto.delete({
 			where: {
 				id: id,
@@ -359,8 +421,8 @@ export class GraffitiPhotoService {
 	};
 }
 
-//   Image Extension   MIME Type
-const mimetypes: {
+// Image Extension MIME Type
+export const mimetypes: {
 	[key: string]: string;
 } = {
 	'image/x-jg': 'art',
