@@ -12,7 +12,7 @@ export class GraffitiPhotoEntity implements GraffitiPhoto {
 	url: string;
 
 	@ApiProperty()
-	addedAt: Date;
+	createdAt: Date;
 
 	@ApiProperty()
 	userId: number;

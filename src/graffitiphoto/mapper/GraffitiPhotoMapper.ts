@@ -10,7 +10,7 @@ const GraffitiPhotoMapper = {
 			url: entity.url,
 			userId: entity.userId,
 			pictureScore: entity.pictureScore,
-			addedAt: entity.addedAt,
+			addedAt: entity.createdAt,
 			likes: entity.likes ? entity.likes : [],
 		};
 

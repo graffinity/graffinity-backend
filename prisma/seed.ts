@@ -9,8 +9,21 @@ export async function main() {
 	console.log('Seeding...');
 
 	// ----------------------------
+	// User Role test data
+	let userRoles = testDataFactory.getListOfUserRoles();
+	let roles = userRoles.map(async (role) => {
+		return await prisma.userRole.upsert({
+			where: { name: role.name },
+			update: {},
+			create: {
+				name: role.name,
+			},
+		});
+	});
 
+	// ----------------------------
 	// User test data
+
 	let users = await testDataFactory.getListofUsersWithHashedPassword();
 	let res1 = users.map(async (user) => {
 		return await prisma.user.upsert({

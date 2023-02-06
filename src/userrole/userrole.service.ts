@@ -7,11 +7,11 @@ export class UserRoleService {
 	constructor(private prisma: PrismaService) {}
 
 	async findAll() {
-		return await this.prisma.role.findMany();
+		return await this.prisma.userRole.findMany();
 	}
 
 	async findById(id: number) {
-		return await this.prisma.role.findUnique({
+		return await this.prisma.userRole.findUnique({
 			where: {
 				id: id,
 			},
@@ -20,13 +20,13 @@ export class UserRoleService {
 
 	async findByName(name: string) {
 		if (name === 'USER') {
-			return await this.prisma.role.findUnique({
+			return await this.prisma.userRole.findUnique({
 				where: {
 					name: RoleEnum.USER,
 				},
 			});
 		} else if (name === 'ADMIN') {
-			return await this.prisma.role.findUnique({
+			return await this.prisma.userRole.findUnique({
 				where: {
 					name: name,
 				},

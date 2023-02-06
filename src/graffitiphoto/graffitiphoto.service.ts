@@ -55,7 +55,7 @@ export class GraffitiPhotoService {
 		return await this.prisma.graffitiPhoto.upsert({
 			create: {
 				url: response.Location,
-				addedAt: createGraffitiPhotoDto.addedAt,
+				createdAt: createGraffitiPhotoDto.addedAt,
 				pictureScore: localPictureScore,
 				user: {
 					connect: {
@@ -70,7 +70,7 @@ export class GraffitiPhotoService {
 			},
 			update: {
 				url: response.Location,
-				addedAt: createGraffitiPhotoDto.addedAt,
+				createdAt: createGraffitiPhotoDto.addedAt,
 				user: {
 					connect: {
 						id: user.userId,
