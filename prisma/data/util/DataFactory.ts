@@ -31,10 +31,17 @@ export class DataFactory {
 
 	// --------------------------------
 	// User role test data
-	public getValidUserRole(): UserRole {
+	public getBasicUserRole(): UserRole {
 		let userRole: UserRole = {
 			id: 1,
 			name: RoleEnum.USER,
+		};
+		return userRole;
+	}
+	public getAdminUserRole(): UserRole {
+		let userRole: UserRole = {
+			id: 2,
+			name: RoleEnum.ADMIN,
 		};
 		return userRole;
 	}

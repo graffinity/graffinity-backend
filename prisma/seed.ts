@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, RoleEnum } from '@prisma/client';
 import { DataFactory } from './data/util/DataFactory';
 import { GraffitiAndGraffitiPhotoCreateDto } from './data/util/GraffitiAndGraffitiPhotoEntity';
 
@@ -10,15 +10,26 @@ export async function main() {
 
 	// ----------------------------
 	// User Role test data
-	let userRoles = testDataFactory.getListOfUserRoles();
-	let roles = userRoles.map(async (role) => {
-		return await prisma.userRole.upsert({
-			where: { name: role.name },
-			update: {},
-			create: {
-				name: role.name,
-			},
-		});
+
+	let userR = testDataFactory.getBasicUserRole();
+	let adminR = testDataFactory.getAdminUserRole();
+	let userRole = await prisma.userRole.upsert({
+		where: {
+			name: userR.name,
+		},
+		update: {},
+		create: {
+			name: userR.name,
+		},
+	});
+	let adminRole = await prisma.userRole.upsert({
+		where: {
+			name: adminR.name,
+		},
+		update: {},
+		create: {
+			name: adminR.name,
+		},
 	});
 
 	// ----------------------------
@@ -37,12 +48,19 @@ export async function main() {
 				username: user.username,
 				email: user.email,
 				password: user.password,
+				roles: {
+					createMany: {
+						data: {
+							roleId: userRole.id,
+						},
+					},
+				},
 			},
 		});
 	});
 
 	await Promise.all(res1);
-
+	let roles = [userRole, adminRole];
 	let user = await testDataFactory.getValidUser();
 	await prisma.user.upsert({
 		where: { username: user.username },
@@ -53,6 +71,13 @@ export async function main() {
 			username: user.username,
 			email: user.email,
 			password: user.password,
+			roles: {
+				createMany: {
+					data: roles.map((role) => ({
+						roleId: role.id,
+					})),
+				},
+			},
 		},
 	});
 
@@ -69,6 +94,13 @@ export async function main() {
 			username: userWithHashedPassword.username,
 			email: userWithHashedPassword.email,
 			password: userWithHashedPassword.password,
+			roles: {
+				createMany: {
+					data: roles.map((role) => ({
+						roleId: role.id,
+					})),
+				},
+			},
 		},
 	});
 
