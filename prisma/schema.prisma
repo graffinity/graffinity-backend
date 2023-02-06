@@ -7,6 +7,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./data/diagram/graffinity_erd.pdf"
+  theme    = "forest"
+}
+
 enum GraffitiStatus {
   SUBMITTED
   PENDING
