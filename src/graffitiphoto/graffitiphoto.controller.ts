@@ -77,6 +77,8 @@ export class GraffitiPhotoController {
 	}
 
 	@Post('graffiti/:id/upload-multiple')
+	@UseGuards(JwtAuthGuard)
+	@ApiOperation({ summary: 'Upload multiple photos' })
 	@UseInterceptors(
 		FileFieldsInterceptor([
 			{ name: 'image1', maxCount: 1 },
